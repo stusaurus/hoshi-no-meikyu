@@ -49,7 +49,7 @@ for(const players of [2,3,4])for(const size of [7,8,9]){
  setup(api);
  const G=api.get();
  assert.equal(G.players.length,players);
- assert.equal(Object.keys(G.stars).length,players*2+3);
+ assert.equal(Object.keys(G.stars).length,players+3);
  assert.equal(Object.keys(G.walls).length,players);
  const privateStar=Object.values(G.stars).find(s=>s.placer!==null);
  assert(privateStar);
