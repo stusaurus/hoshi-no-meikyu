@@ -24,6 +24,14 @@ jobs:
           sleep 2
           node tests/browser.cjs
           node tests/cpu-browser.cjs
+      - name: Package playable offline prototype
+        run: zip -j star-maze-playable.zip index.html style.css game.js cpu.js README.md
+      - name: Upload playable prototype
+        uses: actions/upload-artifact@v4
+        with:
+          name: star-maze-playable
+          path: star-maze-playable.zip
+          retention-days: 14
       - name: Upload browser screenshots
         if: always()
         uses: actions/upload-artifact@v4
