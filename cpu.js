@@ -255,8 +255,8 @@ function actCPU(){
   // Prefer a legal card escape over an expensive emergency move.
   if(options.length===0||options[0].score<0){
    const boosts=boostDirs(p);
-   if(boosts.length&&p.hand.length>=2){emergencyBoost(boosts[0]);return;}
-   if(!boosts.length&&!hasCardEscape(p)){emergencyReturn();return;}
+   if(boosts.length&&p.hand.length>=2){emergencyBoost(boosts[0]);endTurn();return;}
+   if(!boosts.length&&!hasCardEscape(p)){emergencyReturn();endTurn();return;}
   }
  }
  const plan=chooseAction();
