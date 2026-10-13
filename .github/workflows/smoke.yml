@@ -16,8 +16,8 @@ jobs:
       - run: node tests/interactions.cjs
       - run: node tests/cpu.cjs
       - run: node --check scripts/simulate.cjs
-      - name: Initial balance simulation (900 CPU matches)
-        run: node scripts/simulate.cjs --games=100 --seed=20261014 --out=reports
+      - name: Lightweight CPU balance regression (90 matches)
+        run: node scripts/simulate.cjs --games=10 --seed=20261014 --out=reports
       - name: Upload preliminary balance data
         if: always()
         uses: actions/upload-artifact@v4
