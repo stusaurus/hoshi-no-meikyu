@@ -88,7 +88,12 @@ function handoff(){
  $("#modaltext").textContent=cpu?"ロケットが次の一手を選んでいます。":G.phase==="placement"?"次は "+human(G.players[G.current])+" の秘密配置です。本人だけが画面を見てください。":"次は "+human(G.players[G.current])+" のターンです。本人だけが画面を開いてください。";
  $("#reveal").hidden=cpu;
  $("#handoff").hidden=false;
- if(cpu&&typeof window!=="undefined"&&window.StarMazeCPU)window.setTimeout(()=>window.StarMazeCPU.run(),0);
+ if(cpu&&typeof window!=="undefined"&&window.StarMazeCPU){
+  const scheduledGame=G,scheduledPlayer=G.current,scheduledPhase=G.phase;
+  window.setTimeout(()=>{
+   if(G===scheduledGame&&G.current===scheduledPlayer&&G.phase===scheduledPhase&&G.locked)window.StarMazeCPU.run();
+  },0);
+ }
 }
 function unlock(){
  if(G.players[G.current]&&G.players[G.current].cpu)return;
@@ -207,8 +212,9 @@ function directionAction(type){
  return h+'</div>';
 }
 function render(){
- $("#backToTitle").hidden=!G;
- $("#backFromHandoff").hidden=!G;
+ const backToTitle=$("#backToTitle"),backFromHandoff=$("#backFromHandoff");
+ if(backToTitle)backToTitle.hidden=!G;
+ if(backFromHandoff)backFromHandoff.hidden=!G;
  if(!G){$("#board").innerHTML="";$("#status").innerHTML='<strong>新しいゲーム</strong>';$("#score").innerHTML="";$("#log").innerHTML="";
  $("#side").innerHTML='<h2 id="startHeading">🚀 まずは1人で遊ぼう</h2><p class="small muted" id="startDescription">CPUと1対1で対戦できます。初めての方はこの設定がおすすめです。</p><div class="formgrid"><label>遊び方<select id="playMode"><option value="cpu2" selected>1人で遊ぶ・CPU1体（おすすめ）</option><option value="cpu3">1人で遊ぶ・CPU2体</option><option value="cpu4">1人で遊ぶ・CPU3体</option><option value="local">友達と遊ぶ・同じ端末で交代</option></select></label><label>友達と遊ぶ場合の人数<select id="playerCount"><option value="2" selected>2人</option><option value="3">3人</option><option value="4">4人</option></select></label><label>盤面サイズ（検証用）<select id="boardSize"><option value="7" selected>7×7</option><option value="8">8×8</option><option value="9">9×9</option></select></label></div><button class="btn primary start-main" id="start">🚀 ゲームスタート</button><div class="note">これは開発用のローカル対戦版です。遠隔オンライン対戦と保存は未実装です。CPUは初級テスト対戦用であり、最適手の保証はありません。</div>';
  return;}
@@ -427,8 +433,8 @@ function returnToTitle(){
  if(!window.confirm("対戦を終了してタイトルへ戻りますか？\n現在の進行状況は保存されません。"))return;
  reset();
 }
-$("#backToTitle").addEventListener("click",returnToTitle);
-$("#backFromHandoff").addEventListener("click",returnToTitle);
+if($("#backToTitle"))$("#backToTitle").addEventListener("click",returnToTitle);
+if($("#backFromHandoff"))$("#backFromHandoff").addEventListener("click",returnToTitle);
 $("#reveal").addEventListener("click",unlock);
 document.addEventListener("change",e=>{
  if(e.target.id!=="playMode")return;
