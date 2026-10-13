@@ -23,6 +23,7 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/starmaze-http.log 2>&1 &
           sleep 2
           node tests/browser.cjs
+          node tests/navigation.cjs
           node tests/cpu-browser.cjs
       - name: Package playable offline prototype
         run: zip -j star-maze-playable.zip index.html style.css game.js cpu.js README.md
