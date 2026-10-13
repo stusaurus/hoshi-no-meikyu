@@ -207,8 +207,10 @@ function directionAction(type){
  return h+'</div>';
 }
 function render(){
+ $("#backToTitle").hidden=!G;
+ $("#backFromHandoff").hidden=!G;
  if(!G){$("#board").innerHTML="";$("#status").innerHTML='<strong>新しいゲーム</strong>';$("#score").innerHTML="";$("#log").innerHTML="";
- $("#side").innerHTML='<h2>試作版を始める</h2><p class="small muted">友達同士の交代プレイ、または1人＋CPU対戦を選べます。初期手札は固定です。</p><div class="formgrid"><label>遊び方<select id="playMode"><option value="local">友達と交代で遊ぶ</option><option value="cpu2">1人＋CPU 1体（計2人）</option><option value="cpu3">1人＋CPU 2体（計3人）</option><option value="cpu4">1人＋CPU 3体（計4人）</option></select></label><label>プレイ人数<select id="playerCount"><option value="2">2人</option><option value="3">3人</option><option value="4" selected>4人</option></select></label><label>盤面サイズ（検証用）<select id="boardSize"><option value="7" selected>7×7</option><option value="8">8×8</option><option value="9">9×9</option></select></label></div><div class="actions"><button class="btn primary" id="start">ゲーム開始</button></div><div class="note">これは開発用のローカル対戦版です。遠隔オンライン対戦と保存は未実装です。CPUは初級テスト対戦用であり、最適手の保証はありません。</div>';
+ $("#side").innerHTML='<h2 id="startHeading">🚀 まずは1人で遊ぼう</h2><p class="small muted" id="startDescription">CPUと1対1で対戦できます。初めての方はこの設定がおすすめです。</p><div class="formgrid"><label>遊び方<select id="playMode"><option value="cpu2" selected>1人で遊ぶ・CPU1体（おすすめ）</option><option value="cpu3">1人で遊ぶ・CPU2体</option><option value="cpu4">1人で遊ぶ・CPU3体</option><option value="local">友達と遊ぶ・同じ端末で交代</option></select></label><label>友達と遊ぶ場合の人数<select id="playerCount"><option value="2" selected>2人</option><option value="3">3人</option><option value="4">4人</option></select></label><label>盤面サイズ（検証用）<select id="boardSize"><option value="7" selected>7×7</option><option value="8">8×8</option><option value="9">9×9</option></select></label></div><button class="btn primary start-main" id="start">🚀 ゲームスタート</button><div class="note">これは開発用のローカル対戦版です。遠隔オンライン対戦と保存は未実装です。CPUは初級テスト対戦用であり、最適手の保証はありません。</div>';
  return;}
  $("#status").innerHTML='<div class="row between"><b>'+(G.phase==="ended"?"対戦終了":G.phase==="placement"?"秘密配置フェーズ":"第"+G.round+"ラウンド")+'</b><span class="pill">'+G.nplayers+'人 / '+G.n+'×'+G.n+'</span></div>';
  renderBoard();renderScore();
@@ -419,8 +421,22 @@ function finishGame(){
  G.phase="ended";G.active=null;G.message="";G.privateMessage="";G.locked=false;$("#handoff").hidden=true;$("main").style.visibility="visible";
  record("最終得点を公開しました。");render();
 }
-function reset(){G=null;$("main").style.visibility="visible";$("#handoff").hidden=true;render();}
+function reset(){G=null;$("main").style.visibility="visible";$("#handoff").hidden=true;$("#reveal").hidden=false;render();}
+function returnToTitle(){
+ if(!G)return;
+ if(!window.confirm("対戦を終了してタイトルへ戻りますか？\n現在の進行状況は保存されません。"))return;
+ reset();
+}
+$("#backToTitle").addEventListener("click",returnToTitle);
+$("#backFromHandoff").addEventListener("click",returnToTitle);
 $("#reveal").addEventListener("click",unlock);
+document.addEventListener("change",e=>{
+ if(e.target.id!=="playMode")return;
+ const single=e.target.value!=="local";
+ $("#startHeading").textContent=single?"🚀 まずは1人で遊ぼう":"👥 友達と遊ぼう";
+ $("#startDescription").textContent=single?"CPUと対戦できます。初めての方はCPU1体がおすすめです。":"2〜4人が同じ端末を交代しながら対戦します。";
+ $("#start").textContent=single?"🚀 ゲームスタート":"👥 対戦スタート";
+});
 document.addEventListener("click",e=>{
  let b=e.target.closest("button");if(!b||G&&G.locked)return;
  if(b.id==="start")return start();
