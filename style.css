@@ -35,3 +35,15 @@ select{background:#1c304f;border:1px solid #64779a;border-radius:10px;color:#fff
 footer{max-width:1120px;margin:auto;padding:0 16px 30px;color:#96a9c8;font-size:.73rem}
 @media(max-width:790px){.shell{grid-template-columns:1fr}.top{padding-top:17px}.panel{padding:12px}.board{width:min(100%,550px)}.tiletext{font-size:clamp(.5rem,2.6vw,1.1rem)}.token{font-size:clamp(.7rem,4vw,1.5rem)}.wall.e{width:10px;right:-6px}.wall.s{height:10px;bottom:-6px}}
 @media(max-width:370px){.hand{grid-template-columns:repeat(2,1fr)}.board{gap:2px;padding:4px}.wall.e{right:-5px}.wall.s{bottom:-5px}}
+
+/* Navigation and solo-first entry point */
+.header-actions{display:flex;justify-content:flex-start;align-items:center;min-height:0;margin-bottom:8px}
+.back-button{min-height:42px;min-width:130px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:.84rem}
+.start-main{display:block;width:100%;margin-top:16px;padding:14px 18px;font-size:1.04rem;letter-spacing:.02em}
+#startHeading{margin-bottom:6px}
+#startDescription{line-height:1.6}
+@media(max-width:790px){
+ .header-actions{margin-bottom:8px}
+ .back-button{min-height:44px}
+ .start-main{min-height:50px}
+}
