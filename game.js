@@ -37,15 +37,17 @@ function choosePlayers(n,size){
 }
 function draw(p,count){for(let i=0;i<count;i++){if(!G.deck.length){G.deck=shuffle(G.discard);G.discard=[];}if(G.deck.length)p.hand.push(G.deck.pop());}}
 function start(){
- let n=Number($("#playerCount").value),size=Number($("#boardSize").value);
+ const modeEl=$("#playMode"),mode=modeEl&&modeEl.value?modeEl.value:"local";
+ let n=mode.startsWith("cpu")?Number(mode.slice(3)):Number($("#playerCount").value);
+ let size=Number($("#boardSize").value);
  let allStars=[];starCounts[n].forEach((num,value)=>{for(let k=0;k<num;k++)allStars.push(value);});allStars=shuffle(allStars);
  let walls=[];wallCounts[n].forEach((num,j)=>{for(let k=0;k<num;k++)walls.push(wallKinds[j]);});walls=shuffle(walls);
  const presets=["walk","walk","dash","scan","tractor"];
  let deck=[];Object.keys(cardCounts).forEach(k=>{for(let i=0;i<cardCounts[k];i++)deck.push(k);});
  let positions=choosePlayers(n,size);
- G={n:size,nplayers:n,round:1,phase:"placement",placementPhase:0,players:[],stars:{},walls:{},queue:[],current:0,actions:0,active:null,selectedSupply:0,dir:1,deck:[],discard:[],logs:[],message:"",privateMessage:"",locked:false};
+ G={n:size,nplayers:n,cpuMode:mode!=="local",round:1,phase:"placement",placementPhase:0,players:[],stars:{},walls:{},queue:[],current:0,actions:0,active:null,selectedSupply:0,dir:1,deck:[],discard:[],logs:[],message:"",privateMessage:"",locked:false};
  for(let id=0;id<n;id++){
-  let p={id,pos:positions[id],home:positions[id],hand:presets.slice(),stars:[allStars.pop(),allStars.pop()],walls:[walls.pop(),walls.pop()],shield:false,penalty:0};
+  let p={id,cpu:mode!=="local"&&id>0,pos:positions[id],home:positions[id],hand:presets.slice(),stars:[allStars.pop(),allStars.pop()],walls:[walls.pop(),walls.pop()],shield:false,penalty:0};
   G.players.push(p);
   presets.forEach(c=>{let j=deck.indexOf(c);deck.splice(j,1);});
  }
@@ -81,12 +83,16 @@ function afterPlacement(){
 function handoff(){
  G.locked=true;G.privateMessage="";
  $("main").style.visibility="hidden";
- $("#modaltitle").textContent="画面を交代してください";
- $("#modaltext").textContent=G.phase==="placement"?"次は "+human(G.players[G.current])+" の秘密配置です。本人だけが画面を見てください。":"次は "+human(G.players[G.current])+" のターンです。本人だけが画面を開いてください。";
+ const cpu=Boolean(G.players[G.current]&&G.players[G.current].cpu);
+ $("#modaltitle").textContent=cpu?"CPUが考えています":"画面を交代してください";
+ $("#modaltext").textContent=cpu?"ロケットが次の一手を選んでいます。":G.phase==="placement"?"次は "+human(G.players[G.current])+" の秘密配置です。本人だけが画面を見てください。":"次は "+human(G.players[G.current])+" のターンです。本人だけが画面を開いてください。";
+ $("#reveal").hidden=cpu;
  $("#handoff").hidden=false;
+ if(cpu&&typeof window!=="undefined"&&window.StarMazeCPU)window.setTimeout(()=>window.StarMazeCPU.run(),0);
 }
 function unlock(){
- G.locked=false;$("#handoff").hidden=true;$("main").style.visibility="visible";
+ if(G.players[G.current]&&G.players[G.current].cpu)return;
+ G.locked=false;$("#reveal").hidden=false;$("#handoff").hidden=true;$("main").style.visibility="visible";
  if(G.phase==="play"&&G.actions===0)G.players[G.current].shield=false;
  render();
 }
@@ -202,7 +208,7 @@ function directionAction(type){
 }
 function render(){
  if(!G){$("#board").innerHTML="";$("#status").innerHTML='<strong>新しいゲーム</strong>';$("#score").innerHTML="";$("#log").innerHTML="";
- $("#side").innerHTML='<h2>試作版を始める</h2><p class="small muted">同じ端末で交代しながら2〜4人で遊べます。初期手札は固定です。</p><div class="formgrid"><label>プレイ人数<select id="playerCount"><option value="2">2人</option><option value="3">3人</option><option value="4" selected>4人</option></select></label><label>盤面サイズ（検証用）<select id="boardSize"><option value="7" selected>7×7</option><option value="8">8×8</option><option value="9">9×9</option></select></label></div><div class="actions"><button class="btn primary" id="start">ゲーム開始</button></div><div class="note">これは開発用のローカル対戦版です。遠隔オンライン対戦・保存・本格AI対戦は未実装です。</div>';
+ $("#side").innerHTML='<h2>試作版を始める</h2><p class="small muted">友達同士の交代プレイ、または1人＋CPU対戦を選べます。初期手札は固定です。</p><div class="formgrid"><label>遊び方<select id="playMode"><option value="local">友達と交代で遊ぶ</option><option value="cpu2">1人＋CPU 1体（計2人）</option><option value="cpu3">1人＋CPU 2体（計3人）</option><option value="cpu4">1人＋CPU 3体（計4人）</option></select></label><label>プレイ人数<select id="playerCount"><option value="2">2人</option><option value="3">3人</option><option value="4" selected>4人</option></select></label><label>盤面サイズ（検証用）<select id="boardSize"><option value="7" selected>7×7</option><option value="8">8×8</option><option value="9">9×9</option></select></label></div><div class="actions"><button class="btn primary" id="start">ゲーム開始</button></div><div class="note">これは開発用のローカル対戦版です。遠隔オンライン対戦と保存は未実装です。CPUは初級テスト対戦用であり、最適手の保証はありません。</div>';
  return;}
  $("#status").innerHTML='<div class="row between"><b>'+(G.phase==="ended"?"対戦終了":G.phase==="placement"?"秘密配置フェーズ":"第"+G.round+"ラウンド")+'</b><span class="pill">'+G.nplayers+'人 / '+G.n+'×'+G.n+'</span></div>';
  renderBoard();renderScore();
