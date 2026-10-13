@@ -13,3 +13,4 @@ jobs:
           node-version: '22'
       - run: node --check game.js
       - run: node tests/smoke.cjs
+      - run: node tests/interactions.cjs
