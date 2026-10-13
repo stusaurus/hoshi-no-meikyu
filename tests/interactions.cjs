@@ -82,4 +82,25 @@ test('Emergency return subtracts two points when boost has no destination',()=>{
   assert.equal(g.actions,2);
 });
 
-console.log('7 interactive rule regressions passed.');
+
+test('Emergency return is forbidden if a jump can land on a hidden-score star',()=>{
+  const {t,g}=create();
+  for(const pos of [1,7,14])g.stars[pos]={value:0,placer:1,claimed:1,seen:[1]};
+  g.stars[2]={value:3,placer:1,claimed:null,seen:[1]};
+  g.players[0].hand[0]='jump';
+  t.emergencyReturn();
+  assert.equal(g.players[0].penalty,0);
+  assert.equal(g.actions,0);
+});
+
+test('Emergency return is forbidden if wall-move card can clear a route',()=>{
+  const {t,g}=create();
+  for(const pos of [2,14])g.stars[pos]={value:0,placer:1,claimed:1,seen:[1]};
+  for(const to of [1,7]){const k=t.edge(0,to);g.walls[k]={a:0,b:to,kind:'solid',seen:[0],faceUp:true,placer:0};}
+  g.players[0].hand[0]='wallmove';
+  t.emergencyReturn();
+  assert.equal(g.players[0].penalty,0);
+  assert.equal(g.actions,0);
+});
+
+console.log('9 interactive rule regressions passed.');
