@@ -82,6 +82,8 @@ function afterPlacement(){
 }
 function handoff(){
  G.locked=true;G.privateMessage="";
+ if($("#backToTitle"))$("#backToTitle").hidden=false;
+ if($("#backFromHandoff"))$("#backFromHandoff").hidden=false;
  $("main").style.visibility="hidden";
  const cpu=Boolean(G.players[G.current]&&G.players[G.current].cpu);
  $("#modaltitle").textContent=cpu?"CPUが考えています":"画面を交代してください";
