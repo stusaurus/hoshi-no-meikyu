@@ -372,8 +372,39 @@ function emergencyBoost(d){
  for(let k=0;k<2;k++)G.discard.push(p.hand.pop());
  G.actions=2;p.pos=j;G.message="緊急ブーストで脱出しました。";record(human(p)+" が緊急ブースト。");claim(p);render();
 }
+function hasCardEscape(p){
+ if(p.hand.includes("jump")){
+  for(let d=0;d<4;d++)for(let len=1;len<=2;len++){
+   let curr=p.pos,barriers=0,possible=true;
+   for(let stepN=0;stepN<len;stepN++){
+    let j=neighbor(curr,d);
+    if(j<0){possible=false;break;}
+    if(G.walls[edge(curr,j)])barriers++;
+    if(stepN<len-1&&(isFlag(j)||occupied(j,p.id)))barriers++;
+    curr=j;
+   }
+   if(possible&&barriers<=1&&free(curr,p.id))return true;
+  }
+ }
+ if(p.hand.includes("wallmove")){
+  for(let d=0;d<4;d++){
+   const j=neighbor(p.pos,d);if(j<0||!free(j,p.id))continue;
+   const k=edge(p.pos,j),w=G.walls[k];
+   if(!w||!w.faceUp||w.kind==="phantom"||(w.kind==="oneway"&&w.a===p.pos))continue;
+   const c=wallCenter(w);
+   for(let i=0;i<G.n*G.n;i++)for(let sd=0;sd<4;sd++){
+    const q=neighbor(i,sd);if(q<0||G.walls[edge(i,q)])continue;
+    const a=rc(i),b=rc(q);
+    const ncenter=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+    if(Math.abs(c[0]-ncenter[0])+Math.abs(c[1]-ncenter[1])<=1.01)return true;
+   }
+  }
+ }
+ return false;
+}
 function emergencyReturn(){
- let p=G.players[G.current];if(G.actions!==0||!blockedPublic(p)||boostDirs(p).length>0)return;
+ let p=G.players[G.current];
+ if(G.actions!==0||!blockedPublic(p)||boostDirs(p).length>0||hasCardEscape(p))return info("使える脱出手段があるため、緊急帰還できません。");
  let safe=Array.from({length:G.n*G.n},(_,i)=>i).filter(i=>free(i,p.id)&&!G.stars[i]).sort((a,b)=>dist(a,p.home)-dist(b,p.home)||a-b);
  if(!safe.length)return info("復帰可能な空きマスがありません。ルールを再検証してください。");
  p.pos=safe[0];p.penalty+=2;G.actions=2;G.message="緊急帰還しました。最終得点から2点引かれます。";record(human(p)+" が緊急帰還しました。");render();
