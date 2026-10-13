@@ -50,3 +50,5 @@ footer{max-width:1120px;margin:auto;padding:0 16px 30px;color:#96a9c8;font-size:
 
 /* Explicitly honor native hidden state for the responsive navigation control. */
 .back-button[hidden],#backFromHandoff[hidden]{display:none!important}
+
+.formgrid label[hidden]{display:none!important}
