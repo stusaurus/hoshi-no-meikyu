@@ -137,7 +137,7 @@ function candidateTractor(id){
    const at=neighbor(rival.pos,d);
    if(!safeStep(rival.pos,at,rival.id))continue;
    if(starAt(at))continue; // Don't knowingly gift a star.
-   const from=strategicDistance(rival.pos,rival.id),to=strategicDistance(at,rival.id);
+   const from=strategicDistance(rival.pos,id),to=strategicDistance(at,id);
    possibilities.push({card:"tractor",type:"tractor",i:idx,target:rival.id,to:at,score:Math.min(9,(to-from)*4)+1});
   }
  }
