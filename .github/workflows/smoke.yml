@@ -18,11 +18,15 @@ jobs:
       - run: node --check scripts/simulate.cjs
       - name: Lightweight CPU balance regression (90 matches)
         run: node scripts/simulate.cjs --games=10 --seed=20261014 --out=reports
+      - name: Rotate starting seats (432 CPU games)
+        run: node scripts/simulate.cjs --games=48 --seed=20261014 --rotateSeats=true --out=reports-rotated
       - name: Upload preliminary balance data
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: star-maze-balance-baseline
-          path: reports/
+          path: |
+            reports/
+            reports-rotated/
           if-no-files-found: ignore
           retention-days: 14
