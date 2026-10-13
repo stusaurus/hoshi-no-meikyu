@@ -47,3 +47,6 @@ footer{max-width:1120px;margin:auto;padding:0 16px 30px;color:#96a9c8;font-size:
  .back-button{min-height:44px}
  .start-main{min-height:50px}
 }
+
+/* Explicitly honor native hidden state for the responsive navigation control. */
+.back-button[hidden],#backFromHandoff[hidden]{display:none!important}
