@@ -32,3 +32,15 @@ jobs:
       - name: Deploy
         id: deploy
         uses: actions/deploy-pages@v4
+      - name: Check the published URL and game assets
+        run: |
+          BASE="https://stusaurus.github.io/hoshi-no-meikyu"
+          curl -fLsS --retry 12 --retry-delay 5 --retry-all-errors "$BASE/" -o /tmp/star-index.html
+          curl -fLsS --retry 12 --retry-delay 5 --retry-all-errors "$BASE/style.css" -o /tmp/star-style.css
+          curl -fLsS --retry 12 --retry-delay 5 --retry-all-errors "$BASE/game.js" -o /tmp/star-game.js
+          curl -fLsS --retry 12 --retry-delay 5 --retry-all-errors "$BASE/cpu.js" -o /tmp/star-cpu.js
+          grep -q "星の迷宮" /tmp/star-index.html
+          grep -q "noindex" /tmp/star-index.html
+          grep -q "function start" /tmp/star-game.js
+          grep -q "StarMazeCPU" /tmp/star-cpu.js
+          echo "Public preview URL and all game assets verified."
