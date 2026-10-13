@@ -14,12 +14,15 @@ async function run(browser,width,height){
   assert.equal(await page.locator('#playMode').inputValue(),'cpu2','1 human vs 1 CPU is the default');
   assert.match(await page.locator('#startHeading').innerText(),/1人で遊ぼう/);
   assert.equal(await page.locator('#start').isVisible(),true);
+  assert.equal(await page.locator('#friendCountLabel').isVisible(),false,'Hide multiplayer-only settings in solo play');
   assert.equal(await page.locator('#backToTitle').isVisible(),false,'No back button on title');
 
   // Selecting multiplayer changes the visible introduction, but can switch back.
   await page.locator('#playMode').selectOption('local');
+  assert.equal(await page.locator('#friendCountLabel').isVisible(),true,'Multiplayer player count is available for friend mode');
   assert.match(await page.locator('#startHeading').innerText(),/友達と遊ぼう/);
   await page.locator('#playMode').selectOption('cpu2');
+  assert.equal(await page.locator('#friendCountLabel').isVisible(),false);
   assert.match(await page.locator('#startHeading').innerText(),/1人で遊ぼう/);
 
   // Start: initial private placement must offer an exit.
