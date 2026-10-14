@@ -174,25 +174,41 @@ function placeWall(i){
 function knownStar(s){return G.phase==="ended"||s.seen.includes(G.current);}
 function knownWall(w){return G.phase==="ended"||w.faceUp||w.seen.includes(G.current);}
 function wallMark(w){return knownWall(w)?wallIcons[w.kind]:"?";}
+const spriteKeyForPlayer=id=>["blue","red","green","yellow"][id];
+const sprite=(key,extra="")=>'<span class="sprite sprite-'+key+(extra?" "+extra:"")+'" aria-hidden="true"></span>';
 function wallHtml(i,j,where){
- let k=edge(i,j),w=G.walls[k];if(!w)return "";
- return '<button type="button" class="wall '+where+' '+(w.faceUp?"open":"unknown")+'" data-wall="'+k+'" title="壁を調べる／選ぶ" aria-label="'+(knownWall(w)?wallLabels[w.kind]:"秘密の壁")+'">'+wallMark(w)+'</button>';
+ const k=edge(i,j),w=G.walls[k];if(!w)return "";
+ // Hidden tiles always show their common stone back—even to the placer.
+ const visible=w.faceUp||G.phase==="ended";
+ const visual=visible?"wall_"+w.kind:"wall_hidden";
+ const label=visible?wallLabels[w.kind]:"秘密の壁";
+ const arrow=visible&&w.kind==="oneway"?'<span class="wall-arrow">'+(where==="e"?"→":"↓")+'</span>':"";
+ return '<button type="button" class="wall '+where+' '+(visible?"open":"unknown")+'" data-wall="'+k+'" title="'+label+'" aria-label="'+label+'">'+sprite(visual,"wall-visual")+arrow+'</button>';
 }
 function renderBoard(){
  if(!G)return;
  $("#board").style.setProperty("--n",G.n);
  let h="";
  for(let i=0;i<G.n*G.n;i++){
-  let p=G.players.find(p=>p.pos===i),s=G.stars[i],c="",c2="",starlabel="";
+  const p=G.players.find(p=>p.pos===i),s=G.stars[i],hasRight=i%G.n!==G.n-1,hasBottom=i<G.n*(G.n-1);
+  let content="",aria=(i+1)+"番のマス";
   if(s){
-   if(s.claimed!==null){c='<span class="token star claimed" style="color:'+colours[s.claimed]+'">⚑</span>';}
-   else c='<span class="token star">✦</span>';
-   if(knownStar(s))starlabel='<span class="starlabel">'+s.value+'点</span>';
+   const shown=G.phase==="ended"?"star_"+s.value:"star_hidden";
+   content+=sprite(shown,"star-card"+(s.claimed!==null?" star-owned":""));
+   if(s.claimed!==null){
+    content+=sprite("flag_"+spriteKeyForPlayer(s.claimed),"flag-on-star");
+    aria+="、"+human(G.players[s.claimed])+"が獲得した星";
+   }else aria+="、秘密の星";
+   if(knownStar(s))content+='<span class="starlabel">'+s.value+'点</span>';
   }
-  if(p){c2='<span class="token '+(s&&s.claimed!==null?"dual":"")+'" style="color:'+colours[p.id]+'">🚀'+(p.shield?"<span class=playerdot>🛡</span>":"")+'</span>';}
-  h+='<div class="cell" tabindex="0" role="button" data-cell="'+i+'" aria-label="'+(i+1)+'番のマス">'+c+starlabel+c2;
-  if(i%G.n!==G.n-1)h+=wallHtml(i,i+1,"e");
-  if(i<G.n*(G.n-1))h+=wallHtml(i,i+G.n,"s");
+  if(p){
+   content+=sprite("rocket_"+spriteKeyForPlayer(p.id),"rocket-on-cell"+(s&&s.claimed!==null?" rocket-on-flag":""));
+   if(p.shield)content+='<span class="shield-badge" aria-label="バリア展開中">🛡</span>';
+   aria+="、"+human(p);
+  }
+  h+='<div class="cell '+(hasRight?"edge-right ":"")+(hasBottom?"edge-bottom":"")+'" tabindex="0" role="button" data-cell="'+i+'" aria-label="'+aria+'">'+content;
+  if(hasRight)h+=wallHtml(i,i+1,"e");
+  if(hasBottom)h+=wallHtml(i,i+G.n,"s");
   h+='</div>';
  }
  $("#board").innerHTML=h;
@@ -200,7 +216,7 @@ function renderBoard(){
 function renderScore(){
  let h='<div class="row between"><b>プレイヤーの確保数</b><span class="small muted">点数は最終公開まで秘密</span></div><div class="row">';
  for(const p of G.players){let f=Object.values(G.stars).filter(x=>x.claimed===p.id).length;
- h+='<span class="pill"><span style="color:'+colours[p.id]+'">⚑</span> '+human(p)+'：'+f+'個'+(p.penalty?" / 減点"+p.penalty:"")+'</span>';}
+ h+='<span class="pill player-score">'+sprite("flag_"+spriteKeyForPlayer(p.id),"inline-flag")+' '+human(p)+'：'+f+'個'+(p.penalty?" / 減点"+p.penalty:"")+'</span>';}
  $("#score").innerHTML=h+"</div>";
 }
 function dirBtns(prefix){
@@ -215,7 +231,7 @@ function renderPlacement(){
  else h+='<p class="note">① 壁を選ぶ → ② 方向（↑→↓←）を選ぶ → ③ その手前のマスをタップ。壁の正体は相手に秘密です。'+(G.ruleset==="standard"?"一方通行は右・下の正方向のみ通れます。":"")+'</p>'+dirBtns();
  return h;
 }
-function cardBtn(c,i){let def=defs[c];return '<button class="btn '+def.group+' '+(G.active&&G.active.index===i?"active":"")+'" data-card="'+i+'" title="'+def.desc+'"><span class="cardicon">'+def.icon+'</span>'+def.name+'</button>';}
+function cardBtn(c,i){const def=defs[c];return '<button class="btn card-choice '+def.group+' '+(G.active&&G.active.index===i?"active":"")+'" data-card="'+i+'" aria-label="'+def.name+"："+def.desc+'" title="'+def.desc+'">'+sprite("card_"+c,"card-art")+'<span class="card-name">'+def.name+'</span></button>';}
 function blockedPublic(p){
  for(let d=0;d<4;d++){
   let j=neighbor(p.pos,d);if(j<0)continue;
@@ -269,6 +285,7 @@ function render(){
  if(!G){$("#board").innerHTML="";$("#status").innerHTML='<strong>新しいゲーム</strong>';$("#score").innerHTML="";$("#log").innerHTML="";
  $("#side").innerHTML='<h2 id="startHeading">🚀 まずは1人で遊ぼう</h2><p class="small muted" id="startDescription">CPUと1対1で対戦できます。まずは簡単なスターターがおすすめです。</p>'+
  '<div class="starter-selection"><label for="gameSet"><strong>ゲームセット</strong></label><select id="gameSet"><option value="starter" selected>🌟 スターターセット（おすすめ）</option><option value="standard">スタンダード（従来版）</option></select><div class="starter-intro" id="setDescription"><strong>カード5種類・壁3種類</strong><p>🚀 移動山札：てくてく・流星ダッシュ・ジェットジャンプ（手札3枚）<br>✨ 効果山札：宇宙探査・トラクタービーム（手札2枚）<br>壁：通常・反発・幻影</p><small>最初は1人＋CPUで練習できます。遊び方は同じ、複雑なカードを減らしたセットです。</small></div></div>'+
+ '<div class="home-rockets" aria-label="4色のロケット">'+["red","blue","yellow","green"].map(c=>sprite("rocket_"+c,"home-rocket")).join("")+'</div>'+ 
  '<div class="formgrid"><label>遊び方<select id="playMode"><option value="cpu2" selected>1人で遊ぶ・CPU1体（おすすめ）</option><option value="cpu3">1人で遊ぶ・CPU2体</option><option value="cpu4">1人で遊ぶ・CPU3体</option><option value="local">友達と遊ぶ・同じ端末で交代</option></select></label><label id="friendCountLabel" hidden>友達と遊ぶ場合の人数<select id="playerCount"><option value="2" selected>2人</option><option value="3">3人</option><option value="4">4人</option></select></label><label>盤面サイズ（検証用）<select id="boardSize"><option value="7" selected>7×7</option><option value="8">8×8</option><option value="9">9×9</option></select></label></div>'+
  '<button class="btn primary start-main" id="start">🚀 スターターでゲームスタート</button><div class="note">開発中の試遊版です。最終点数は星を公開するまで秘密。遠隔オンライン対戦と保存は未実装です。</div>';
  return;}

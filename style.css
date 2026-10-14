@@ -74,3 +74,86 @@ footer{max-width:1120px;margin:auto;padding:0 16px 30px;color:#96a9c8;font-size:
 .effect-group h3{color:#e1c8ff}
 .hand-group .tiny{font-size:.72rem;font-weight:400;color:#c7d4ee;white-space:nowrap}
 @media(max-width:400px){.hand-group{padding:9px 7px}.hand-group h3{font-size:.87rem}.hand-group .tiny{font-size:.68rem}}
+
+/* Visually approved tabletop art, packed in one lightweight transparent WEBP.
+   Geometry-based sprites ensure all states use the same unchanged source artwork. */
+.sprite{display:inline-block;flex:none;box-sizing:border-box;background-image:url("./assets/art.webp");background-repeat:no-repeat;pointer-events:none;user-select:none}
+.sprite-card_walk{background-size:875% 343.4066%;background-position:0% 0%;aspect-ratio:96/182}
+.sprite-card_dash{background-size:875% 343.4066%;background-position:13.3065% 0%;aspect-ratio:96/182}
+.sprite-card_jump{background-size:875% 343.4066%;background-position:26.6129% 0%;aspect-ratio:96/182}
+.sprite-card_scan{background-size:875% 343.4066%;background-position:39.9194% 0%;aspect-ratio:96/182}
+.sprite-card_tractor{background-size:875% 343.4066%;background-position:53.2258% 0%;aspect-ratio:96/182}
+.sprite-card_wallmove{background-size:875% 343.4066%;background-position:66.5323% 0%;aspect-ratio:96/182}
+.sprite-card_pull{background-size:875% 343.4066%;background-position:79.8387% 0%;aspect-ratio:96/182}
+.sprite-card_shield{background-size:875% 343.4066%;background-position:93.1452% 0%;aspect-ratio:96/182}
+.sprite-rocket_red{background-size:1105.2632% 606.7961%;background-position:0% 36.59%;aspect-ratio:76/103}
+.sprite-rocket_blue{background-size:1105.2632% 606.7961%;background-position:10.8639% 36.59%;aspect-ratio:76/103}
+.sprite-rocket_yellow{background-size:1105.2632% 606.7961%;background-position:21.7277% 36.59%;aspect-ratio:76/103}
+.sprite-rocket_green{background-size:1105.2632% 606.7961%;background-position:32.5916% 36.59%;aspect-ratio:76/103}
+.sprite-flag_red{background-size:1105.2632% 606.7961%;background-position:46.0733% 36.59%;aspect-ratio:76/103}
+.sprite-flag_blue{background-size:1105.2632% 606.7961%;background-position:56.9372% 36.59%;aspect-ratio:76/103}
+.sprite-flag_yellow{background-size:1105.2632% 606.7961%;background-position:67.801% 36.59%;aspect-ratio:76/103}
+.sprite-flag_green{background-size:1105.2632% 606.7961%;background-position:78.6649% 36.59%;aspect-ratio:76/103}
+.sprite-star_hidden{background-size:988.2353% 735.2941%;background-position:0% 56.2963%;aspect-ratio:85/85}
+.sprite-star_0{background-size:988.2353% 735.2941%;background-position:12.1854% 56.2963%;aspect-ratio:85/85}
+.sprite-star_1{background-size:988.2353% 735.2941%;background-position:24.2384% 56.2963%;aspect-ratio:85/85}
+.sprite-star_2{background-size:988.2353% 735.2941%;background-position:36.2914% 56.2963%;aspect-ratio:85/85}
+.sprite-star_3{background-size:988.2353% 735.2941%;background-position:48.3444% 56.2963%;aspect-ratio:85/85}
+.sprite-wall_solid{background-size:482.7586% 710.2273%;background-position:0% 74.8603%;aspect-ratio:174/88}
+.sprite-wall_bounce{background-size:482.7586% 710.2273%;background-position:26.7267% 74.8603%;aspect-ratio:174/88}
+.sprite-wall_phantom{background-size:482.7586% 710.2273%;background-position:53.4535% 74.8603%;aspect-ratio:174/88}
+.sprite-wall_oneway{background-size:482.7586% 710.2273%;background-position:80.1802% 74.8603%;aspect-ratio:174/88}
+.sprite-wall_hidden{background-size:482.7586% 694.4444%;background-position:0% 93.271%;aspect-ratio:174/90}
+.sprite-logo{background-size:245.614% 538.7931%;background-position:71.6867% 98.4283%;aspect-ratio:342/116}
+
+/* Quiet, low-cost, printed-board appearance: walls remain on edges, not on cells. */
+.board{gap:2px;padding:7px;border-color:#668eb5;background:
+ radial-gradient(circle at 20% 15%,#edf7ff8c 0 1px,transparent 2px) 0 0/43px 56px,
+ radial-gradient(circle at 80% 65%,#a9d4ff7d 0 1px,transparent 2px) 0 0/67px 59px,
+ radial-gradient(120% 80% at 15% 100%,#143564 0%,transparent 65%),#09172f}
+.cell{background:linear-gradient(145deg,#19335188,#11294374);border:1px solid #4a8fb7a3;border-radius:2px;isolation:isolate}
+.cell:hover{background:#224c7088}
+.cell.edge-right:before,.cell.edge-bottom:after{content:"";position:absolute;z-index:2;border:1px solid #7ac0e58a;border-radius:10px;background:#173753;pointer-events:none}
+.cell.edge-right:before{width:6px;height:36%;top:32%;right:-5px}
+.cell.edge-bottom:after{height:6px;width:36%;left:32%;bottom:-5px}
+.cell .star-card{position:absolute;z-index:1;width:64%;height:auto;aspect-ratio:1;top:50%;left:50%;transform:translate(-50%,-50%);filter:drop-shadow(0 1px 3px #000b)}
+.cell .star-owned{opacity:.9}
+.cell .rocket-on-cell{position:absolute;z-index:5;height:77%;width:auto;aspect-ratio:76/103;bottom:3%;left:50%;transform:translateX(-50%);filter:drop-shadow(0 2px 2px #0009)}
+.cell .rocket-on-flag{height:70%;left:38%}
+.cell .flag-on-star{position:absolute;z-index:3;height:64%;width:auto;aspect-ratio:76/103;top:2%;right:0;filter:drop-shadow(0 2px 3px #0009)}
+.cell .starlabel{z-index:7;top:1px;left:2px;font-size:clamp(.46rem,.95vw,.74rem);padding:1px 3px;background:#07182ed9;border:1px solid #fff4;border-radius:5px;color:#ffdd6b}
+.shield-badge{position:absolute;right:2px;bottom:0;z-index:8;font-size:.75rem;pointer-events:none}
+.wall{box-sizing:border-box;background:transparent!important;color:transparent!important;border:0!important;padding:0!important;box-shadow:none!important;z-index:8;overflow:visible}
+.wall.e{width:11px;height:50%;right:-7px;top:25%}
+.wall.s{height:11px;width:50%;left:25%;bottom:-7px}
+.wall .wall-visual{display:block;position:absolute;top:50%;left:50%;width:100%;height:100%;transform:translate(-50%,-50%);border-radius:3px;filter:drop-shadow(0 1px 1px #0008)}
+.wall.e .wall-visual{width:310%;height:38%;transform:translate(-50%,-50%) rotate(90deg)}
+.wall .wall-arrow{position:absolute;inset:0;z-index:3;display:grid;place-items:center;color:#fff;text-shadow:0 0 4px #07122d;font-size:.72rem}
+.wall.open{filter:drop-shadow(0 0 2px #bdeeff)}
+.wall:focus-visible{outline:2px solid #ffe17d;outline-offset:2px}
+.player-score{display:inline-flex;align-items:center;gap:4px}
+.inline-flag{width:15px;aspect-ratio:76/103;height:auto}
+.hand .card-choice{min-height:0;padding:5px 4px 7px;display:flex;justify-content:flex-start;align-items:center;gap:4px;border-radius:10px;overflow:hidden}
+.hand .card-choice .card-art{display:block;width:min(100%,115px);height:auto;aspect-ratio:96/182;border-radius:6px;box-shadow:0 2px 8px #0008}
+.hand .card-choice .card-name{line-height:1.2;font-weight:700;font-size:clamp(.63rem,1vw,.84rem);text-align:center}
+.hand .card-choice.move{background:#18496c;border:1px solid #59b5e7}
+.hand .card-choice.effect{background:#412553;border:1px solid #a16ed0}
+.hand .card-choice.active{box-shadow:0 0 0 3px #f5ce69}
+.hand-group .hand{grid-template-columns:repeat(3,minmax(0,1fr))}
+.home-rockets{display:flex;align-items:end;justify-content:center;gap:16px;padding:9px 6px;margin:8px 0;border:1px solid #5977a655;border-radius:12px;background:linear-gradient(180deg,#11294699,#14294466)}
+.home-rocket{width:13%;max-width:57px;height:auto;aspect-ratio:76/103;filter:drop-shadow(0 2px 3px #0008)}
+@media(max-width:790px){
+ .board{gap:2px;padding:5px}
+ .wall.e{width:9px;right:-6px}
+ .wall.s{height:9px;bottom:-6px}
+ .cell.edge-right:before{width:5px;right:-4px}
+ .cell.edge-bottom:after{height:5px;bottom:-4px}
+ .cell .rocket-on-cell{height:75%}
+ .cell .flag-on-star{height:60%}
+}
+@media(max-width:370px){
+ .hand-group .hand{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .hand-group .card-choice{padding:3px 2px 5px}
+ .hand-group .card-choice .card-name{font-size:.64rem}
+ .cell .starlabel{font-size:.46rem}
+}

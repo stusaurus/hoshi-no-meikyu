@@ -11,11 +11,17 @@ async function run(browser,count,width){
  page.on('pageerror',e=>errors.push(e.message));
  try{
   await page.goto(ROOT,{waitUntil:'networkidle'});
+  const art=await page.evaluate(async()=>{const r=await fetch('./assets/art.webp');return {ok:r.ok,bytes:(await r.arrayBuffer()).byteLength};});
+  assert.ok(art.ok&&art.bytes>25000,'Approved illustrations asset must be served, not missing');
+
   assert.equal(await page.locator('#gameSet').inputValue(),'starter','Starter is the default ruleset');
   await page.locator('#playMode').selectOption('cpu'+count);
   await page.locator('#boardSize').selectOption(count===4?'9':'7');
   await page.locator('#start').click();
   assert.equal(await page.evaluate(()=>G.ruleset),'starter');
+  assert.equal(await page.locator('.rocket-on-cell').count(),count,'4-color rocket artwork renders for each player');
+  assert.equal(await page.locator('.sprite-rocket_blue').count(),1,'Blue player uses approved blue rocket, not emoji');
+
   assert.equal(await page.evaluate(()=>G.players.filter(x=>x.cpu).length),count-1);
   let turns=0;
   while(turns++<70){
@@ -52,6 +58,10 @@ async function run(browser,count,width){
     assert.equal(hand.move,3,'Starter hand has 3 movement cards after prior refill');
     assert.equal(hand.effect,2,'Starter hand has 2 effect cards after prior refill');
     assert.equal(await page.locator('.move-group [data-card]').count(),3,'3 cards shown under blue movement heading');
+    assert.equal(await page.locator('.card-art').count(),5,'All starter cards show approved illustrations');
+    assert.equal(await page.locator('.sprite-star_hidden').count(),await page.evaluate(()=>Object.values(G.stars).filter(s=>s.claimed===null).length),'Hidden stars show card backs');
+    assert.equal(await page.locator('.wall.unknown .sprite-wall_hidden').count(),await page.evaluate(()=>Object.values(G.walls).filter(w=>!w.faceUp).length),'All hidden wall types share the stone back');
+
     assert.equal(await page.locator('.effect-group [data-card]').count(),2,'2 cards shown under purple effect heading');
     await page.locator('#endturn').click();
    }else throw Error('Unknown phase '+phase);
