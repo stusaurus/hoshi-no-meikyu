@@ -249,7 +249,7 @@ function renderPlacement(){
  else h+='<p class="note">① 壁を選ぶ → ② 方向（↑→↓←）を選ぶ → ③ その手前のマスをタップ。選んだ矢印側の境界に平らな壁が置かれます。マスの中には置きません。壁の正体は相手に秘密です。'+(G.ruleset==="standard"?"一方通行は右・下の正方向のみ通れます。":"")+'</p>'+dirBtns();
  return h;
 }
-function cardBtn(c,i){const def=defs[c],description=cardDescription(c);return '<button class="btn card-choice '+def.group+' '+(G.active&&!G.active.committed&&G.active.index===i?"active":"")+'" data-card="'+i+'" '+(G.actions>=actionLimit()||G.active&&G.active.committed?"disabled ":"")+'aria-pressed="'+Boolean(G.active&&!G.active.committed&&G.active.index===i)+'" aria-label="'+def.name+"："+description+'" title="'+description+'">'+sprite("card_"+c,"card-art")+'<span class="card-name">'+def.name+'</span><span class="card-effect">'+description+'</span></button>';}
+function cardBtn(c,i){const def=defs[c],description=cardDescription(c);return '<button class="btn card-choice '+(strategy()?"fixed-card ":"")+def.group+' '+(G.active&&!G.active.committed&&G.active.index===i?"active":"")+'" data-card="'+i+'" '+(G.actions>=actionLimit()||G.active&&G.active.committed?"disabled ":"")+'aria-pressed="'+Boolean(G.active&&!G.active.committed&&G.active.index===i)+'" aria-label="'+def.name+"："+description+'" title="'+description+'">'+sprite("card_"+c,"card-art")+'<span class="card-name">'+def.name+'</span><span class="card-effect">'+description+'</span></button>';}
 function blockedPublic(p){
  for(let d=0;d<4;d++){
   let j=neighbor(p.pos,d);if(j<0)continue;

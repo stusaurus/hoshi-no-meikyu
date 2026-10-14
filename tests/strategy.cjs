@@ -29,7 +29,8 @@ for(const count of [2,3,4])for(const size of [7,8,9]){
  assert.equal(Object.keys(g.stars).length,0,'No random neutral stars');
  for(const p of g.players){assert.deepEqual(Array.from(p.stars),[1,2,3]);assert.deepEqual(Array.from(p.hand),cards);}
  placement(t);assert.equal(Object.keys(g.stars).length,2*count);assert.ok(g.players.every(p=>p.stars.length===1));
- assert.ok(Object.values(g.stars).every(t.knownStar));
+ assert.ok(Object.values(g.stars).every(t.knownStar));t.unlock();
+ assert.equal((nodes.get('#side').innerHTML.match(/fixed-card/g)||[]).length,5,'Fixed-card artwork captions must be scoped to the new mode');
  assert.match(nodes.get('#board').innerHTML,/starlabel/);assert.ok(!nodes.get('#board').innerHTML.includes('star_hidden'));
  // A public star cannot consume the wall-only scan action.
  t.unlock();t.selectCard(3);t.inspectStar(Number(Object.keys(g.stars)[0]));assert.equal(g.actions,0);
