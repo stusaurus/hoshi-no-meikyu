@@ -1,0 +1,11 @@
+{
+  "base_commit": "7e67026befb0996e0e91de7c889862b789e85e93",
+  "comparison_records": 2784,
+  "repeated_control_records": 696,
+  "initial_seeds_per_condition": 8,
+  "sha256": {
+    "game.js": "2b8033b9088ee0f8248c82d6b66a05e58877454bbbf5794834a5a09882fb5766",
+    "cpu.js": "ac70c6d9e03810f2d5b78891bfbefc2b54d55103a57eac64ef7cf091fd5da5a0",
+    "scripts/audit-simulate.cjs": "0a983c7e12e750caf0fe1c7041dd48e72e01ed3e9ea88a2e101564a7d7553683"
+  }
+}

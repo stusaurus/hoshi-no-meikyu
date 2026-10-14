@@ -5,9 +5,30 @@ const args=Object.fromEntries(process.argv.slice(2).map(x=>x.replace(/^--/,'').s
 const dir=path.resolve(args.out||'docs/audit-2026-10-14/data');fs.mkdirSync(dir,{recursive:true});
 const policies=(args.policies||'collect,sabotage,explore,random,mixed').split(','),seedOffset=Number(args.seedOffset||0);
 const seeds=Number(args.seeds||4),ruleset=args.set||'starter',variant=args.variant||'current';
+const variants=['current','five-rounds','alternating','passable-flags','alternating-passable-flags'];
+if(!variants.includes(variant))throw Error('Unknown experimental variant: '+variant);
+const alternating=variant.startsWith('alternating'),passable=variant.includes('passable-flags');
+function replaceOnce(text,from,to){if(text.split(from).length!==2)throw Error('Experimental adapter anchor changed: '+from);return text.replace(from,to);}
 let source=fs.readFileSync(args.gameSource||'game.js','utf8');
 if(variant==='five-rounds')source=source.replace('G.round>=6||','G.round>=5||'); // isolated hypothetical, not a formal rule
+if(passable)source=replaceOnce(source,'function isFlag(i){return G.stars[i]&&G.stars[i].claimed!==null;}','function isFlag(i){return false;}');
+if(alternating){
+ // Twelve single-action circuits preserve six rounds' 12 actions per actor.
+ // Refill after each actor's second circuit, and add supplies after circuit 6.
+ source=replaceOnce(source,'draw(p,5-p.hand.length);','if(G.round%2===0)draw(p,5-p.hand.length);');
+ source=replaceOnce(source,'G.round>=6||(G.round>=4&&','G.round>=12||(G.round>=7&&');
+ source=replaceOnce(source,'if(G.round===4){','if(G.round===7){');
+}
 let cpu=fs.readFileSync(args.cpuSource||'cpu.js','utf8');
+if(alternating){
+ cpu=replaceOnce(cpu,'G.actions<2&&succeeded','G.actions<1&&succeeded');
+ // Emergency actions still cost two actions: skip this actor's next circuit.
+ cpu=replaceOnce(cpu,'const plan=chooseAction();','if(G.players[G.current].auditDebt){G.players[G.current].auditDebt=false;endTurn();return;}\n const plan=chooseAction();');
+ cpu=replaceOnce(cpu,'emergencyBoost(boosts[0]);endTurn();','emergencyBoost(boosts[0]);p.auditDebt=true;endTurn();');
+ cpu=replaceOnce(cpu,'emergencyReturn();endTurn();','emergencyReturn();p.auditDebt=true;endTurn();');
+ // Check debt before considering another rescue.
+ cpu=replaceOnce(cpu,'if(G.actions===0&&blockedPublic(G.players[G.current])){','if(G.round%2===1&&!G.players[G.current].auditDebt&&G.actions===0&&blockedPublic(G.players[G.current])){');
+}
 // Memoize only within one non-mutating planning pass; fresh cache each choice.
 cpu=cpu.replace('function publicDistance(', 'function uncachedPublicDistance(').replace('function targets(id)', `let distances=new Map();function publicDistance(a,b,id){const k=a+':'+b+':'+id;if(!distances.has(k))distances.set(k,uncachedPublicDistance(a,b,id));return distances.get(k);}
 function targets(id)`).replace('function chooseAction(){','function chooseAction(){distances.clear();').replace('function placeCPU(){','function placeCPU(){distances.clear();');
@@ -34,20 +55,25 @@ function run(count,size,seed,seat,order,policy){
  // Identity remains slot id. Rotate physical seat and separately which actor/policy occupies each turn slot.
  const starts=g.players.map(p=>p.pos),identities=g.players.map(p=>(p.id+order)%count),supplies=g.players.map(p=>({stars:p.stars.slice(),walls:p.walls.slice()}));
  g.players.forEach((p,i)=>{p.pos=starts[(identities[i]+seat)%count];p.home=p.pos;p.stars=supplies[identities[i]].stars.slice();p.walls=supplies[identities[i]].walls.slice();p.cpu=true;p.auditPolicy=policy==='mixed'?['collect','sabotage','explore','random'][identities[i]]:policy;});
- let ticks=0,roundScores=[],blocked=0,noAction=0;
+ let ticks=0,roundScores=[],blocked=0,noAction=0,turns=[];
  const score=()=>g.players.map(p=>Object.values(g.stars).filter(s=>s.claimed===p.id).reduce((n,s)=>n+s.value,0)-p.penalty);
  while(g.phase!=='ended'){
   if(++ticks>300)throw Error('nontermination');
-  const ph=g.phase,r=g.round,id=g.current,old=g.players[id].pos,before=ctx.metrics.actions.length;
+  const ph=g.phase,r=g.round,id=g.current,old=g.players[id].pos,before=ctx.metrics.actions.length,rescuesBefore=ctx.metrics.rescues.length,debt=!!g.players[id].auditDebt;
   if(ph==='play'&&vm.runInContext('blockedPublic(G.players[G.current])',ctx))blocked++;
   tasks.length=0;a.run();
   if(errors.length)throw Error(errors[0]);
+  if(ph==='play'){
+   const cards=ctx.metrics.actions.length-before,rescues=ctx.metrics.rescues.length-rescuesBefore;
+   if(cards>(alternating?1:2)||rescues>1||(debt&&(cards||rescues)))throw Error('Experimental action budget exceeded');
+   turns.push({id,circuit:r,cards,rescues,debt});
+  }
   if(ph==='play'&&ctx.metrics.actions.length===before&&old===g.players[id].pos)noAction++;
   if(ph==='play'&&id===count-1)roundScores.push({round:r,scores:score()});
  }
  const scores=score(),max=Math.max(...scores),winners=scores.flatMap((v,i)=>v===max?[i]:[]),sorted=scores.slice().sort((a,b)=>b-a);
  const penultimate=roundScores.at(-2),previousLeaders=penultimate?penultimate.scores.flatMap((v,i)=>v===Math.max(...penultimate.scores)?[i]:[]):[];
- return {count,size,seed,seat,order,policy,identities,round:g.round,scores,winners,margin:sorted[0]-sorted[1],claimCounts:g.players.map(p=>Object.values(g.stars).filter(s=>s.claimed===p.id).length),capture:Object.values(g.stars).filter(s=>s.claimed!==null).length/Object.keys(g.stars).length,reversal:previousLeaders.length?Number(winners.some(i=>!previousLeaders.includes(i))):null,roundScores,blocked,noAction,wallRevealed:Object.values(g.walls).filter(w=>w.faceUp).length,wallCount:Object.keys(g.walls).length,...JSON.parse(JSON.stringify(ctx.metrics))};
+ return {count,size,seed,seat,order,policy,identities,round:g.round,logicalRound:alternating?g.round/2:g.round,turns,scores,winners,margin:sorted[0]-sorted[1],claimCounts:g.players.map(p=>Object.values(g.stars).filter(s=>s.claimed===p.id).length),capture:Object.values(g.stars).filter(s=>s.claimed!==null).length/Object.keys(g.stars).length,reversal:previousLeaders.length?Number(winners.some(i=>!previousLeaders.includes(i))):null,roundScores,blocked,noAction,wallRevealed:Object.values(g.walls).filter(w=>w.faceUp).length,wallCount:Object.keys(g.walls).length,...JSON.parse(JSON.stringify(ctx.metrics))};
 }
 const records=[],failures=[],start=Date.now();
 for(const count of [2,3,4])for(const size of [7,8,9])for(const policy of policies){
