@@ -45,6 +45,14 @@ async function run(browser,count,width){
     if(action.kind==='wall')await page.locator('[data-dir="'+action.d+'"]').click();
     await page.locator('#board [data-cell="'+action.cell+'"]').click();
    }else if(phase==='play'){
+    const hand=await page.evaluate(()=>({
+      move:G.players[G.current].hand.filter(c=>defs[c].group==='move').length,
+      effect:G.players[G.current].hand.filter(c=>defs[c].group==='effect').length
+    }));
+    assert.equal(hand.move,3,'Starter hand has 3 movement cards after prior refill');
+    assert.equal(hand.effect,2,'Starter hand has 2 effect cards after prior refill');
+    assert.equal(await page.locator('.move-group [data-card]').count(),3,'3 cards shown under blue movement heading');
+    assert.equal(await page.locator('.effect-group [data-card]').count(),2,'2 cards shown under purple effect heading');
     await page.locator('#endturn').click();
    }else throw Error('Unknown phase '+phase);
   }
@@ -65,5 +73,6 @@ async function run(browser,count,width){
  try{
   await run(browser,2,1280);
   await run(browser,4,390);
+  await run(browser,2,320);
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
