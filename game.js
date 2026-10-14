@@ -538,7 +538,7 @@ function emergencyReturn(){
 }
 function finishGame(){
  G.phase="ended";G.active=null;G.message="";G.privateMessage="";G.locked=false;$("#handoff").hidden=true;$("main").style.visibility="visible";
- record("最終得点を公開しました。");render();
+ record(strategy()?"対戦終了。現在の得点で勝者を確認しました。":"最終得点を公開しました。");render();
 }
 function reset(){if(document.body)document.body.classList.remove("compact-board");const zoom=$("#boardZoom");if(zoom&&zoom.setAttribute){zoom.setAttribute("aria-pressed","true");zoom.textContent="盤面を縮小";}if($("main").removeAttribute)$("main").removeAttribute("inert");G=null;$("main").style.visibility="visible";$("#handoff").hidden=true;$("#reveal").hidden=false;render();}
 function returnToTitle(){

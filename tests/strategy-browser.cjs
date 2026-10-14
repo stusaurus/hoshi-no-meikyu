@@ -29,6 +29,7 @@ async function run(browser,width,count){
   assert.match(await page.locator('#score').innerText(),/現在の得点/);
   assert.match(await page.locator('#side').innerText(),/繰り返し|次の手番でも/);
   assert.match(await page.locator('[data-card="3"]').innerText(),/秘密の壁/);
+  assert.match(await page.locator('.fixed-card .sprite-card_scan').evaluate(el=>getComputedStyle(el,'::after').content),/秘密の壁/);
   // Put an existing 3-point star next to the human to verify real walk UI,
   // live points, and that choosing one action doesn't remove its card.
   const dest=await page.evaluate(()=>{

@@ -209,3 +209,8 @@ body:not(.playing) .shell{display:block;max-width:640px}
 .wall.e .wall-visual{width:100%;height:auto;transform:translate(-50%,-50%)}
 .wall.e .wall-arrow{transform:rotate(-90deg)}
 @media(min-width:791px){#boardZoom,#panHint{display:none}}
+
+/* Fixed-action scan targets walls only; cover the old printed star-or-wall
+   caption without modifying the approved illustration atlas. */
+.fixed-card .sprite-card_scan{position:relative}
+.fixed-card .sprite-card_scan::after{content:"秘密の壁を確認";position:absolute;left:5%;right:5%;bottom:3%;height:25%;display:flex;align-items:center;justify-content:center;padding:2px;box-sizing:border-box;background:#f3f0db;color:#18344f;font-size:clamp(8px,1vw,12px);font-weight:800;line-height:1.2;border-radius:2px;text-align:center}
