@@ -56,7 +56,7 @@ async function play(viewport,browser) {
   try{
     const response=await page.goto(URL,{waitUntil:'networkidle'});
     assert.equal(response.status(),200,'home page served');
-    assert.equal(await page.title(),'星の迷宮 | STANDARD 試作版');
+    assert.equal(await page.title(),'星の迷宮 | イラスト付きWeb試作版');
     assert.equal(await page.locator('#playMode').inputValue(),'cpu2','Solo CPU play is the default');
     await page.locator('#gameSet').selectOption('standard');
     await page.locator('#playMode').selectOption('local');
