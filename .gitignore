@@ -3,3 +3,7 @@ artifacts/
 package-lock.json
 star-maze-playable.zip
 preview/
+
+# Reproducible uncompressed intermediates; gzip records are tracked.
+docs/audit-2026-10-14/data-*/games.json
+docs/audit-2026-10-14/data-*/progress.json

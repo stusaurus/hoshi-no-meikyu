@@ -234,7 +234,7 @@ function renderPlacement(){
  else h+='<p class="note">① 壁を選ぶ → ② 方向（↑→↓←）を選ぶ → ③ その手前のマスをタップ。選んだ矢印側の境界に平らな壁が置かれます。マスの中には置きません。壁の正体は相手に秘密です。'+(G.ruleset==="standard"?"一方通行は右・下の正方向のみ通れます。":"")+'</p>'+dirBtns();
  return h;
 }
-function cardBtn(c,i){const def=defs[c];return '<button class="btn card-choice '+def.group+' '+(G.active&&G.active.index===i?"active":"")+'" data-card="'+i+'" '+(G.actions>=2?"disabled ":"")+'aria-pressed="'+Boolean(G.active&&G.active.index===i)+'" aria-label="'+def.name+"："+def.desc+'" title="'+def.desc+'">'+sprite("card_"+c,"card-art")+'<span class="card-name">'+def.name+'</span><span class="card-effect">'+def.desc+'</span></button>';}
+function cardBtn(c,i){const def=defs[c];return '<button class="btn card-choice '+def.group+' '+(G.active&&!G.active.committed&&G.active.index===i?"active":"")+'" data-card="'+i+'" '+(G.actions>=2||G.active&&G.active.committed?"disabled ":"")+'aria-pressed="'+Boolean(G.active&&!G.active.committed&&G.active.index===i)+'" aria-label="'+def.name+"："+def.desc+'" title="'+def.desc+'">'+sprite("card_"+c,"card-art")+'<span class="card-name">'+def.name+'</span><span class="card-effect">'+def.desc+'</span></button>';}
 function blockedPublic(p){
  for(let d=0;d<4;d++){
   let j=neighbor(p.pos,d);if(j<0)continue;
@@ -510,7 +510,7 @@ function finishGame(){
  G.phase="ended";G.active=null;G.message="";G.privateMessage="";G.locked=false;$("#handoff").hidden=true;$("main").style.visibility="visible";
  record("最終得点を公開しました。");render();
 }
-function reset(){if($("main").removeAttribute)$("main").removeAttribute("inert");G=null;$("main").style.visibility="visible";$("#handoff").hidden=true;$("#reveal").hidden=false;render();}
+function reset(){if(document.body)document.body.classList.remove("compact-board");const zoom=$("#boardZoom");if(zoom&&zoom.setAttribute){zoom.setAttribute("aria-pressed","true");zoom.textContent="盤面を縮小";}if($("main").removeAttribute)$("main").removeAttribute("inert");G=null;$("main").style.visibility="visible";$("#handoff").hidden=true;$("#reveal").hidden=false;render();}
 function returnToTitle(){
  if(!G)return;
  if(!window.confirm("対戦を終了してタイトルへ戻りますか？\n現在の進行状況は保存されません。"))return;

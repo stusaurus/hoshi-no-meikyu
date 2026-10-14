@@ -83,6 +83,7 @@ async function run(browser,count,width){
  try{
   await run(browser,2,1280);
   await run(browser,4,390);
+  await run(browser,3,390);
   await run(browser,2,320);
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
