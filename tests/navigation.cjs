@@ -11,6 +11,12 @@ async function run(browser,width,height){
  try{
   const response=await page.goto(URL,{waitUntil:'networkidle'});
   assert.equal(response.status(),200);
+  assert.equal(await page.locator('#gameSet').inputValue(),'starter','Starter must be the default ruleset');
+  assert.match(await page.locator('#setDescription').innerText(),/カード5種類・壁3種類/);
+  await page.locator('#gameSet').selectOption('standard');
+  assert.match(await page.locator('#setDescription').innerText(),/カード8種類・壁4種類/);
+  await page.locator('#gameSet').selectOption('starter');
+  assert.match(await page.locator('#setDescription').innerText(),/カード5種類・壁3種類/);
   assert.equal(await page.locator('#playMode').inputValue(),'cpu2','1 human vs 1 CPU is the default');
   assert.match(await page.locator('#startHeading').innerText(),/1人で遊ぼう/);
   assert.equal(await page.locator('#start').isVisible(),true);
