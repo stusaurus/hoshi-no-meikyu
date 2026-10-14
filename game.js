@@ -39,7 +39,37 @@ function choosePlayers(n,size){
  let p=n===2?[0,size*size-1]:n===3?[0,size-1,(size-1)*size+Math.floor(size/2)]:[0,size-1,(size-1)*size,size*size-1];
  return p;
 }
-function draw(p,count){for(let i=0;i<count;i++){if(!G.deck.length){G.deck=shuffle(G.discard);G.discard=[];}if(G.deck.length)p.hand.push(G.deck.pop());}}
+function discardCard(c){
+ if(G.ruleset==="starter"){
+  (defs[c].group==="move"?G.moveDiscard:G.effectDiscard).push(c);
+ }else G.discard.push(c);
+}
+function drawFromSeparateDeck(group){
+ const deckKey=group==="move"?"moveDeck":"effectDeck";
+ const discardKey=group==="move"?"moveDiscard":"effectDiscard";
+ if(!G[deckKey].length&&G[discardKey].length){
+  G[deckKey]=shuffle(G[discardKey]);G[discardKey]=[];
+ }
+ return G[deckKey].length?G[deckKey].pop():null;
+}
+function draw(p,count){
+ if(G.ruleset==="starter"){
+  // Separate decks and fixed slots: always refill movement to 3 and effects to 2.
+  for(const [group,limit] of [["move",3],["effect",2]]){
+   let held=p.hand.filter(c=>defs[c].group===group).length;
+   while(held<limit){
+    const c=drawFromSeparateDeck(group);
+    if(!c)break; // Others may temporarily hold every copy.
+    p.hand.push(c);held++;
+   }
+  }
+  return;
+ }
+ for(let i=0;i<count;i++){
+  if(!G.deck.length){G.deck=shuffle(G.discard);G.discard=[];}
+  if(G.deck.length)p.hand.push(G.deck.pop());
+ }
+}
 function start(){
  const modeEl=$("#playMode"),mode=modeEl&&modeEl.value?modeEl.value:"local";
  // Headless tests without a set selector retain the original STANDARD rules.
@@ -51,18 +81,21 @@ function start(){
  const activeKinds=ruleset==="starter"?starterWallKinds:wallKinds;
  const activeWallCounts=ruleset==="starter"?starterWallCounts[n]:wallCounts[n];
  activeWallCounts.forEach((num,j)=>{for(let k=0;k<num;k++)walls.push(activeKinds[j]);});walls=shuffle(walls);
- // First Starter turn emphasizes movement; tractor is introduced when drawn later.
- const presets=ruleset==="starter"?["walk","walk","dash","jump","scan"]:["walk","walk","dash","scan","tractor"];
+ // Starter starts with exactly 3 movement and 2 effect cards (one of each kind).
+ const presets=ruleset==="starter"?["walk","dash","jump","scan","tractor"]:["walk","walk","dash","scan","tractor"];
  let deck=[],activeCardCounts=ruleset==="starter"?starterCardCounts:cardCounts;
  Object.keys(activeCardCounts).forEach(k=>{for(let i=0;i<activeCardCounts[k];i++)deck.push(k);});
  let positions=choosePlayers(n,size);
- G={n:size,nplayers:n,ruleset,cpuMode:mode!=="local",round:1,phase:"placement",placementPhase:0,players:[],stars:{},walls:{},queue:[],current:0,actions:0,active:null,selectedSupply:0,dir:1,deck:[],discard:[],logs:[],message:"",privateMessage:"",locked:false};
+ G={n:size,nplayers:n,ruleset,cpuMode:mode!=="local",round:1,phase:"placement",placementPhase:0,players:[],stars:{},walls:{},queue:[],current:0,actions:0,active:null,selectedSupply:0,dir:1,deck:[],discard:[],moveDeck:[],effectDeck:[],moveDiscard:[],effectDiscard:[],logs:[],message:"",privateMessage:"",locked:false};
  for(let id=0;id<n;id++){
   let p={id,cpu:mode!=="local"&&id>0,pos:positions[id],home:positions[id],hand:presets.slice(),stars:[allStars.pop(),allStars.pop()],walls:[walls.pop(),walls.pop()],shield:false,penalty:0};
   G.players.push(p);
   presets.forEach(c=>{let j=deck.indexOf(c);deck.splice(j,1);});
  }
- G.deck=shuffle(deck);
+ if(ruleset==="starter"){
+  G.moveDeck=shuffle(deck.filter(c=>defs[c].group==="move"));
+  G.effectDeck=shuffle(deck.filter(c=>defs[c].group==="effect"));
+ }else G.deck=shuffle(deck);
  let neutrals=allStars;
  neutrals.forEach(value=>{
   let candidates=Array.from({length:size*size},(_,i)=>i).filter(i=>positions.every(x=>dist(i,x)>=2)&&!G.stars[i]);
@@ -196,7 +229,11 @@ function boostDirs(p){let out=[];for(let d=0;d<4;d++){let mid=neighbor(p.pos,d),
 function renderPlay(){
  let p=G.players[G.current],h='<div class="banner"><strong style="color:'+colours[p.id]+'">'+human(p)+'</strong><div class="small">第'+G.round+' / 6ラウンド　・　残り'+(2-G.actions)+'アクション</div></div>';
  h+='<p class="small muted">操作：カードを選択 → 盤面か方向ボタンで実行。星で止まると旗を立てられます。</p>';
- h+='<h3>手札（クリックして使用）</h3><div class="hand">'+p.hand.map(cardBtn).join("")+'</div>';
+ if(G.ruleset==="starter"){
+  h+='<div class="separated-hands"><section class="hand-group move-group"><h3>🚀 移動カード <span class="tiny">3枚 / 青い山札</span></h3><div class="hand">'+p.hand.map((c,i)=>defs[c].group==="move"?cardBtn(c,i):"").join("")+'</div></section>';
+  h+='<section class="hand-group effect-group"><h3>✨ 効果カード <span class="tiny">2枚 / 紫の山札</span></h3><div class="hand">'+p.hand.map((c,i)=>defs[c].group==="effect"?cardBtn(c,i):"").join("")+'</div></section></div>';
+  h+='<p class="small muted">使ったカードは種類別に捨て札へ。手番終了時に青い山札から移動3枚、紫の山札から効果2枚まで補充します。</p>';
+ }else h+='<h3>手札（クリックして使用）</h3><div class="hand">'+p.hand.map(cardBtn).join("")+'</div>';
  h+='<p class="small muted">手札のカードは1枚ずつ使用。効果を使わず1マスだけ歩くこともできます。</p>';
  if(G.active){
   let a=G.active,c=a.card;h+='<div class="note"><b>'+defs[c].name+'</b>：';
@@ -231,7 +268,7 @@ function render(){
  if(backFromHandoff)backFromHandoff.hidden=!G;
  if(!G){$("#board").innerHTML="";$("#status").innerHTML='<strong>新しいゲーム</strong>';$("#score").innerHTML="";$("#log").innerHTML="";
  $("#side").innerHTML='<h2 id="startHeading">🚀 まずは1人で遊ぼう</h2><p class="small muted" id="startDescription">CPUと1対1で対戦できます。まずは簡単なスターターがおすすめです。</p>'+
- '<div class="starter-selection"><label for="gameSet"><strong>ゲームセット</strong></label><select id="gameSet"><option value="starter" selected>🌟 スターターセット（おすすめ）</option><option value="standard">スタンダード（従来版）</option></select><div class="starter-intro" id="setDescription"><strong>カード5種類・壁3種類</strong><p>移動：てくてく・流星ダッシュ・ジェットジャンプ<br>効果：宇宙探査・トラクタービーム<br>壁：通常・反発・幻影</p><small>最初は1人＋CPUで練習できます。遊び方は同じ、複雑なカードを減らしたセットです。</small></div></div>'+
+ '<div class="starter-selection"><label for="gameSet"><strong>ゲームセット</strong></label><select id="gameSet"><option value="starter" selected>🌟 スターターセット（おすすめ）</option><option value="standard">スタンダード（従来版）</option></select><div class="starter-intro" id="setDescription"><strong>カード5種類・壁3種類</strong><p>🚀 移動山札：てくてく・流星ダッシュ・ジェットジャンプ（手札3枚）<br>✨ 効果山札：宇宙探査・トラクタービーム（手札2枚）<br>壁：通常・反発・幻影</p><small>最初は1人＋CPUで練習できます。遊び方は同じ、複雑なカードを減らしたセットです。</small></div></div>'+
  '<div class="formgrid"><label>遊び方<select id="playMode"><option value="cpu2" selected>1人で遊ぶ・CPU1体（おすすめ）</option><option value="cpu3">1人で遊ぶ・CPU2体</option><option value="cpu4">1人で遊ぶ・CPU3体</option><option value="local">友達と遊ぶ・同じ端末で交代</option></select></label><label id="friendCountLabel" hidden>友達と遊ぶ場合の人数<select id="playerCount"><option value="2" selected>2人</option><option value="3">3人</option><option value="4">4人</option></select></label><label>盤面サイズ（検証用）<select id="boardSize"><option value="7" selected>7×7</option><option value="8">8×8</option><option value="9">9×9</option></select></label></div>'+
  '<button class="btn primary start-main" id="start">🚀 スターターでゲームスタート</button><div class="note">開発中の試遊版です。最終点数は星を公開するまで秘密。遠隔オンライン対戦と保存は未実装です。</div>';
  return;}
@@ -249,7 +286,7 @@ function commit(){
  let a=G.active;if(!a||a.committed)return;
  let p=G.players[G.current];if(G.actions>=2)return;
  let c=p.hand.splice(a.index,1)[0];if(!c)return;
- a.committed=true;G.discard.push(c);G.actions++;G.message="";
+ a.committed=true;discardCard(c);G.actions++;G.message="";
 }
 function claim(p){
  let s=G.stars[p.pos];if(s&&s.claimed===null){
@@ -400,7 +437,7 @@ function emergencyBoost(d){
  let p=G.players[G.current];if(G.actions!==0||!blockedPublic(p)||p.hand.length<2)return;
  let j=neighbor(p.pos,d);j=j>=0?neighbor(j,d):-1;
  if(j<0||!free(j,p.id)||G.stars[j])return info("安全に着地できる2マス先を選んでください。");
- for(let k=0;k<2;k++)G.discard.push(p.hand.pop());
+ for(let k=0;k<2;k++)discardCard(p.hand.pop());
  G.actions=2;p.pos=j;G.message="緊急ブーストで脱出しました。";record(human(p)+" が緊急ブースト。");claim(p);render();
 }
 function hasCardEscape(p){
@@ -456,7 +493,7 @@ $("#reveal").addEventListener("click",unlock);
 document.addEventListener("change",e=>{
  if(e.target.id==="gameSet"){
   const starter=e.target.value==="starter";
-  $("#setDescription").innerHTML=starter?'<strong>カード5種類・壁3種類</strong><p>移動：てくてく・流星ダッシュ・ジェットジャンプ<br>効果：宇宙探査・トラクタービーム<br>壁：通常・反発・幻影</p><small>初めて遊ぶ人向けの基本セットです。</small>':'<strong>カード8種類・壁4種類</strong><p>スターターに壁の移動・星の引力・宇宙バリアと一方通行壁を追加した従来版。</p><small>複雑なカードを試したい人向けです。</small>';
+  $("#setDescription").innerHTML=starter?'<strong>カード5種類・壁3種類</strong><p>🚀 移動山札：てくてく・流星ダッシュ・ジェットジャンプ（手札3枚）<br>✨ 効果山札：宇宙探査・トラクタービーム（手札2枚）<br>壁：通常・反発・幻影</p><small>初めて遊ぶ人向けの基本セットです。</small>':'<strong>カード8種類・壁4種類</strong><p>スターターに壁の移動・星の引力・宇宙バリアと一方通行壁を追加した従来版。</p><small>複雑なカードを試したい人向けです。</small>';
   const solo=$("#playMode").value!=="local";
   $("#start").textContent=(solo?"🚀 ":"👥 ")+(starter?"スターターでゲームスタート":"スタンダードでゲームスタート");
   return;
