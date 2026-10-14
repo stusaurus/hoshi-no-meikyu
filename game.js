@@ -26,6 +26,10 @@ const defs={
  shield:{name:"宇宙バリア",icon:"🛡️",group:"effect",desc:"次の強制移動を防ぐ"}
 };
 const cardCounts={walk:12,dash:8,jump:6,scan:6,tractor:6,wallmove:4,pull:4,shield:2};
+// STARTER: 5 card types, with more movement cards for beginner-friendly turns.
+const starterCardCounts={walk:16,dash:10,jump:6,scan:6,tractor:6};
+const starterWallKinds=["solid","bounce","phantom"];
+const starterWallCounts={2:[2,1,1],3:[2,2,2],4:[3,2,3]};
 const starCounts={2:[1,2,2,2],3:[2,2,3,2],4:[2,3,4,2]};
 const wallCounts={2:[1,1,1,1],3:[2,1,1,2],4:[2,2,2,2]};
 const wallKinds=["solid","bounce","oneway","phantom"];
@@ -38,14 +42,20 @@ function choosePlayers(n,size){
 function draw(p,count){for(let i=0;i<count;i++){if(!G.deck.length){G.deck=shuffle(G.discard);G.discard=[];}if(G.deck.length)p.hand.push(G.deck.pop());}}
 function start(){
  const modeEl=$("#playMode"),mode=modeEl&&modeEl.value?modeEl.value:"local";
+ // Headless tests without a set selector retain the original STANDARD rules.
+ const setEl=$("#gameSet"),ruleset=setEl&&setEl.value==="starter"?"starter":"standard";
  let n=mode.startsWith("cpu")?Number(mode.slice(3)):Number($("#playerCount").value);
  let size=Number($("#boardSize").value);
  let allStars=[];starCounts[n].forEach((num,value)=>{for(let k=0;k<num;k++)allStars.push(value);});allStars=shuffle(allStars);
- let walls=[];wallCounts[n].forEach((num,j)=>{for(let k=0;k<num;k++)walls.push(wallKinds[j]);});walls=shuffle(walls);
+ let walls=[];
+ const activeKinds=ruleset==="starter"?starterWallKinds:wallKinds;
+ const activeWallCounts=ruleset==="starter"?starterWallCounts[n]:wallCounts[n];
+ activeWallCounts.forEach((num,j)=>{for(let k=0;k<num;k++)walls.push(activeKinds[j]);});walls=shuffle(walls);
  const presets=["walk","walk","dash","scan","tractor"];
- let deck=[];Object.keys(cardCounts).forEach(k=>{for(let i=0;i<cardCounts[k];i++)deck.push(k);});
+ let deck=[],activeCardCounts=ruleset==="starter"?starterCardCounts:cardCounts;
+ Object.keys(activeCardCounts).forEach(k=>{for(let i=0;i<activeCardCounts[k];i++)deck.push(k);});
  let positions=choosePlayers(n,size);
- G={n:size,nplayers:n,cpuMode:mode!=="local",round:1,phase:"placement",placementPhase:0,players:[],stars:{},walls:{},queue:[],current:0,actions:0,active:null,selectedSupply:0,dir:1,deck:[],discard:[],logs:[],message:"",privateMessage:"",locked:false};
+ G={n:size,nplayers:n,ruleset,cpuMode:mode!=="local",round:1,phase:"placement",placementPhase:0,players:[],stars:{},walls:{},queue:[],current:0,actions:0,active:null,selectedSupply:0,dir:1,deck:[],discard:[],logs:[],message:"",privateMessage:"",locked:false};
  for(let id=0;id<n;id++){
   let p={id,cpu:mode!=="local"&&id>0,pos:positions[id],home:positions[id],hand:presets.slice(),stars:[allStars.pop(),allStars.pop()],walls:[walls.pop(),walls.pop()],shield:false,penalty:0};
   G.players.push(p);
@@ -167,8 +177,8 @@ function renderPlacement(){
  let h='<div class="banner"><strong>'+human(p)+' の秘密配置</strong><div class="small"> '+(G.placementPhase===0?"ゲーム開始前":"第4ラウンド前")+' / '+(type==="star"?"星":"壁")+'を配置</div></div>';
  h+='<p class="small">この情報は置く本人だけが確認します。他の人には見せないでください。</p><h3>配置する'+(type==="star"?"星":"壁")+'を選択</h3><div class="actions">';
  pool.forEach((v,i)=>{h+='<button class="btn '+(G.selectedSupply===i?"active":"")+'" data-supply="'+i+'">'+(type==="star"?v+"点の星":wallLabels[v])+'</button>';});h+='</div>';
- if(type==="star")h+='<p class="note">ロケットから直交距離2マス以上の空きマスをタップして星を置きます。点数は公開しません。</p>';
- else h+='<p class="note">境界の方向を選んでから、その手前のマスをタップ。壁の種類は相手に秘密です。一方通行の許可方向は右・下の正方向です。</p>'+dirBtns();
+ if(type==="star")h+='<p class="note">① 星カードを選ぶ → ② ロケットから2マス以上離れた空きマスをタップ。点数は秘密です。</p>';
+ else h+='<p class="note">① 壁を選ぶ → ② 方向（↑→↓←）を選ぶ → ③ その手前のマスをタップ。壁の正体は相手に秘密です。'+(G.ruleset==="standard"?"一方通行は右・下の正方向のみ通れます。":"")+'</p>'+dirBtns();
  return h;
 }
 function cardBtn(c,i){let def=defs[c];return '<button class="btn '+def.group+' '+(G.active&&G.active.index===i?"active":"")+'" data-card="'+i+'" title="'+def.desc+'"><span class="cardicon">'+def.icon+'</span>'+def.name+'</button>';}
@@ -184,6 +194,7 @@ function blockedPublic(p){
 function boostDirs(p){let out=[];for(let d=0;d<4;d++){let mid=neighbor(p.pos,d),j=mid>=0?neighbor(mid,d):-1;if(j>=0&&free(j,p.id)&&!G.stars[j])out.push(d);}return out;}
 function renderPlay(){
  let p=G.players[G.current],h='<div class="banner"><strong style="color:'+colours[p.id]+'">'+human(p)+'</strong><div class="small">第'+G.round+' / 6ラウンド　・　残り'+(2-G.actions)+'アクション</div></div>';
+ h+='<p class="small muted">操作：カードを選択 → 盤面か方向ボタンで実行。星で止まると旗を立てられます。</p>';
  h+='<h3>手札（クリックして使用）</h3><div class="hand">'+p.hand.map(cardBtn).join("")+'</div>';
  h+='<p class="small muted">手札のカードは1枚ずつ使用。効果を使わず1マスだけ歩くこともできます。</p>';
  if(G.active){
@@ -218,9 +229,12 @@ function render(){
  if(backToTitle)backToTitle.hidden=!G;
  if(backFromHandoff)backFromHandoff.hidden=!G;
  if(!G){$("#board").innerHTML="";$("#status").innerHTML='<strong>新しいゲーム</strong>';$("#score").innerHTML="";$("#log").innerHTML="";
- $("#side").innerHTML='<h2 id="startHeading">🚀 まずは1人で遊ぼう</h2><p class="small muted" id="startDescription">CPUと1対1で対戦できます。初めての方はこの設定がおすすめです。</p><div class="formgrid"><label>遊び方<select id="playMode"><option value="cpu2" selected>1人で遊ぶ・CPU1体（おすすめ）</option><option value="cpu3">1人で遊ぶ・CPU2体</option><option value="cpu4">1人で遊ぶ・CPU3体</option><option value="local">友達と遊ぶ・同じ端末で交代</option></select></label><label id="friendCountLabel" hidden>友達と遊ぶ場合の人数<select id="playerCount"><option value="2" selected>2人</option><option value="3">3人</option><option value="4">4人</option></select></label><label>盤面サイズ（検証用）<select id="boardSize"><option value="7" selected>7×7</option><option value="8">8×8</option><option value="9">9×9</option></select></label></div><button class="btn primary start-main" id="start">🚀 ゲームスタート</button><div class="note">これは開発用のローカル対戦版です。遠隔オンライン対戦と保存は未実装です。CPUは初級テスト対戦用であり、最適手の保証はありません。</div>';
+ $("#side").innerHTML='<h2 id="startHeading">🚀 まずは1人で遊ぼう</h2><p class="small muted" id="startDescription">CPUと1対1で対戦できます。まずは簡単なスターターがおすすめです。</p>'+
+ '<div class="starter-selection"><label for="gameSet"><strong>ゲームセット</strong></label><select id="gameSet"><option value="starter" selected>🌟 スターターセット（おすすめ）</option><option value="standard">スタンダード（従来版）</option></select><div class="starter-intro" id="setDescription"><strong>カード5種類・壁3種類</strong><p>移動：てくてく・流星ダッシュ・ジェットジャンプ<br>効果：宇宙探査・トラクタービーム<br>壁：通常・反発・幻影</p><small>最初は1人＋CPUで練習できます。遊び方は同じ、複雑なカードを減らしたセットです。</small></div></div>'+
+ '<div class="formgrid"><label>遊び方<select id="playMode"><option value="cpu2" selected>1人で遊ぶ・CPU1体（おすすめ）</option><option value="cpu3">1人で遊ぶ・CPU2体</option><option value="cpu4">1人で遊ぶ・CPU3体</option><option value="local">友達と遊ぶ・同じ端末で交代</option></select></label><label id="friendCountLabel" hidden>友達と遊ぶ場合の人数<select id="playerCount"><option value="2" selected>2人</option><option value="3">3人</option><option value="4">4人</option></select></label><label>盤面サイズ（検証用）<select id="boardSize"><option value="7" selected>7×7</option><option value="8">8×8</option><option value="9">9×9</option></select></label></div>'+
+ '<button class="btn primary start-main" id="start">🚀 スターターでゲームスタート</button><div class="note">開発中の試遊版です。最終点数は星を公開するまで秘密。遠隔オンライン対戦と保存は未実装です。</div>';
  return;}
- $("#status").innerHTML='<div class="row between"><b>'+(G.phase==="ended"?"対戦終了":G.phase==="placement"?"秘密配置フェーズ":"第"+G.round+"ラウンド")+'</b><span class="pill">'+G.nplayers+'人 / '+G.n+'×'+G.n+'</span></div>';
+ $("#status").innerHTML='<div class="row between"><b>'+(G.phase==="ended"?"対戦終了":G.phase==="placement"?"秘密配置フェーズ":"第"+G.round+"ラウンド")+'</b><span class="pill">'+(G.ruleset==="starter"?"🌟 スターター":"スタンダード")+' / '+G.nplayers+'人 / '+G.n+'×'+G.n+'</span></div>';
  renderBoard();renderScore();
  if(G.phase==="ended"){
   let scores=G.players.map(p=>{let total=Object.values(G.stars).filter(s=>s.claimed===p.id).reduce((sum,s)=>sum+s.value,0)-p.penalty;return {p,total};}).sort((a,b)=>b.total-a.total);
@@ -439,13 +453,20 @@ if($("#backToTitle"))$("#backToTitle").addEventListener("click",returnToTitle);
 if($("#backFromHandoff"))$("#backFromHandoff").addEventListener("click",returnToTitle);
 $("#reveal").addEventListener("click",unlock);
 document.addEventListener("change",e=>{
+ if(e.target.id==="gameSet"){
+  const starter=e.target.value==="starter";
+  $("#setDescription").innerHTML=starter?'<strong>カード5種類・壁3種類</strong><p>移動：てくてく・流星ダッシュ・ジェットジャンプ<br>効果：宇宙探査・トラクタービーム<br>壁：通常・反発・幻影</p><small>初めて遊ぶ人向けの基本セットです。</small>':'<strong>カード8種類・壁4種類</strong><p>スターターに壁の移動・星の引力・宇宙バリアと一方通行壁を追加した従来版。</p><small>複雑なカードを試したい人向けです。</small>';
+  const solo=$("#playMode").value!=="local";
+  $("#start").textContent=(solo?"🚀 ":"👥 ")+(starter?"スターターでゲームスタート":"スタンダードでゲームスタート");
+  return;
+ }
  if(e.target.id!=="playMode")return;
  const single=e.target.value!=="local";
  const friendCountLabel=$("#friendCountLabel");
  if(friendCountLabel)friendCountLabel.hidden=single;
  $("#startHeading").textContent=single?"🚀 まずは1人で遊ぼう":"👥 友達と遊ぼう";
  $("#startDescription").textContent=single?"CPUと対戦できます。初めての方はCPU1体がおすすめです。":"2〜4人が同じ端末を交代しながら対戦します。";
- $("#start").textContent=single?"🚀 ゲームスタート":"👥 対戦スタート";
+ $("#start").textContent=(single?"🚀 ":"👥 ")+($("#gameSet").value==="starter"?"スターターでゲームスタート":"スタンダードでゲームスタート");
 });
 document.addEventListener("click",e=>{
  let b=e.target.closest("button");if(!b||G&&G.locked)return;
