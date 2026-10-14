@@ -59,7 +59,7 @@ async function run(browser,count,width){
     assert.equal(hand.effect,2,'Starter hand has 2 effect cards after prior refill');
     assert.equal(await page.locator('.move-group [data-card]').count(),3,'3 cards shown under blue movement heading');
     assert.equal(await page.locator('.card-art').count(),5,'All starter cards show approved illustrations');
-    assert.equal(await page.locator('.sprite-star_hidden').count(),await page.evaluate(()=>Object.values(G.stars).filter(s=>s.claimed===null).length),'Hidden stars show card backs');
+    assert.equal(await page.locator('.sprite-star_hidden').count(),await page.evaluate(()=>Object.keys(G.stars).length),'All stars, including claimed ones, stay face-down until the final reveal');
     assert.equal(await page.locator('.wall.unknown .sprite-wall_hidden').count(),await page.evaluate(()=>Object.values(G.walls).filter(w=>!w.faceUp).length),'All hidden wall types share the stone back');
 
     assert.equal(await page.locator('.effect-group [data-card]').count(),2,'2 cards shown under purple effect heading');
