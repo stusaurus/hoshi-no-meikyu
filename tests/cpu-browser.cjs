@@ -11,9 +11,11 @@ async function run(browser,count,width){
  page.on('pageerror',e=>errors.push(e.message));
  try{
   await page.goto(ROOT,{waitUntil:'networkidle'});
+  assert.equal(await page.locator('#gameSet').inputValue(),'starter','Starter is the default ruleset');
   await page.locator('#playMode').selectOption('cpu'+count);
   await page.locator('#boardSize').selectOption(count===4?'9':'7');
   await page.locator('#start').click();
+  assert.equal(await page.evaluate(()=>G.ruleset),'starter');
   assert.equal(await page.evaluate(()=>G.players.filter(x=>x.cpu).length),count-1);
   let turns=0;
   while(turns++<70){
