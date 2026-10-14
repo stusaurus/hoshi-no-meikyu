@@ -11,8 +11,8 @@ async function run(browser,width,height){
  try{
   const response=await page.goto(URL,{waitUntil:'networkidle'});
   assert.equal(response.status(),200);
-  assert.equal(await page.locator('#gameSet').inputValue(),'starter','Starter must be the default ruleset');
-  assert.match(await page.locator('#setDescription').innerText(),/カード5種類・壁3種類/);
+  assert.equal(await page.locator('#gameSet').inputValue(),'strategy','Public fixed-action mode must be the default ruleset');
+  assert.match(await page.locator('#setDescription').innerText(),/公開得点・固定アクション/);
   await page.locator('#gameSet').selectOption('standard');
   assert.match(await page.locator('#setDescription').innerText(),/カード8種類・壁4種類/);
   await page.locator('#gameSet').selectOption('starter');

@@ -25,6 +25,7 @@ jobs:
           node tests/browser.cjs
           node tests/navigation.cjs
           node tests/cpu-browser.cjs
+          node tests/strategy-browser.cjs
           python3 scripts/package.py
           node tests/audit-browser.cjs
           node tests/audit-screens.cjs

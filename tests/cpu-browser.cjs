@@ -14,7 +14,8 @@ async function run(browser,count,width){
   const art=await page.evaluate(async()=>{const r=await fetch('./assets/art.webp');return {ok:r.ok,bytes:(await r.arrayBuffer()).byteLength};});
   assert.ok(art.ok&&art.bytes>25000,'Approved illustrations asset must be served, not missing');
 
-  assert.equal(await page.locator('#gameSet').inputValue(),'starter','Starter is the default ruleset');
+  assert.equal(await page.locator('#gameSet').inputValue(),'strategy','Fixed-action mode is the default ruleset');
+  await page.locator('#gameSet').selectOption('starter');
   await page.locator('#playMode').selectOption('cpu'+count);
   await page.locator('#boardSize').selectOption(count===4?'9':'7');
   await page.locator('#start').click();

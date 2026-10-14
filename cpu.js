@@ -6,7 +6,7 @@
 const CARD_CPU={walk:"てくてく",dash:"流星ダッシュ",jump:"ジェットジャンプ",scan:"宇宙探査",tractor:"トラクタービーム",wallmove:"壁の移動",pull:"星の引力",shield:"宇宙バリア"};
 function cpu(){return G&&G.players[G.current]&&G.players[G.current].cpu;}
 function unknownValue(s,viewer){
- return (s.placer===viewer||s.seen.includes(viewer))?s.value:1.45;
+ return (G.ruleset==="strategy"||s.placer===viewer||s.seen.includes(viewer))?s.value:1.45;
 }
 function wallVisible(w,viewer){return w.faceUp||w.seen.includes(viewer);}
 function safeStep(pos,next,id,viewer=id){
@@ -116,7 +116,7 @@ function candidateScan(id){
  const idx=G.players[id].hand.indexOf("scan");if(idx<0)return [];
  const me=G.players[id],possibilities=[];
  for(const [where,s] of Object.entries(G.stars)){
-  if(s.claimed!==null||s.placer===id||s.seen.includes(id))continue;
+  if(G.ruleset==="strategy"||s.claimed!==null||s.placer===id||s.seen.includes(id))continue;
   const at=Number(where);
   possibilities.push({card:"scan",type:"scanStar",i:idx,at,score:3+Math.max(0,3.5-publicDistance(me.pos,at,id))});
  }
@@ -164,6 +164,7 @@ function candidateWallMove(id){
  return out;
 }
 function candidateFallback(id){
+ if(G.ruleset==="strategy")return []; // Fixed walk already offers a legal one-step action.
  const pl=G.players[id],out=[];
  const disposable=pl.hand.map((c,i)=>({c,i})).filter(x=>x.c!=="shield");
  for(const card of disposable){
@@ -263,7 +264,7 @@ function actCPU(){
  if(!plan){endTurn();return;}
  const succeeded=executeAction(plan);
  if(!succeeded)G.message="CPUは有効な行動を選べず手番を終了しました。";
- if(G.phase==="play"&&G.actions<2&&succeeded){
+ if(G.phase==="play"&&G.actions<2&&succeeded&&G.ruleset!=="strategy"){
   // Re-evaluate after the first action, so newly exposed walls can alter the plan.
   const next=chooseAction();
   if(next)executeAction(next);
