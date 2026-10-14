@@ -12,7 +12,7 @@ function make(players,size,set,seed){
  math.random=()=>((x=(Math.imul(x,1664525)+1013904223)>>>0)/4294967296);
  const context=vm.createContext({document:{querySelector:k=>nodes[k],addEventListener(){}},
     window:{setTimeout:fn=>tasks.push(fn)},Math:math,console:{error:(...args)=>errors.push(args.join(" ")),log(){}}});
- vm.runInContext(game+"\n"+cpu+"\nthis.h={start,get:()=>G,unlock,placeStar,placeWall,edge,neighbor,wallInitialAllowed,endTurn}",context);
+ vm.runInContext(game+"\n"+cpu+"\nthis.h={start,get:()=>G,unlock,placeStar,placeWall,edge,neighbor,wallInitialAllowed,endTurn,draw,discardCard}",context);
  return {api:context.h,tasks,errors};
 }
 function humanMove(api){
@@ -38,11 +38,15 @@ for(const mode of ["starter","standard"])for(const players of [2,3,4])for(const 
  const {api,tasks,errors}=make(players,size,mode,12345+players*4000+size*79);api.start();const g=api.get();
  assert.equal(g.ruleset,mode);
  if(mode==="starter"){
-  assert.ok(g.deck.every(c=>allowedStarterCards.has(c)));
-  assert.ok(g.players.every(p=>p.hand.every(c=>allowedStarterCards.has(c))));
+  assert.equal(g.deck.length,0,"starter must not have a mixed draw pile");
+  assert.equal(g.discard.length,0,"starter must not have a mixed discard pile");
+  assert.ok(g.moveDeck.every(c=>allowedStarterCards.has(c)&&["walk","dash","jump"].includes(c)));
+  assert.ok(g.effectDeck.every(c=>allowedStarterCards.has(c)&&["scan","tractor"].includes(c)));
+  assert.ok(g.players.every(p=>p.hand.filter(c=>["walk","dash","jump"].includes(c)).length===3));
+  assert.ok(g.players.every(p=>p.hand.filter(c=>["scan","tractor"].includes(c)).length===2));
   assert.ok(g.players.every(p=>p.walls.every(w=>allowedStarterWalls.has(w))));
-  const cards=[...g.deck,...g.players.flatMap(p=>p.hand)];
-  assert.equal(cards.length,44,"starter deck should have 44 physical cards including initial hands");
+  const cards=[...g.moveDeck,...g.effectDeck,...g.players.flatMap(p=>p.hand)];
+  assert.equal(cards.length,44,"starter should have 44 cards split across the two decks and hands");
   const kinds=Object.fromEntries([...allowedStarterCards].map(c=>[c,cards.filter(x=>x===c).length]));
   assert.deepEqual(kinds,{walk:16,dash:10,jump:6,scan:6,tractor:6});
  }else{
@@ -57,7 +61,13 @@ for(const mode of ["starter","standard"])for(const players of [2,3,4])for(const 
    tasks.shift()();
   }else humanMove(api);
   if(mode==="starter"){
-   assert.ok([...g.players.flatMap(p=>p.hand),...g.deck,...g.discard].every(c=>allowedStarterCards.has(c)),"No advanced cards can enter starter game");
+   const move=c=>["walk","dash","jump"].includes(c),effect=c=>["scan","tractor"].includes(c);
+   assert.ok([...g.players.flatMap(p=>p.hand),...g.moveDeck,...g.effectDeck,...g.moveDiscard,...g.effectDiscard].every(c=>allowedStarterCards.has(c)),"No advanced cards can enter starter game");
+   assert.ok(g.moveDeck.every(move)&&g.moveDiscard.every(move),"Movement pile and discards contain only movement");
+   assert.ok(g.effectDeck.every(effect)&&g.effectDiscard.every(effect),"Effect pile and discards contain only effects");
+   assert.ok(g.players.every(p=>p.hand.filter(move).length<=3&&p.hand.filter(effect).length<=2),"Hand slots are separate");
+   assert.equal(g.deck.length+g.discard.length,0,"Mixed STANDARD pile is unused");
+   assert.equal(g.moveDeck.length+g.effectDeck.length+g.moveDiscard.length+g.effectDiscard.length+g.players.reduce((sum,p)=>sum+p.hand.length,0),44,"Physical card count conserved");
    assert.ok(Object.values(g.walls).every(w=>allowedStarterWalls.has(w.kind)),"No one-way walls in starter");
   }
  }
@@ -68,4 +78,29 @@ for(const mode of ["starter","standard"])for(const players of [2,3,4])for(const 
  console.log("PASS",mode,players+"p",size+"×"+size);
  games++;
 }
+// Edge case: starter reshuffles each discard pile independently and never changes the other one.
+{
+ const {api}=make(2,7,"starter",777);api.start();const g=api.get(),p=g.players[0];
+ const beforeEffectDeck=g.effectDeck.slice();
+ const beforeEffectDiscard=g.effectDiscard.slice();
+ g.moveDeck=[]; // Simulate end-of-pile immediately before replenishment.
+ const spare=p.hand.find(c=>["walk","dash","jump"].includes(c));
+ p.hand.splice(p.hand.indexOf(spare),1);
+ api.discardCard(spare);
+ api.draw(p,1);
+ assert.equal(p.hand.filter(c=>["walk","dash","jump"].includes(c)).length,3);
+ assert.equal(g.effectDeck.join(","),beforeEffectDeck.join(","));
+ assert.equal(g.effectDiscard.join(","),beforeEffectDiscard.join(","));
+ assert.equal(g.moveDiscard.length,0,"Move discard recycled in move deck only");
+ // Now consume an effect card and verify a different group is used.
+ const spareEffect=p.hand.find(c=>["scan","tractor"].includes(c));
+ p.hand.splice(p.hand.indexOf(spareEffect),1);
+ api.discardCard(spareEffect);
+ const currentMove=g.moveDeck.slice(),currentMoveDiscard=g.moveDiscard.slice();
+ api.draw(p,1);
+ assert.equal(p.hand.filter(c=>["scan","tractor"].includes(c)).length,2);
+ assert.equal(g.moveDeck.join(","),currentMove.join(","));
+ assert.equal(g.moveDiscard.join(","),currentMoveDiscard.join(","));
+}
+console.log("PASS separate deck reshuffle and independent 3+2 top-up");
 console.log("PASS "+games+" STARTER and STANDARD CPU games");
