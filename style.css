@@ -157,3 +157,55 @@ footer{max-width:1120px;margin:auto;padding:0 16px 30px;color:#96a9c8;font-size:
  .hand-group .card-choice .card-name{font-size:.64rem}
  .cell .starlabel{font-size:.46rem}
 }
+
+/* Audit improvements: preserve original art ratios and expose readable text. */
+.play-nav[hidden],#panHint[hidden]{display:none}
+.play-nav{max-width:1120px;margin:auto;padding:6px 16px;display:flex;gap:8px;align-items:center;background:#0b1427;z-index:30}
+.play-nav a,.play-nav button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 10px;border:1px solid #6683ad;border-radius:9px;color:#ecf4ff;background:#1c304f;text-decoration:none;font-size:.8rem}
+.board-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-color:#7191be #102440;padding:8px 2px}
+#boardPanel,#handPanel{scroll-margin-top:72px;min-width:0}
+.btn,select{min-height:44px}
+.cell .rocket-on-cell{height:85%}
+.cell .rocket-on-flag{height:78%;left:32%}
+.cell .flag-on-star{height:76%;right:-1px}
+.cell .star-card{width:76%}
+.cell .starlabel{font-size:10px}
+/* Hit region stays centered on the edge. Art maintains its natural ratio. */
+.wall.e{width:24px;height:78%;top:11%;right:-14px}
+.wall.s{height:24px;width:78%;left:11%;bottom:-14px}
+.wall .wall-visual{height:auto;width:100%;aspect-ratio:174/90;transform:translate(-50%,-50%)}
+.wall.e .wall-visual{width:auto;height:100%;aspect-ratio:90/174;transform:translate(-50%,-50%);background-image:none}
+/* A horizontal sprite with an invariant ratio, rotated into the vertical edge. */
+.wall.e .wall-visual{width:calc(var(--wall-length, 34px));height:auto;aspect-ratio:174/90;background-image:url('./assets/art.webp');transform:translate(-50%,-50%) rotate(90deg)}
+.wall.s .wall-visual{width:100%;height:auto;aspect-ratio:174/90}
+.wall .wall-visual{outline:1px dashed #d4deee;outline-offset:1px}
+.wall.open .wall-visual{outline:2px solid #79d5ff;outline-offset:1px}
+.hand .card-choice .card-name{font-size:.83rem}
+.card-effect{font-size:.72rem;line-height:1.5;text-align:center;color:#edf5ff;white-space:normal}
+.hand .card-choice{min-width:0;min-height:44px}
+.hand .card-choice[aria-pressed=true]{border:2px solid #ffe17d}
+.private-notes,.wall-picker{padding:10px;border:1px solid #788aad;border-radius:10px;margin:10px 0;font-size:.8rem}
+summary{cursor:pointer;min-height:32px}
+body:not(.playing) #boardPanel{display:none}
+body:not(.playing) .shell{display:block;max-width:640px}
+#side{line-height:1.5}
+@media(max-width:790px){
+ .top{padding:12px 12px 4px}.shell{padding:8px 10px 24px;gap:10px}.panel{padding:10px}
+ .play-nav{position:sticky;top:0;padding:6px 10px;gap:6px}.play-nav a,.play-nav button{flex:1;padding:6px 4px;font-size:.73rem}
+ .board{width:calc(var(--n)*46px + 14px);min-width:calc(var(--n)*46px + 14px);max-width:none;--wall-length:34px}
+ .compact-board .board{width:100%;min-width:0}.compact-board .wall.e .wall-visual{width:22px}
+ .hand .card-choice .card-art{width:64px;max-width:100%}
+ .hand-group .hand{gap:6px}.hand-group{padding:8px}
+ .hand-group h3{font-size:.85rem}.card-effect{font-size:.68rem}
+ .legend{font-size:.7rem;gap:6px}.formgrid{grid-template-columns:1fr}
+}
+@media(min-width:791px){.board{--wall-length:40px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+/* Use each approved wall sprite's own aspect ratio (88px face / 90px back). */
+.wall .wall-visual,.wall.s .wall-visual,.wall.e .wall-visual{aspect-ratio:174/88}
+.wall .sprite-wall_hidden{aspect-ratio:174/90}
+/* Identical horizontal/vertical tile geometry; rotate the edge hit region itself. */
+.wall.e{width:78%;height:24px;top:calc(50% - 12px);right:calc(-39% - 2px);transform:rotate(90deg)}
+.wall.e .wall-visual{width:100%;height:auto;transform:translate(-50%,-50%)}
+.wall.e .wall-arrow{transform:rotate(-90deg)}
+@media(min-width:791px){#boardZoom,#panHint{display:none}}

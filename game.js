@@ -129,11 +129,13 @@ function handoff(){
  if($("#backToTitle"))$("#backToTitle").hidden=false;
  if($("#backFromHandoff"))$("#backFromHandoff").hidden=false;
  $("main").style.visibility="hidden";
+ if(typeof $("main").setAttribute==="function")$("main").setAttribute("inert","");
  const cpu=Boolean(G.players[G.current]&&G.players[G.current].cpu);
  $("#modaltitle").textContent=cpu?"CPUが考えています":"画面を交代してください";
  $("#modaltext").textContent=cpu?"ロケットが次の一手を選んでいます。":G.phase==="placement"?"次は "+human(G.players[G.current])+" の秘密配置です。本人だけが画面を見てください。":"次は "+human(G.players[G.current])+" のターンです。本人だけが画面を開いてください。";
  $("#reveal").hidden=cpu;
  $("#handoff").hidden=false;
+ const handoffFocus=cpu?$("#backFromHandoff"):$("#reveal");if(handoffFocus&&handoffFocus.focus)handoffFocus.focus();
  if(cpu&&typeof window!=="undefined"&&window.StarMazeCPU){
   const scheduledGame=G,scheduledPlayer=G.current,scheduledPhase=G.phase;
   window.setTimeout(()=>{
@@ -199,6 +201,7 @@ function renderBoard(){
     content+=sprite("flag_"+spriteKeyForPlayer(s.claimed),"flag-on-star");
     aria+="、"+human(G.players[s.claimed])+"が獲得した星";
    }else aria+="、秘密の星";
+   if(knownStar(s)){aria+="、自分が知っている得点"+s.value+"点";}
    if(knownStar(s))content+='<span class="starlabel">'+s.value+'点</span>';
   }
   if(p){
@@ -214,7 +217,7 @@ function renderBoard(){
  $("#board").innerHTML=h;
 }
 function renderScore(){
- let h='<div class="row between"><b>プレイヤーの確保数</b><span class="small muted">点数は最終公開まで秘密</span></div><div class="row">';
+ let h='<div class="row between"><b>プレイヤーの確保数</b><span class="small muted">'+(G.phase==="ended"?"星の得点を公開しました":"点数は最終公開まで秘密")+'</span></div><div class="row">';
  for(const p of G.players){let f=Object.values(G.stars).filter(x=>x.claimed===p.id).length;
  h+='<span class="pill player-score">'+sprite("flag_"+spriteKeyForPlayer(p.id),"inline-flag")+' '+human(p)+'：'+f+'個'+(p.penalty?" / 減点"+p.penalty:"")+'</span>';}
  $("#score").innerHTML=h+"</div>";
@@ -228,10 +231,10 @@ function renderPlacement(){
  h+='<p class="small">この情報は置く本人だけが確認します。他の人には見せないでください。</p><h3>配置する'+(type==="star"?"星":"壁")+'を選択</h3><div class="actions">';
  pool.forEach((v,i)=>{h+='<button class="btn '+(G.selectedSupply===i?"active":"")+'" data-supply="'+i+'">'+(type==="star"?v+"点の星":wallLabels[v])+'</button>';});h+='</div>';
  if(type==="star")h+='<p class="note">① 星カードを選ぶ → ② ロケットから2マス以上離れた空きマスをタップ。点数は秘密です。</p>';
- else h+='<p class="note">① 壁を選ぶ → ② 方向（↑→↓←）を選ぶ → ③ その手前のマスをタップ。壁の正体は相手に秘密です。'+(G.ruleset==="standard"?"一方通行は右・下の正方向のみ通れます。":"")+'</p>'+dirBtns();
+ else h+='<p class="note">① 壁を選ぶ → ② 方向（↑→↓←）を選ぶ → ③ その手前のマスをタップ。選んだ矢印側の境界に平らな壁が置かれます。マスの中には置きません。壁の正体は相手に秘密です。'+(G.ruleset==="standard"?"一方通行は右・下の正方向のみ通れます。":"")+'</p>'+dirBtns();
  return h;
 }
-function cardBtn(c,i){const def=defs[c];return '<button class="btn card-choice '+def.group+' '+(G.active&&G.active.index===i?"active":"")+'" data-card="'+i+'" aria-label="'+def.name+"："+def.desc+'" title="'+def.desc+'">'+sprite("card_"+c,"card-art")+'<span class="card-name">'+def.name+'</span></button>';}
+function cardBtn(c,i){const def=defs[c];return '<button class="btn card-choice '+def.group+' '+(G.active&&G.active.index===i?"active":"")+'" data-card="'+i+'" '+(G.actions>=2?"disabled ":"")+'aria-pressed="'+Boolean(G.active&&G.active.index===i)+'" aria-label="'+def.name+"："+def.desc+'" title="'+def.desc+'">'+sprite("card_"+c,"card-art")+'<span class="card-name">'+def.name+'</span><span class="card-effect">'+def.desc+'</span></button>';}
 function blockedPublic(p){
  for(let d=0;d<4;d++){
   let j=neighbor(p.pos,d);if(j<0)continue;
@@ -244,16 +247,19 @@ function blockedPublic(p){
 function boostDirs(p){let out=[];for(let d=0;d<4;d++){let mid=neighbor(p.pos,d),j=mid>=0?neighbor(mid,d):-1;if(j>=0&&free(j,p.id)&&!G.stars[j])out.push(d);}return out;}
 function renderPlay(){
  let p=G.players[G.current],h='<div class="banner"><strong style="color:'+colours[p.id]+'">'+human(p)+'</strong><div class="small">第'+G.round+' / 6ラウンド　・　残り'+(2-G.actions)+'アクション</div></div>';
- h+='<p class="small muted">操作：カードを選択 → 盤面か方向ボタンで実行。星で止まると旗を立てられます。</p>';
+ h+='<p class="small muted">操作：カードを選択 → 盤面か方向ボタンで実行。移動を終えたマスの星を自動で獲得します。途中の星は拾いません。</p>';
  if(G.ruleset==="starter"){
-  h+='<div class="separated-hands"><section class="hand-group move-group"><h3>🚀 移動カード <span class="tiny">3枚 / 青い山札</span></h3><div class="hand">'+p.hand.map((c,i)=>defs[c].group==="move"?cardBtn(c,i):"").join("")+'</div></section>';
-  h+='<section class="hand-group effect-group"><h3>✨ 効果カード <span class="tiny">2枚 / 紫の山札</span></h3><div class="hand">'+p.hand.map((c,i)=>defs[c].group==="effect"?cardBtn(c,i):"").join("")+'</div></section></div>';
+  h+='<div class="separated-hands"><section class="hand-group move-group"><h3>🚀 移動カード <span class="tiny">'+p.hand.filter(c=>defs[c].group==="move").length+'枚 / 青い山札</span></h3><div class="hand">'+p.hand.map((c,i)=>defs[c].group==="move"?cardBtn(c,i):"").join("")+'</div></section>';
+  h+='<section class="hand-group effect-group"><h3>✨ 効果カード <span class="tiny">'+p.hand.filter(c=>defs[c].group==="effect").length+'枚 / 紫の山札</span></h3><div class="hand">'+p.hand.map((c,i)=>defs[c].group==="effect"?cardBtn(c,i):"").join("")+'</div></section></div>';
   h+='<p class="small muted">使ったカードは種類別に捨て札へ。手番終了時に青い山札から移動3枚、紫の山札から効果2枚まで補充します。</p>';
  }else h+='<h3>手札（クリックして使用）</h3><div class="hand">'+p.hand.map(cardBtn).join("")+'</div>';
  h+='<p class="small muted">手札のカードは1枚ずつ使用。効果を使わず1マスだけ歩くこともできます。</p>';
+ const notes=Object.entries(G.walls).filter(([k,w])=>!w.faceUp&&w.seen.includes(G.current));
+ if(notes.length)h+='<details class="private-notes"><summary>自分だけが知っている壁（'+notes.length+'）</summary>'+notes.map(([k,w])=>'<p>'+edgeLabel(w)+'：'+wallLabels[w.kind]+'</p>').join('')+'</details>';
+ if(G.active&&G.active.card==='scan')h+='<details class="wall-picker"><summary>壁を一覧から選ぶ</summary><div class="actions">'+Object.entries(G.walls).map(([k,w])=>'<button class="btn" data-inspect-wall="'+k+'">'+edgeLabel(w)+(w.faceUp?' / '+wallLabels[w.kind]:' / 秘密')+'</button>').join('')+'</div></details>';
  if(G.active){
   let a=G.active,c=a.card;h+='<div class="note"><b>'+defs[c].name+'</b>：';
-  const descriptions={walk:"隣のマスをタップ（残り"+(a.remaining||2)+"歩）。途中で終了できます。",dash:"進む方向を選択。止まるまで直進します。",jump:"方向と距離を選択。障害物を最大1つ越えられます。",scan:"秘密の星または壁をタップして自分だけ確認。",tractor:a.target===undefined?"3マス以内の相手ロケットをタップ。":"相手の移動先となる隣接マスをタップ。",wallmove:a.wallKey===undefined?"移動したい壁をタップ。":"新しい壁の方向を選択後、その手前のマスをタップ。",pull:a.starIndex===undefined?"未確保の星をタップ。":"星を移動する隣接マスをタップ。",shield:""};h+=descriptions[c]+"</div>";
+  const descriptions={walk:"隣のマスをタップ（残り"+a.remaining+"歩）。途中で終了できます。",dash:"進む方向を選択。止まるまで直進します。",jump:"方向と距離を選択。障害物を最大1つ越えられます。",scan:"秘密の星または壁をタップして自分だけ確認。",tractor:a.target===undefined?"3マス以内の相手ロケットをタップ。":"相手の移動先となる隣接マスをタップ。",wallmove:a.wallKey===undefined?"移動したい壁をタップ。":"新しい壁の方向を選択後、その手前のマスをタップ。",pull:a.starIndex===undefined?"未確保の星をタップ。":"星を移動する隣接マスをタップ。",shield:""};h+=descriptions[c]+"</div>";
   if(c==="dash")h+=directionAction("dash");
   if(c==="jump")h+=directionAction("jump");
   if(c==="wallmove"&&a.wallKey!==undefined)h+=dirBtns();
@@ -270,6 +276,7 @@ function renderPlay(){
  }
  return h;
 }
+function edgeLabel(w){const a=rc(w.a),b=rc(w.b);return (a[0]+1)+"行"+(a[1]+1)+"列 ↔ "+(b[0]+1)+"行"+(b[1]+1)+"列";}
 function directionAction(type){
  let h='<div class="actions">';
  for(let d=0;d<4;d++){
@@ -279,7 +286,12 @@ function directionAction(type){
  return h+'</div>';
 }
 function render(){
+ if(G&&!G.locked&&$("main").removeAttribute)$("main").removeAttribute("inert");
  const backToTitle=$("#backToTitle"),backFromHandoff=$("#backFromHandoff");
+ const nav=$("#playNav"),pan=$("#panHint");
+ if(nav)nav.hidden=!G;
+ if(pan)pan.hidden=!G;
+ if(typeof document.body!=="undefined")document.body.classList.toggle('playing',!!G);
  if(backToTitle)backToTitle.hidden=!G;
  if(backFromHandoff)backFromHandoff.hidden=!G;
  if(!G){$("#board").innerHTML="";$("#status").innerHTML='<strong>新しいゲーム</strong>';$("#score").innerHTML="";$("#log").innerHTML="";
@@ -293,9 +305,9 @@ function render(){
  renderBoard();renderScore();
  if(G.phase==="ended"){
   let scores=G.players.map(p=>{let total=Object.values(G.stars).filter(s=>s.claimed===p.id).reduce((sum,s)=>sum+s.value,0)-p.penalty;return {p,total};}).sort((a,b)=>b.total-a.total);
-  $("#side").innerHTML='<h2>星の得点を公開！</h2><div class="results">'+scores.map(x=>'<div class="result"><span style="color:'+colours[x.p.id]+'">⚑</span> '+human(x.p)+'<br><strong>'+x.total+'点</strong><div class="tiny">減点 '+x.p.penalty+'</div></div>').join("")+'</div><div class="note">獲得した星だけが得点になります。今回は '+names[scores[0].p.id]+'ロケット'+(scores.filter(x=>x.total===scores[0].total).length>1?"たちの同点！":"の勝利！")+'</div><button id="reset" class="btn primary">新しいゲーム</button>';
+  $("#side").innerHTML='<h2>星の得点を公開！</h2><div class="results">'+scores.map(x=>'<div class="result"><span style="color:'+colours[x.p.id]+'">⚑</span> '+human(x.p)+'<br><strong>'+x.total+'点</strong><div class="tiny">減点 '+x.p.penalty+'</div></div>').join("")+'</div><div class="note">獲得した星だけが得点になります。今回は '+scores.filter(x=>x.total===scores[0].total).map(x=>human(x.p)).join('・')+(scores.filter(x=>x.total===scores[0].total).length>1?"の同点！":"の勝利！")+'</div><button id="reset" class="btn primary">新しいゲーム</button>';
  }else{
-  $("#side").innerHTML=(G.message?'<div class="note">'+G.message+'</div>':"")+(G.privateMessage?'<div class="note">'+G.privateMessage+'</div>':"")+(G.phase==="placement"?renderPlacement():renderPlay());
+  $("#side").innerHTML=(G.message?'<div class="note" role="status">'+G.message+'</div>':"")+(G.privateMessage?'<div class="note" role="status">'+G.privateMessage+'</div>':"")+(G.phase==="placement"?renderPlacement():renderPlay());
  }
  $("#log").innerHTML='<h3>公開された出来事</h3><div class="log">'+G.logs.map(x=>'<div>'+x+'</div>').join("")+'</div>';
 }
@@ -498,7 +510,7 @@ function finishGame(){
  G.phase="ended";G.active=null;G.message="";G.privateMessage="";G.locked=false;$("#handoff").hidden=true;$("main").style.visibility="visible";
  record("最終得点を公開しました。");render();
 }
-function reset(){G=null;$("main").style.visibility="visible";$("#handoff").hidden=true;$("#reveal").hidden=false;render();}
+function reset(){if($("main").removeAttribute)$("main").removeAttribute("inert");G=null;$("main").style.visibility="visible";$("#handoff").hidden=true;$("#reveal").hidden=false;render();}
 function returnToTitle(){
  if(!G)return;
  if(!window.confirm("対戦を終了してタイトルへ戻りますか？\n現在の進行状況は保存されません。"))return;
@@ -525,6 +537,10 @@ document.addEventListener("change",e=>{
 });
 document.addEventListener("click",e=>{
  let b=e.target.closest("button");if(!b||G&&G.locked)return;
+ if(b.id==="boardZoom"){
+  const compact=document.body.classList.toggle('compact-board');b.setAttribute('aria-pressed',String(!compact));b.textContent=compact?'盤面を拡大':'盤面を縮小';return;
+ }
+ if(b.hasAttribute('data-inspect-wall')){onWall(b.dataset.inspectWall);return;}
  if(b.id==="start")return start();
  if(b.id==="reset")return reset();
  if(b.hasAttribute("data-dir")){G.dir=Number(b.dataset.dir);render();return;}
@@ -543,6 +559,6 @@ $("#board").addEventListener("click",e=>{
  let c=e.target.closest("[data-cell]");if(c)onCell(Number(c.dataset.cell));
 });
 $("#board").addEventListener("keydown",e=>{
- if((e.key==="Enter"||e.key===" ")&&e.target.hasAttribute("data-cell")){e.preventDefault();onCell(Number(e.target.dataset.cell));}
+ if(G&&!G.locked&&(e.key==="Enter"||e.key===" ")&&e.target.hasAttribute("data-cell")){e.preventDefault();onCell(Number(e.target.dataset.cell));}
 });
 render();

@@ -14,6 +14,7 @@ jobs:
       - run: node --check game.js
       - run: node tests/smoke.cjs
       - run: node tests/interactions.cjs
+      - run: node tests/audit.cjs
       - run: node tests/cpu.cjs
       - run: node tests/starter.cjs
       - run: node --check scripts/simulate.cjs

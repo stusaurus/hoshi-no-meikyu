@@ -1,0 +1,24 @@
+{
+  "viewport": 390,
+  "scroll": 390,
+  "cell": {
+    "width": 33.765625,
+    "height": 33.765625
+  },
+  "wall": {
+    "width": 9,
+    "height": 15.890625
+  },
+  "rocket": {
+    "width": 17.578125,
+    "height": 23.828125
+  },
+  "flag": {
+    "width": 14.0625,
+    "height": 19.0625
+  },
+  "card": {
+    "width": 100.65625,
+    "height": 201.984375
+  }
+}

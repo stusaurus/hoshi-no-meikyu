@@ -3,9 +3,10 @@
 <title>星の迷宮 | イラスト付きWeb試作版</title><meta name="robots" content="noindex,nofollow,noarchive"><meta name="description" content="星の点数を隠し、壁を仕掛け、ロケットで星を確保する対戦ボードゲームの試作版。">
 <link rel="preload" href="./assets/art.webp" as="image" type="image/webp"><link rel="stylesheet" href="./style.css"></head>
 <body><header class="top"><div class="header-actions"><button type="button" id="backToTitle" class="btn soft back-button" hidden aria-label="タイトル画面へ戻る">← タイトルへ戻る</button></div><p class="eyebrow">HOSHI NO MEIKYU / ILLUSTRATED WEB PROTOTYPE</p><h1>✦ 星の迷宮</h1><p class="lead">星を隠し、道を惑わせ、相手の一手を読み切れ。</p></header>
+<nav id="playNav" class="play-nav" hidden aria-label="対戦画面の移動"><a href="#boardPanel">盤面へ</a><a href="#handPanel">手札・操作へ</a><button type="button" id="boardZoom" aria-pressed="true">盤面を縮小</button></nav>
 <main class="shell">
-<section class="panel"><div id="status"></div><div id="board" class="board" aria-label="ゲーム盤"></div><div class="legend"><span>4色のロケット＝プレイヤー</span><span>黄色の星カード＝秘密の星</span><span>旗＝獲得した星</span><span>石壁模様＝未公開の壁</span></div><div id="score"></div></section>
-<section class="panel"><div id="side"></div><div id="log"></div></section>
+<section class="panel" id="boardPanel"><div id="status"></div><div class="board-scroll" tabindex="0" role="region" aria-label="盤面。大きい盤は横にスクロールできます"><div id="board" class="board" aria-label="ゲーム盤"></div></div><p id="panHint" class="tiny muted" hidden>盤面が収まらないときは横にスワイプ。縮小ボタンでも全体を確認できます。</p><div class="legend"><span>4色のロケット＝プレイヤー</span><span>黄色の星カード＝秘密の星</span><span>旗＝獲得した星</span><span>石壁模様＝未公開の壁</span></div><div id="score"></div></section>
+<section class="panel" id="handPanel"><div id="side"></div><div id="log"></div></section>
 </main><footer>星の迷宮 / イラスト付き試作版（スターター・スタンダード）。点数・壁・カードのバランスは未調整です。<p>この端末での交代プレイ用。画面を渡す前に「手番終了」を押してください。端末の開発者ツール等から秘密情報を完全に保護する仕組みではありません。</p></footer>
 <div id="handoff" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="modaltitle"><div class="modal"><h2 id="modaltitle">画面を交代してください</h2><p id="modaltext"></p><button id="reveal" class="btn primary">自分の手番を開く</button><button id="backFromHandoff" type="button" class="btn soft" hidden>← タイトルへ戻る</button></div></div>
 <script src="./game.js" defer></script><script src="./cpu.js" defer></script></body></html>

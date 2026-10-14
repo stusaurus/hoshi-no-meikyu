@@ -25,8 +25,11 @@ jobs:
           node tests/browser.cjs
           node tests/navigation.cjs
           node tests/cpu-browser.cjs
+          python3 scripts/package.py
+          node tests/audit-browser.cjs
+          node tests/audit-screens.cjs
       - name: Package playable offline prototype
-        run: zip -j star-maze-playable.zip index.html style.css game.js cpu.js README.md
+        run: python3 scripts/package.py && node tests/package.cjs
       - name: Upload playable prototype
         uses: actions/upload-artifact@v4
         with:
@@ -38,6 +41,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: star-maze-browser-screenshots
-          path: artifacts/
+          path: |
+            artifacts/
+            docs/audit-2026-10-14/after/
           if-no-files-found: ignore
           retention-days: 7

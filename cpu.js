@@ -9,10 +9,10 @@ function unknownValue(s,viewer){
  return (s.placer===viewer||s.seen.includes(viewer))?s.value:1.45;
 }
 function wallVisible(w,viewer){return w.faceUp||w.seen.includes(viewer);}
-function safeStep(pos,next,id){
+function safeStep(pos,next,id,viewer=id){
  if(next<0||isFlag(next)||occupied(next,id))return false;
  const w=G.walls[edge(pos,next)];
- if(!w||!wallVisible(w,id))return true;
+ if(!w||!wallVisible(w,viewer))return true;
  if(w.kind==="solid"||w.kind==="bounce")return false;
  if(w.kind==="oneway"&&pos!==w.a)return false;
  return true;
@@ -135,7 +135,7 @@ function candidateTractor(id){
   if(rival.id===id||dist(myPos,rival.pos)>3)continue;
   for(let d=0;d<4;d++){
    const at=neighbor(rival.pos,d);
-   if(!safeStep(rival.pos,at,rival.id))continue;
+   if(!safeStep(rival.pos,at,rival.id,id))continue;
    if(starAt(at))continue; // Don't knowingly gift a star.
    const from=strategicDistance(rival.pos,id),to=strategicDistance(at,id);
    possibilities.push({card:"tractor",type:"tractor",i:idx,target:rival.id,to:at,score:Math.min(9,(to-from)*4)+1});
@@ -274,7 +274,10 @@ function run(){
  if(!cpu()||G.phase==="ended")return;
  try{
   if(G.phase==="placement")placeCPU();
-  else if(G.phase==="play")actCPU();
+  else if(G.phase==="play"){
+   if(G.actions===0)G.players[G.current].shield=false;
+   actCPU();
+  }
  }catch(err){
   console.error("StarMaze CPU error",err);
   G.message="CPUの処理に問題が発生しました。ゲームを続けられるよう手番を終了します。";

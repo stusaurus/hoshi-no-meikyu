@@ -23,6 +23,7 @@ jobs:
         run: |
           mkdir -p preview
           cp index.html style.css game.js cpu.js preview/
+          cp -R assets preview/
           touch preview/.nojekyll
           printf 'User-agent: *\nDisallow: /\n' > preview/robots.txt
       - uses: actions/configure-pages@v5
@@ -43,4 +44,6 @@ jobs:
           grep -q "noindex" /tmp/star-index.html
           grep -q "function start" /tmp/star-game.js
           grep -q "StarMazeCPU" /tmp/star-cpu.js
+          curl -fLsS --retry 6 --retry-delay 5 "$BASE/assets/art.webp" -o /tmp/star-art.webp
+          cmp assets/art.webp /tmp/star-art.webp
           echo "Public preview URL and all game assets verified."
