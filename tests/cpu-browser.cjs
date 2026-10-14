@@ -19,8 +19,6 @@ async function run(browser,count,width){
   await page.locator('#boardSize').selectOption(count===4?'9':'7');
   await page.locator('#start').click();
   assert.equal(await page.evaluate(()=>G.ruleset),'starter');
-  assert.equal(await page.locator('.rocket-on-cell').count(),count,'4-color rocket artwork renders for each player');
-  assert.equal(await page.locator('.sprite-rocket_blue').count(),1,'Blue player uses approved blue rocket, not emoji');
 
   assert.equal(await page.evaluate(()=>G.players.filter(x=>x.cpu).length),count-1);
   let turns=0;
@@ -51,6 +49,8 @@ async function run(browser,count,width){
     if(action.kind==='wall')await page.locator('[data-dir="'+action.d+'"]').click();
     await page.locator('#board [data-cell="'+action.cell+'"]').click();
    }else if(phase==='play'){
+    assert.equal(await page.locator('.rocket-on-cell').count(),count,'4-color rocket artwork renders once board is visible');
+    assert.equal(await page.locator('.sprite-rocket_blue').count(),1,'Blue player uses approved blue rocket, not emoji');
     const hand=await page.evaluate(()=>({
       move:G.players[G.current].hand.filter(c=>defs[c].group==='move').length,
       effect:G.players[G.current].hand.filter(c=>defs[c].group==='effect').length
