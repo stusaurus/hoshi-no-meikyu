@@ -33,7 +33,7 @@ const starterWallCounts={2:[2,1,1],3:[2,2,2],4:[3,2,3]};
 const starCounts={2:[1,2,2,2],3:[2,2,3,2],4:[2,3,4,2]};
 const wallCounts={2:[1,1,1,1],3:[2,1,1,2],4:[2,2,2,2]};
 const wallKinds=["solid","bounce","oneway","phantom"];
-const wallLabels={solid:"鉄壁",bounce:"反発壁",oneway:"一方通行",phantom:"幻影壁"};
+const wallLabels={solid:"通常壁",bounce:"反発壁",oneway:"一方通行",phantom:"幻影壁"};
 const wallIcons={solid:"▰",bounce:"↩",oneway:"➜",phantom:"◇"};
 function choosePlayers(n,size){
  let p=n===2?[0,size*size-1]:n===3?[0,size-1,(size-1)*size+Math.floor(size/2)]:[0,size-1,(size-1)*size,size*size-1];
@@ -51,7 +51,8 @@ function start(){
  const activeKinds=ruleset==="starter"?starterWallKinds:wallKinds;
  const activeWallCounts=ruleset==="starter"?starterWallCounts[n]:wallCounts[n];
  activeWallCounts.forEach((num,j)=>{for(let k=0;k<num;k++)walls.push(activeKinds[j]);});walls=shuffle(walls);
- const presets=["walk","walk","dash","scan","tractor"];
+ // First Starter turn emphasizes movement; tractor is introduced when drawn later.
+ const presets=ruleset==="starter"?["walk","walk","dash","jump","scan"]:["walk","walk","dash","scan","tractor"];
  let deck=[],activeCardCounts=ruleset==="starter"?starterCardCounts:cardCounts;
  Object.keys(activeCardCounts).forEach(k=>{for(let i=0;i<activeCardCounts[k];i++)deck.push(k);});
  let positions=choosePlayers(n,size);
