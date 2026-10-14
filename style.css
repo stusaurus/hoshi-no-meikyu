@@ -62,3 +62,15 @@ footer{max-width:1120px;margin:auto;padding:0 16px 30px;color:#96a9c8;font-size:
 .starter-intro p{margin:8px 0;font-size:.8rem}
 .starter-intro small{color:#bdd1e9;line-height:1.5}
 @media(max-width:790px){.starter-selection{margin:10px 0 14px;padding:12px}}
+
+/* Starter: movement and effect cards are physically distinct decks and hand slots. */
+.separated-hands{display:grid;gap:10px;margin:10px 0}
+.hand-group{border:1px solid #6383ac;border-radius:12px;padding:10px 11px 12px;background:#142842}
+.hand-group h3{margin:0 0 10px;font-size:.94rem;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.hand-group .hand{margin:0}
+.move-group{border-color:#438dca;background:linear-gradient(145deg,#173554,#132940)}
+.move-group h3{color:#b8e4ff}
+.effect-group{border-color:#9b79c7;background:linear-gradient(145deg,#302748,#201e37)}
+.effect-group h3{color:#e1c8ff}
+.hand-group .tiny{font-size:.72rem;font-weight:400;color:#c7d4ee;white-space:nowrap}
+@media(max-width:400px){.hand-group{padding:9px 7px}.hand-group h3{font-size:.87rem}.hand-group .tiny{font-size:.68rem}}
