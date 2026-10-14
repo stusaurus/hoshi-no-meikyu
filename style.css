@@ -52,3 +52,13 @@ footer{max-width:1120px;margin:auto;padding:0 16px 30px;color:#96a9c8;font-size:
 .back-button[hidden],#backFromHandoff[hidden]{display:none!important}
 
 .formgrid label[hidden]{display:none!important}
+
+/* STARTER: clearly introduce what is in the simpler physical+web set. */
+.starter-selection{margin:12px 0 16px;padding:14px;border:1px solid #6886b1;border-radius:13px;background:linear-gradient(135deg,#213b5d,#172744)}
+.starter-selection>label{display:block;font-size:.88rem;margin-bottom:8px;color:#f5d88e}
+.starter-selection select{font-weight:700;background:#305781;border-color:#94b6db;min-height:48px}
+.starter-intro{margin-top:10px;font-size:.83rem;line-height:1.55;color:#e6f0ff}
+.starter-intro strong{color:#f3d68e}
+.starter-intro p{margin:8px 0;font-size:.8rem}
+.starter-intro small{color:#bdd1e9;line-height:1.5}
+@media(max-width:790px){.starter-selection{margin:10px 0 14px;padding:12px}}
