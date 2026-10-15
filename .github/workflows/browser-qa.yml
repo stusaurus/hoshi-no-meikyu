@@ -1,0 +1,50 @@
+name: Browser QA (desktop and mobile)
+on:
+  pull_request:
+  push:
+    branches: [feat/standard-web-prototype]
+permissions:
+  contents: read
+jobs:
+  browser-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: End-to-end board game play (PC, 390px, 320px)
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/starmaze-http.log 2>&1 &
+          sleep 2
+          node tests/browser.cjs
+          node tests/navigation.cjs
+          node tests/cpu-browser.cjs
+          node tests/strategy-browser.cjs
+          STAR_MAZE_BALANCED=1 node tests/strategy-browser.cjs
+          python3 scripts/package.py
+          node tests/audit-browser.cjs
+          node tests/audit-screens.cjs
+      - name: Package playable offline prototype
+        run: python3 scripts/package.py && node tests/package.cjs
+      - name: Upload playable prototype
+        uses: actions/upload-artifact@v4
+        with:
+          name: star-maze-playable
+          path: star-maze-playable.zip
+          retention-days: 14
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: star-maze-browser-screenshots
+          path: |
+            artifacts/
+            docs/audit-2026-10-14/after/
+          if-no-files-found: ignore
+          retention-days: 7

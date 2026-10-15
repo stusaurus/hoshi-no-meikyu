@@ -1,0 +1,1223 @@
+{
+  "ruleset": "starter",
+  "variant": "current",
+  "seeds": 24,
+  "seedOffset": 8,
+  "policies": [
+    "collect"
+  ],
+  "seedFormula": "20261014 + players*1000000 + size*10000 + seedIndex*8191",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz"
+  },
+  "seconds": 224.086,
+  "completed": 2088,
+  "failures": [],
+  "definitions": {
+    "success": "Committed card action; successful effect is NOT inferred from points",
+    "directPoints": "Claimed points during action only; no causal estimate of scan/tractor future value",
+    "reversal": "Final winners include someone not leading after penultimate completed round; omniscient retrospective score",
+    "order": "Rotate actors including private star/wall supplies and policies across turn slots independently of physical seat; paired rotations share seeds and are NOT independent samples",
+    "random": "Random legal candidate, not uniform over cards/positions"
+  },
+  "summary": [
+    {
+      "count": 2,
+      "size": 7,
+      "policy": "collect",
+      "n": 96,
+      "winShare": [
+        0.6041666666666666,
+        0.3958333333333333
+      ],
+      "identityWinShare": [
+        0.46875,
+        0.53125
+      ],
+      "scores": [
+        6.46875,
+        5.46875
+      ],
+      "claims": [
+        3.7604166666666665,
+        3.21875
+      ],
+      "capture": 0.9970238095238096,
+      "margin": 3.125,
+      "reversal": 0.23958333333333334,
+      "rounds": 4.739583333333333,
+      "blocked": 0.09375,
+      "noAction": 0.010416666666666666,
+      "rescues": {
+        "return": 1,
+        "boost": 6
+      },
+      "wallReveal": 0.65625,
+      "wallContacts": {
+        "solid": 129,
+        "bounce": 62,
+        "phantom": 86,
+        "oneway": 0
+      },
+      "cards": {
+        "walk": {
+          "used": 866,
+          "effect": 866,
+          "basic": 0,
+          "moved": 698,
+          "directPoints": 575,
+          "zeroDirectPoint": 576,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "dash": {
+          "used": 439,
+          "effect": 407,
+          "basic": 32,
+          "moved": 431,
+          "directPoints": 140,
+          "zeroDirectPoint": 365,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "jump": {
+          "used": 330,
+          "effect": 330,
+          "basic": 0,
+          "moved": 330,
+          "directPoints": 388,
+          "zeroDirectPoint": 141,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "scan": {
+          "used": 87,
+          "effect": 54,
+          "basic": 33,
+          "moved": 33,
+          "directPoints": 30,
+          "zeroDirectPoint": 71,
+          "learned": 54,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "tractor": {
+          "used": 84,
+          "effect": 78,
+          "basic": 6,
+          "moved": 6,
+          "directPoints": 15,
+          "zeroDirectPoint": 79,
+          "learned": 0,
+          "rivalMoved": 78,
+          "giftPoints": 0
+        },
+        "wallmove": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "pull": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "shield": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        }
+      }
+    },
+    {
+      "count": 2,
+      "size": 8,
+      "policy": "collect",
+      "n": 96,
+      "winShare": [
+        0.59375,
+        0.40625
+      ],
+      "identityWinShare": [
+        0.5416666666666666,
+        0.4583333333333333
+      ],
+      "scores": [
+        6.53125,
+        5.385416666666667
+      ],
+      "claims": [
+        3.59375,
+        3.3229166666666665
+      ],
+      "capture": 0.9880952380952381,
+      "margin": 3.1458333333333335,
+      "reversal": 0.11458333333333333,
+      "rounds": 5.052083333333333,
+      "blocked": 0.03125,
+      "noAction": 0,
+      "rescues": {
+        "boost": 1
+      },
+      "wallReveal": 0.6276041666666666,
+      "wallContacts": {
+        "solid": 117,
+        "bounce": 61,
+        "phantom": 89,
+        "oneway": 0
+      },
+      "cards": {
+        "walk": {
+          "used": 935,
+          "effect": 935,
+          "basic": 0,
+          "moved": 785,
+          "directPoints": 563,
+          "zeroDirectPoint": 667,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "dash": {
+          "used": 511,
+          "effect": 482,
+          "basic": 29,
+          "moved": 503,
+          "directPoints": 180,
+          "zeroDirectPoint": 414,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "jump": {
+          "used": 336,
+          "effect": 336,
+          "basic": 0,
+          "moved": 336,
+          "directPoints": 364,
+          "zeroDirectPoint": 147,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "scan": {
+          "used": 90,
+          "effect": 54,
+          "basic": 36,
+          "moved": 36,
+          "directPoints": 35,
+          "zeroDirectPoint": 75,
+          "learned": 54,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "tractor": {
+          "used": 66,
+          "effect": 57,
+          "basic": 9,
+          "moved": 9,
+          "directPoints": 2,
+          "zeroDirectPoint": 65,
+          "learned": 0,
+          "rivalMoved": 57,
+          "giftPoints": 0
+        },
+        "wallmove": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "pull": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "shield": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        }
+      }
+    },
+    {
+      "count": 2,
+      "size": 9,
+      "policy": "collect",
+      "n": 96,
+      "winShare": [
+        0.5572916666666666,
+        0.4427083333333333
+      ],
+      "identityWinShare": [
+        0.5260416666666666,
+        0.4739583333333333
+      ],
+      "scores": [
+        6.3125,
+        5.583333333333333
+      ],
+      "claims": [
+        3.6458333333333335,
+        3.2395833333333335
+      ],
+      "capture": 0.9836309523809526,
+      "margin": 3.75,
+      "reversal": 0.10416666666666667,
+      "rounds": 5.114583333333333,
+      "blocked": 0.041666666666666664,
+      "noAction": 0,
+      "rescues": {
+        "boost": 2
+      },
+      "wallReveal": 0.6666666666666666,
+      "wallContacts": {
+        "solid": 138,
+        "bounce": 61,
+        "phantom": 78,
+        "oneway": 0
+      },
+      "cards": {
+        "walk": {
+          "used": 924,
+          "effect": 924,
+          "basic": 0,
+          "moved": 767,
+          "directPoints": 600,
+          "zeroDirectPoint": 636,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "dash": {
+          "used": 525,
+          "effect": 463,
+          "basic": 62,
+          "moved": 505,
+          "directPoints": 147,
+          "zeroDirectPoint": 445,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "jump": {
+          "used": 329,
+          "effect": 329,
+          "basic": 0,
+          "moved": 329,
+          "directPoints": 362,
+          "zeroDirectPoint": 147,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "scan": {
+          "used": 99,
+          "effect": 46,
+          "basic": 53,
+          "moved": 53,
+          "directPoints": 23,
+          "zeroDirectPoint": 87,
+          "learned": 46,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "tractor": {
+          "used": 82,
+          "effect": 59,
+          "basic": 23,
+          "moved": 23,
+          "directPoints": 10,
+          "zeroDirectPoint": 76,
+          "learned": 0,
+          "rivalMoved": 59,
+          "giftPoints": 0
+        },
+        "wallmove": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "pull": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "shield": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        }
+      }
+    },
+    {
+      "count": 3,
+      "size": 7,
+      "policy": "collect",
+      "n": 216,
+      "winShare": [
+        0.6944444444444444,
+        0.2013888888888889,
+        0.10416666666666667
+      ],
+      "identityWinShare": [
+        0.3425925925925926,
+        0.33564814814814814,
+        0.32175925925925924
+      ],
+      "scores": [
+        6.7592592592592595,
+        4.171296296296297,
+        2.962962962962963
+      ],
+      "claims": [
+        4.1342592592592595,
+        2.7962962962962963,
+        1.9722222222222223
+      ],
+      "capture": 0.9891975308641974,
+      "margin": 2.9166666666666665,
+      "reversal": 0.1388888888888889,
+      "rounds": 5.111111111111111,
+      "blocked": 0.1712962962962963,
+      "noAction": 0.013888888888888888,
+      "rescues": {
+        "boost": 15,
+        "return": 2
+      },
+      "wallReveal": 0.46373456790123474,
+      "wallContacts": {
+        "solid": 196,
+        "bounce": 189,
+        "phantom": 343,
+        "oneway": 0
+      },
+      "cards": {
+        "walk": {
+          "used": 2987,
+          "effect": 2987,
+          "basic": 0,
+          "moved": 2777,
+          "directPoints": 1572,
+          "zeroDirectPoint": 2202,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "dash": {
+          "used": 1444,
+          "effect": 1393,
+          "basic": 51,
+          "moved": 1374,
+          "directPoints": 751,
+          "zeroDirectPoint": 1060,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "jump": {
+          "used": 955,
+          "effect": 955,
+          "basic": 0,
+          "moved": 955,
+          "directPoints": 623,
+          "zeroDirectPoint": 649,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "scan": {
+          "used": 708,
+          "effect": 675,
+          "basic": 33,
+          "moved": 32,
+          "directPoints": 26,
+          "zeroDirectPoint": 696,
+          "learned": 675,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "tractor": {
+          "used": 487,
+          "effect": 464,
+          "basic": 23,
+          "moved": 23,
+          "directPoints": 33,
+          "zeroDirectPoint": 473,
+          "learned": 0,
+          "rivalMoved": 453,
+          "giftPoints": 0
+        },
+        "wallmove": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "pull": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "shield": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        }
+      }
+    },
+    {
+      "count": 3,
+      "size": 8,
+      "policy": "collect",
+      "n": 216,
+      "winShare": [
+        0.6458333333333334,
+        0.24074074074074073,
+        0.11342592592592593
+      ],
+      "identityWinShare": [
+        0.3148148148148148,
+        0.3055555555555556,
+        0.37962962962962965
+      ],
+      "scores": [
+        6.671296296296297,
+        4.268518518518518,
+        2.962962962962963
+      ],
+      "claims": [
+        4.106481481481482,
+        2.8518518518518516,
+        1.9722222222222223
+      ],
+      "capture": 0.9922839506172837,
+      "margin": 3,
+      "reversal": 0.14814814814814814,
+      "rounds": 5.055555555555555,
+      "blocked": 0.06944444444444445,
+      "noAction": 0,
+      "rescues": {
+        "return": 2,
+        "boost": 8
+      },
+      "wallReveal": 0.46141975308641975,
+      "wallContacts": {
+        "solid": 186,
+        "bounce": 205,
+        "phantom": 341,
+        "oneway": 0
+      },
+      "cards": {
+        "walk": {
+          "used": 3113,
+          "effect": 3113,
+          "basic": 0,
+          "moved": 2898,
+          "directPoints": 1708,
+          "zeroDirectPoint": 2272,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "dash": {
+          "used": 1504,
+          "effect": 1437,
+          "basic": 67,
+          "moved": 1441,
+          "directPoints": 662,
+          "zeroDirectPoint": 1152,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "jump": {
+          "used": 971,
+          "effect": 971,
+          "basic": 0,
+          "moved": 971,
+          "directPoints": 578,
+          "zeroDirectPoint": 687,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "scan": {
+          "used": 587,
+          "effect": 533,
+          "basic": 54,
+          "moved": 54,
+          "directPoints": 42,
+          "zeroDirectPoint": 569,
+          "learned": 533,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "tractor": {
+          "used": 350,
+          "effect": 332,
+          "basic": 18,
+          "moved": 17,
+          "directPoints": 17,
+          "zeroDirectPoint": 342,
+          "learned": 0,
+          "rivalMoved": 331,
+          "giftPoints": 0
+        },
+        "wallmove": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "pull": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "shield": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        }
+      }
+    },
+    {
+      "count": 3,
+      "size": 9,
+      "policy": "collect",
+      "n": 216,
+      "winShare": [
+        0.5046296296296297,
+        0.33796296296296297,
+        0.1574074074074074
+      ],
+      "identityWinShare": [
+        0.3287037037037037,
+        0.35648148148148145,
+        0.3148148148148148
+      ],
+      "scores": [
+        6.180555555555555,
+        4.722222222222222,
+        3.0555555555555554
+      ],
+      "claims": [
+        3.912037037037037,
+        3.0462962962962963,
+        1.9907407407407407
+      ],
+      "capture": 0.994341563786008,
+      "margin": 2.6435185185185186,
+      "reversal": 0.12962962962962962,
+      "rounds": 5.055555555555555,
+      "blocked": 0.05092592592592592,
+      "noAction": 0,
+      "rescues": {
+        "boost": 5,
+        "return": 1
+      },
+      "wallReveal": 0.4814814814814814,
+      "wallContacts": {
+        "solid": 208,
+        "bounce": 230,
+        "phantom": 258,
+        "oneway": 0
+      },
+      "cards": {
+        "walk": {
+          "used": 3264,
+          "effect": 3264,
+          "basic": 0,
+          "moved": 3024,
+          "directPoints": 1605,
+          "zeroDirectPoint": 2469,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "dash": {
+          "used": 1571,
+          "effect": 1507,
+          "basic": 64,
+          "moved": 1503,
+          "directPoints": 661,
+          "zeroDirectPoint": 1221,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "jump": {
+          "used": 1009,
+          "effect": 1009,
+          "basic": 0,
+          "moved": 1009,
+          "directPoints": 717,
+          "zeroDirectPoint": 663,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "scan": {
+          "used": 448,
+          "effect": 408,
+          "basic": 40,
+          "moved": 40,
+          "directPoints": 22,
+          "zeroDirectPoint": 437,
+          "learned": 408,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "tractor": {
+          "used": 247,
+          "effect": 230,
+          "basic": 17,
+          "moved": 17,
+          "directPoints": 12,
+          "zeroDirectPoint": 242,
+          "learned": 0,
+          "rivalMoved": 228,
+          "giftPoints": 0
+        },
+        "wallmove": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "pull": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "shield": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        }
+      }
+    },
+    {
+      "count": 4,
+      "size": 7,
+      "policy": "collect",
+      "n": 384,
+      "winShare": [
+        0.4752604166666667,
+        0.2621527777777778,
+        0.17881944444444442,
+        0.0837673611111111
+      ],
+      "identityWinShare": [
+        0.26996527777777773,
+        0.25737847222222227,
+        0.25390625,
+        0.21875
+      ],
+      "scores": [
+        5.6484375,
+        4.3984375,
+        3.7838541666666665,
+        3.0026041666666665
+      ],
+      "claims": [
+        3.6145833333333335,
+        2.8098958333333335,
+        2.515625,
+        1.9453125
+      ],
+      "capture": 0.9895833333333336,
+      "margin": 2.2604166666666665,
+      "reversal": 0.171875,
+      "rounds": 5.190104166666667,
+      "blocked": 0.5026041666666666,
+      "noAction": 0.015625,
+      "rescues": {
+        "boost": 89,
+        "return": 9
+      },
+      "wallReveal": 0.587890625,
+      "wallContacts": {
+        "solid": 700,
+        "bounce": 506,
+        "phantom": 1189,
+        "oneway": 0
+      },
+      "cards": {
+        "walk": {
+          "used": 7569,
+          "effect": 7569,
+          "basic": 0,
+          "moved": 6726,
+          "directPoints": 4043,
+          "zeroDirectPoint": 5408,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "dash": {
+          "used": 3133,
+          "effect": 2984,
+          "basic": 149,
+          "moved": 3042,
+          "directPoints": 1067,
+          "zeroDirectPoint": 2554,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "jump": {
+          "used": 2222,
+          "effect": 2222,
+          "basic": 0,
+          "moved": 2222,
+          "directPoints": 1251,
+          "zeroDirectPoint": 1593,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "scan": {
+          "used": 1638,
+          "effect": 1549,
+          "basic": 89,
+          "moved": 84,
+          "directPoints": 69,
+          "zeroDirectPoint": 1603,
+          "learned": 1549,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "tractor": {
+          "used": 1161,
+          "effect": 1123,
+          "basic": 38,
+          "moved": 36,
+          "directPoints": 50,
+          "zeroDirectPoint": 1139,
+          "learned": 0,
+          "rivalMoved": 1092,
+          "giftPoints": 2
+        },
+        "wallmove": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "pull": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "shield": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        }
+      }
+    },
+    {
+      "count": 4,
+      "size": 8,
+      "policy": "collect",
+      "n": 384,
+      "winShare": [
+        0.44184027777777785,
+        0.24392361111111113,
+        0.1684027777777778,
+        0.14583333333333334
+      ],
+      "identityWinShare": [
+        0.23611111111111113,
+        0.23177083333333334,
+        0.23350694444444445,
+        0.2986111111111111
+      ],
+      "scores": [
+        5.669270833333333,
+        4.325520833333333,
+        3.6380208333333335,
+        3.171875
+      ],
+      "claims": [
+        3.5546875,
+        2.78125,
+        2.4453125,
+        2.0963541666666665
+      ],
+      "capture": 0.9888731060606063,
+      "margin": 2.5208333333333335,
+      "reversal": 0.11979166666666667,
+      "rounds": 5.143229166666667,
+      "blocked": 0.4010416666666667,
+      "noAction": 0.015625,
+      "rescues": {
+        "boost": 70,
+        "return": 4
+      },
+      "wallReveal": 0.580078125,
+      "wallContacts": {
+        "solid": 689,
+        "bounce": 483,
+        "phantom": 1110,
+        "oneway": 0
+      },
+      "cards": {
+        "walk": {
+          "used": 7893,
+          "effect": 7893,
+          "basic": 0,
+          "moved": 7023,
+          "directPoints": 4176,
+          "zeroDirectPoint": 5688,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "dash": {
+          "used": 3307,
+          "effect": 3135,
+          "basic": 172,
+          "moved": 3232,
+          "directPoints": 942,
+          "zeroDirectPoint": 2773,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "jump": {
+          "used": 2200,
+          "effect": 2200,
+          "basic": 0,
+          "moved": 2200,
+          "directPoints": 1185,
+          "zeroDirectPoint": 1597,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "scan": {
+          "used": 1435,
+          "effect": 1313,
+          "basic": 122,
+          "moved": 115,
+          "directPoints": 105,
+          "zeroDirectPoint": 1381,
+          "learned": 1313,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "tractor": {
+          "used": 799,
+          "effect": 748,
+          "basic": 51,
+          "moved": 47,
+          "directPoints": 53,
+          "zeroDirectPoint": 775,
+          "learned": 0,
+          "rivalMoved": 727,
+          "giftPoints": 0
+        },
+        "wallmove": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "pull": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "shield": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        }
+      }
+    },
+    {
+      "count": 4,
+      "size": 9,
+      "policy": "collect",
+      "n": 384,
+      "winShare": [
+        0.3914930555555555,
+        0.2938368055555555,
+        0.16796875,
+        0.1467013888888889
+      ],
+      "identityWinShare": [
+        0.2504340277777778,
+        0.23567708333333334,
+        0.26822916666666663,
+        0.2456597222222222
+      ],
+      "scores": [
+        5.322916666666667,
+        4.427083333333333,
+        3.7786458333333335,
+        3.3958333333333335
+      ],
+      "claims": [
+        3.375,
+        2.78125,
+        2.5208333333333335,
+        2.265625
+      ],
+      "capture": 0.9947916666666671,
+      "margin": 2.2213541666666665,
+      "reversal": 0.1484375,
+      "rounds": 5.1484375,
+      "blocked": 0.2994791666666667,
+      "noAction": 0.0026041666666666665,
+      "rescues": {
+        "boost": 47,
+        "return": 1
+      },
+      "wallReveal": 0.6155598958333334,
+      "wallContacts": {
+        "solid": 744,
+        "bounce": 534,
+        "phantom": 1119,
+        "oneway": 0
+      },
+      "cards": {
+        "walk": {
+          "used": 7986,
+          "effect": 7986,
+          "basic": 0,
+          "moved": 7121,
+          "directPoints": 4287,
+          "zeroDirectPoint": 5731,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "dash": {
+          "used": 3597,
+          "effect": 3449,
+          "basic": 148,
+          "moved": 3499,
+          "directPoints": 979,
+          "zeroDirectPoint": 3058,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "jump": {
+          "used": 2259,
+          "effect": 2259,
+          "basic": 0,
+          "moved": 2259,
+          "directPoints": 1119,
+          "zeroDirectPoint": 1672,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "scan": {
+          "used": 1182,
+          "effect": 1043,
+          "basic": 139,
+          "moved": 132,
+          "directPoints": 78,
+          "zeroDirectPoint": 1143,
+          "learned": 1043,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "tractor": {
+          "used": 683,
+          "effect": 629,
+          "basic": 54,
+          "moved": 50,
+          "directPoints": 38,
+          "zeroDirectPoint": 665,
+          "learned": 0,
+          "rivalMoved": 618,
+          "giftPoints": 0
+        },
+        "wallmove": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "pull": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        },
+        "shield": {
+          "used": 0,
+          "effect": 0,
+          "basic": 0,
+          "moved": 0,
+          "directPoints": 0,
+          "zeroDirectPoint": 0,
+          "learned": 0,
+          "rivalMoved": 0,
+          "giftPoints": 0
+        }
+      }
+    }
+  ]
+}

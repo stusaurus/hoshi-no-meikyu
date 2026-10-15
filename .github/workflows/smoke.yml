@@ -1,0 +1,40 @@
+name: Prototype smoke tests
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check game.js
+      - run: node tests/smoke.cjs
+      - run: node tests/interactions.cjs
+      - run: node tests/audit.cjs
+      - run: node tests/audit-data.cjs
+      - run: node tests/rules-comparison.cjs
+      - run: node tests/cpu.cjs
+      - run: node tests/starter.cjs
+      - run: node tests/strategy.cjs
+      - run: node tests/balanced.cjs
+      - run: node tests/strategy-balance-engine.cjs
+      - run: node tests/strategy-balance-data.cjs
+      - run: node --check scripts/simulate.cjs
+      - name: Lightweight CPU balance regression (90 matches)
+        run: node scripts/simulate.cjs --games=10 --seed=20261014 --out=reports
+      - name: Rotate starting seats (432 CPU games)
+        run: node scripts/simulate.cjs --games=48 --seed=20261014 --rotateSeats=true --out=reports-rotated
+      - name: Upload preliminary balance data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: star-maze-balance-baseline
+          path: |
+            reports/
+            reports-rotated/
+          if-no-files-found: ignore
+          retention-days: 14
