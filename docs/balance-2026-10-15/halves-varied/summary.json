@@ -1,0 +1,129 @@
+{
+  "sourceHashes": {
+    "game": "d80e48c42fce7a6d129286fa96cde46d0defd490ed9e9fe7f6a5e3a558e38946",
+    "cpu": "cdd187184dd383d0930cf4ec0c7c107efbc1fb1750ea70281699840c4df97f42"
+  },
+  "halfTurns": 6,
+  "seeds": 48,
+  "seedOffset": 0,
+  "counts": [
+    2
+  ],
+  "sizes": [
+    7
+  ],
+  "variants": [
+    "finite-halves"
+  ],
+  "policies": [
+    "collect",
+    "value",
+    "control"
+  ],
+  "opening": "varied",
+  "completed": 576,
+  "failures": [],
+  "seconds": 12.131,
+  "environment": {
+    "node": "v24.19.0",
+    "cpu": "AMD EPYC 9V74 80-Core Processor"
+  },
+  "summary": [
+    {
+      "count": 2,
+      "size": 7,
+      "policy": "collect",
+      "variant": "finite-halves",
+      "n": 192,
+      "seeds": 48,
+      "uniqueOpenings": 176,
+      "winShare": [
+        0.5,
+        0.5
+      ],
+      "spread": 0,
+      "scores": [
+        5.885416666666667,
+        6.046875
+      ],
+      "margin": 0.828125,
+      "capture": 0.9904513888888892,
+      "rounds": 8.416666666666666,
+      "passesPerGame": 0.046875,
+      "repeatRate": 0.2506168487839267,
+      "midReversal": 0,
+      "rescues": 2,
+      "cards": {
+        "walk": 1282,
+        "dash": 767,
+        "jump": 685,
+        "scan": 250,
+        "tractor": 237
+      }
+    },
+    {
+      "count": 2,
+      "size": 7,
+      "policy": "value",
+      "variant": "finite-halves",
+      "n": 192,
+      "seeds": 48,
+      "uniqueOpenings": 176,
+      "winShare": [
+        0.4791666666666667,
+        0.5208333333333334
+      ],
+      "spread": 0.041666666666666685,
+      "scores": [
+        5.838541666666667,
+        6.098958333333333
+      ],
+      "margin": 0.8333333333333334,
+      "capture": 0.990451388888889,
+      "rounds": 8.348958333333334,
+      "passesPerGame": 0,
+      "repeatRate": 0.23316796598157336,
+      "midReversal": 0,
+      "rescues": 0,
+      "cards": {
+        "walk": 1259,
+        "dash": 779,
+        "jump": 623,
+        "scan": 257,
+        "tractor": 288
+      }
+    },
+    {
+      "count": 2,
+      "size": 7,
+      "policy": "control",
+      "variant": "finite-halves",
+      "n": 192,
+      "seeds": 48,
+      "uniqueOpenings": 176,
+      "winShare": [
+        0.5026041666666666,
+        0.4973958333333333
+      ],
+      "spread": 0.005208333333333315,
+      "scores": [
+        5.911458333333333,
+        6.010416666666667
+      ],
+      "margin": 0.828125,
+      "capture": 0.9895833333333335,
+      "rounds": 8.536458333333334,
+      "passesPerGame": 0.046875,
+      "repeatRate": 0.2443595973620271,
+      "midReversal": 0,
+      "rescues": 4,
+      "cards": {
+        "walk": 1289,
+        "dash": 784,
+        "jump": 686,
+        "scan": 247,
+        "tractor": 259
+      }
+    }
+  ]
+}

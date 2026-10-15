@@ -1,0 +1,944 @@
+{
+  "sourceHashes": {
+    "game": "d80e48c42fce7a6d129286fa96cde46d0defd490ed9e9fe7f6a5e3a558e38946",
+    "cpu": "cdd187184dd383d0930cf4ec0c7c107efbc1fb1750ea70281699840c4df97f42"
+  },
+  "seeds": 24,
+  "seedOffset": 0,
+  "variants": [
+    "finite-cyclic",
+    "unlimited-snake",
+    "finite-snake"
+  ],
+  "policies": [
+    "collect"
+  ],
+  "opening": "varied",
+  "completed": 6264,
+  "failures": [],
+  "seconds": 675.974,
+  "environment": {
+    "node": "v24.19.0",
+    "cpu": "AMD EPYC 9V74 80-Core Processor"
+  },
+  "summary": [
+    {
+      "count": 2,
+      "size": 7,
+      "policy": "collect",
+      "variant": "finite-cyclic",
+      "n": 96,
+      "seeds": 24,
+      "uniqueOpenings": 88,
+      "winShare": [
+        0.5104166666666666,
+        0.4895833333333333
+      ],
+      "spread": 0.020833333333333315,
+      "scores": [
+        6.010416666666667,
+        5.927083333333333
+      ],
+      "margin": 0.6458333333333334,
+      "capture": 0.9930555555555557,
+      "rounds": 8.479166666666666,
+      "passesPerGame": 0.07291666666666667,
+      "repeatRate": 0.27279102384291726,
+      "midReversal": 0,
+      "rescues": 3,
+      "cards": {
+        "walk": 649,
+        "dash": 396,
+        "jump": 353,
+        "scan": 139,
+        "tractor": 81
+      }
+    },
+    {
+      "count": 2,
+      "size": 7,
+      "policy": "collect",
+      "variant": "unlimited-snake",
+      "n": 96,
+      "seeds": 24,
+      "uniqueOpenings": 88,
+      "winShare": [
+        0.5104166666666666,
+        0.4895833333333333
+      ],
+      "spread": 0.020833333333333315,
+      "scores": [
+        5.927083333333333,
+        6.0625
+      ],
+      "margin": 0.53125,
+      "capture": 0.998263888888889,
+      "rounds": 8.260416666666666,
+      "passesPerGame": 0,
+      "repeatRate": 0.6291248206599713,
+      "midReversal": 0.010416666666666666,
+      "rescues": 0,
+      "cards": {
+        "walk": 1273,
+        "dash": 121,
+        "jump": 110,
+        "scan": 81,
+        "tractor": 1
+      }
+    },
+    {
+      "count": 2,
+      "size": 7,
+      "policy": "collect",
+      "variant": "finite-snake",
+      "n": 96,
+      "seeds": 24,
+      "uniqueOpenings": 88,
+      "winShare": [
+        0.5104166666666666,
+        0.4895833333333333
+      ],
+      "spread": 0.020833333333333315,
+      "scores": [
+        6.010416666666667,
+        5.927083333333333
+      ],
+      "margin": 0.6458333333333334,
+      "capture": 0.9930555555555557,
+      "rounds": 8.479166666666666,
+      "passesPerGame": 0.07291666666666667,
+      "repeatRate": 0.27279102384291726,
+      "midReversal": 0,
+      "rescues": 3,
+      "cards": {
+        "walk": 649,
+        "dash": 396,
+        "jump": 353,
+        "scan": 139,
+        "tractor": 81
+      }
+    },
+    {
+      "count": 2,
+      "size": 8,
+      "policy": "collect",
+      "variant": "finite-cyclic",
+      "n": 96,
+      "seeds": 24,
+      "uniqueOpenings": 80,
+      "winShare": [
+        0.4635416666666667,
+        0.5364583333333334
+      ],
+      "spread": 0.07291666666666669,
+      "scores": [
+        5.90625,
+        6.083333333333333
+      ],
+      "margin": 1.1145833333333333,
+      "capture": 0.998263888888889,
+      "rounds": 8.322916666666666,
+      "passesPerGame": 0,
+      "repeatRate": 0.2581792318634424,
+      "midReversal": 0.010416666666666666,
+      "rescues": 0,
+      "cards": {
+        "walk": 648,
+        "dash": 446,
+        "jump": 348,
+        "scan": 79,
+        "tractor": 77
+      }
+    },
+    {
+      "count": 2,
+      "size": 8,
+      "policy": "collect",
+      "variant": "unlimited-snake",
+      "n": 96,
+      "seeds": 24,
+      "uniqueOpenings": 80,
+      "winShare": [
+        0.46875,
+        0.53125
+      ],
+      "spread": 0.0625,
+      "scores": [
+        5.895833333333333,
+        6.09375
+      ],
+      "margin": 0.53125,
+      "capture": 0.9982638888888888,
+      "rounds": 8.25,
+      "passesPerGame": 0,
+      "repeatRate": 0.6357758620689655,
+      "midReversal": 0,
+      "rescues": 0,
+      "cards": {
+        "walk": 1258,
+        "dash": 174,
+        "jump": 111,
+        "scan": 39,
+        "tractor": 2
+      }
+    },
+    {
+      "count": 2,
+      "size": 8,
+      "policy": "collect",
+      "variant": "finite-snake",
+      "n": 96,
+      "seeds": 24,
+      "uniqueOpenings": 80,
+      "winShare": [
+        0.4635416666666667,
+        0.5364583333333334
+      ],
+      "spread": 0.07291666666666669,
+      "scores": [
+        5.90625,
+        6.083333333333333
+      ],
+      "margin": 1.1145833333333333,
+      "capture": 0.998263888888889,
+      "rounds": 8.322916666666666,
+      "passesPerGame": 0,
+      "repeatRate": 0.2581792318634424,
+      "midReversal": 0.010416666666666666,
+      "rescues": 0,
+      "cards": {
+        "walk": 648,
+        "dash": 446,
+        "jump": 348,
+        "scan": 79,
+        "tractor": 77
+      }
+    },
+    {
+      "count": 2,
+      "size": 9,
+      "policy": "collect",
+      "variant": "finite-cyclic",
+      "n": 96,
+      "seeds": 24,
+      "uniqueOpenings": 90,
+      "winShare": [
+        0.5729166666666666,
+        0.4270833333333333
+      ],
+      "spread": 0.14583333333333331,
+      "scores": [
+        6.25,
+        5.697916666666667
+      ],
+      "margin": 1.1770833333333333,
+      "capture": 0.9913194444444443,
+      "rounds": 8.510416666666666,
+      "passesPerGame": 0.10416666666666667,
+      "repeatRate": 0.27603074772886094,
+      "midReversal": 0,
+      "rescues": 1,
+      "cards": {
+        "walk": 650,
+        "dash": 417,
+        "jump": 337,
+        "scan": 128,
+        "tractor": 91
+      }
+    },
+    {
+      "count": 2,
+      "size": 9,
+      "policy": "collect",
+      "variant": "unlimited-snake",
+      "n": 96,
+      "seeds": 24,
+      "uniqueOpenings": 90,
+      "winShare": [
+        0.484375,
+        0.515625
+      ],
+      "spread": 0.03125,
+      "scores": [
+        5.989583333333333,
+        6
+      ],
+      "margin": 0.4270833333333333,
+      "capture": 0.9982638888888888,
+      "rounds": 8.34375,
+      "passesPerGame": 0,
+      "repeatRate": 0.6170212765957447,
+      "midReversal": 0,
+      "rescues": 0,
+      "cards": {
+        "walk": 1254,
+        "dash": 164,
+        "jump": 114,
+        "scan": 70,
+        "tractor": 0
+      }
+    },
+    {
+      "count": 2,
+      "size": 9,
+      "policy": "collect",
+      "variant": "finite-snake",
+      "n": 96,
+      "seeds": 24,
+      "uniqueOpenings": 90,
+      "winShare": [
+        0.5729166666666666,
+        0.4270833333333333
+      ],
+      "spread": 0.14583333333333331,
+      "scores": [
+        6.25,
+        5.697916666666667
+      ],
+      "margin": 1.1770833333333333,
+      "capture": 0.9913194444444443,
+      "rounds": 8.510416666666666,
+      "passesPerGame": 0.10416666666666667,
+      "repeatRate": 0.27603074772886094,
+      "midReversal": 0,
+      "rescues": 1,
+      "cards": {
+        "walk": 650,
+        "dash": 417,
+        "jump": 337,
+        "scan": 128,
+        "tractor": 91
+      }
+    },
+    {
+      "count": 3,
+      "size": 7,
+      "policy": "collect",
+      "variant": "finite-cyclic",
+      "n": 216,
+      "seeds": 24,
+      "uniqueOpenings": 216,
+      "winShare": [
+        0.287808641975309,
+        0.3665123456790123,
+        0.3456790123456788
+      ],
+      "spread": 0.07870370370370333,
+      "scores": [
+        5.962962962962963,
+        6.064814814814815,
+        5.842592592592593
+      ],
+      "margin": 1.2916666666666667,
+      "capture": 0.993827160493827,
+      "rounds": 8.88888888888889,
+      "passesPerGame": 0.032407407407407406,
+      "repeatRate": 0.22673733804475854,
+      "midReversal": 0.05555555555555555,
+      "rescues": 11,
+      "cards": {
+        "walk": 2245,
+        "dash": 1089,
+        "jump": 1157,
+        "scan": 676,
+        "tractor": 575
+      }
+    },
+    {
+      "count": 3,
+      "size": 7,
+      "policy": "collect",
+      "variant": "unlimited-snake",
+      "n": 216,
+      "seeds": 24,
+      "uniqueOpenings": 216,
+      "winShare": [
+        0.3973765432098761,
+        0.28858024691358064,
+        0.31404320987654344
+      ],
+      "spread": 0.10879629629629545,
+      "scores": [
+        6.236111111111111,
+        5.958333333333333,
+        5.773148148148148
+      ],
+      "margin": 1.162037037037037,
+      "capture": 0.9979423868312757,
+      "rounds": 8.773148148148149,
+      "passesPerGame": 0,
+      "repeatRate": 0.6304391019272799,
+      "midReversal": 0.009259259259259259,
+      "rescues": 4,
+      "cards": {
+        "walk": 4484,
+        "dash": 428,
+        "jump": 365,
+        "scan": 359,
+        "tractor": 45
+      }
+    },
+    {
+      "count": 3,
+      "size": 7,
+      "policy": "collect",
+      "variant": "finite-snake",
+      "n": 216,
+      "seeds": 24,
+      "uniqueOpenings": 216,
+      "winShare": [
+        0.3580246913580249,
+        0.2816358024691361,
+        0.36033950617283955
+      ],
+      "spread": 0.07870370370370344,
+      "scores": [
+        6.092592592592593,
+        5.787037037037037,
+        6.060185185185185
+      ],
+      "margin": 1.3564814814814814,
+      "capture": 0.9953703703703702,
+      "rounds": 8.925925925925926,
+      "passesPerGame": 0.037037037037037035,
+      "repeatRate": 0.23950810072223305,
+      "midReversal": 0.05092592592592592,
+      "rescues": 5,
+      "cards": {
+        "walk": 2314,
+        "dash": 1067,
+        "jump": 1179,
+        "scan": 662,
+        "tractor": 549
+      }
+    },
+    {
+      "count": 3,
+      "size": 8,
+      "policy": "collect",
+      "variant": "finite-cyclic",
+      "n": 216,
+      "seeds": 24,
+      "uniqueOpenings": 216,
+      "winShare": [
+        0.3163580246913585,
+        0.3695987654320987,
+        0.3140432098765433
+      ],
+      "spread": 0.05555555555555536,
+      "scores": [
+        5.976851851851852,
+        6.1342592592592595,
+        5.800925925925926
+      ],
+      "margin": 1.0972222222222223,
+      "capture": 0.9953703703703702,
+      "rounds": 8.875,
+      "passesPerGame": 0.1111111111111111,
+      "repeatRate": 0.2418210484824596,
+      "midReversal": 0.032407407407407406,
+      "rescues": 5,
+      "cards": {
+        "walk": 2264,
+        "dash": 1132,
+        "jump": 1174,
+        "scan": 644,
+        "tractor": 508
+      }
+    },
+    {
+      "count": 3,
+      "size": 8,
+      "policy": "collect",
+      "variant": "unlimited-snake",
+      "n": 216,
+      "seeds": 24,
+      "uniqueOpenings": 216,
+      "winShare": [
+        0.33179012345679054,
+        0.35493827160493835,
+        0.313271604938272
+      ],
+      "spread": 0.04166666666666635,
+      "scores": [
+        6.097222222222222,
+        6.041666666666667,
+        5.800925925925926
+      ],
+      "margin": 1.0185185185185186,
+      "capture": 0.9974279835390946,
+      "rounds": 8.972222222222221,
+      "passesPerGame": 0,
+      "repeatRate": 0.6288979275614952,
+      "midReversal": 0.018518518518518517,
+      "rescues": 3,
+      "cards": {
+        "walk": 4572,
+        "dash": 530,
+        "jump": 370,
+        "scan": 312,
+        "tractor": 27
+      }
+    },
+    {
+      "count": 3,
+      "size": 8,
+      "policy": "collect",
+      "variant": "finite-snake",
+      "n": 216,
+      "seeds": 24,
+      "uniqueOpenings": 216,
+      "winShare": [
+        0.3009259259259263,
+        0.34259259259259267,
+        0.3564814814814814
+      ],
+      "spread": 0.05555555555555508,
+      "scores": [
+        5.731481481481482,
+        5.986111111111111,
+        6.185185185185185
+      ],
+      "margin": 1.0648148148148149,
+      "capture": 0.9958847736625513,
+      "rounds": 8.893518518518519,
+      "passesPerGame": 0.08333333333333333,
+      "repeatRate": 0.24287679308312046,
+      "midReversal": 0.05092592592592592,
+      "rescues": 8,
+      "cards": {
+        "walk": 2284,
+        "dash": 1177,
+        "jump": 1133,
+        "scan": 627,
+        "tractor": 516
+      }
+    },
+    {
+      "count": 3,
+      "size": 9,
+      "policy": "collect",
+      "variant": "finite-cyclic",
+      "n": 216,
+      "seeds": 24,
+      "uniqueOpenings": 216,
+      "winShare": [
+        0.33101851851851877,
+        0.34027777777777807,
+        0.32870370370370394
+      ],
+      "spread": 0.011574074074074125,
+      "scores": [
+        5.972222222222222,
+        6.138888888888889,
+        5.796296296296297
+      ],
+      "margin": 1.2685185185185186,
+      "capture": 0.9963991769547325,
+      "rounds": 8.88425925925926,
+      "passesPerGame": 0.09259259259259259,
+      "repeatRate": 0.253740157480315,
+      "midReversal": 0.06944444444444445,
+      "rescues": 9,
+      "cards": {
+        "walk": 2274,
+        "dash": 1209,
+        "jump": 1144,
+        "scan": 649,
+        "tractor": 452
+      }
+    },
+    {
+      "count": 3,
+      "size": 9,
+      "policy": "collect",
+      "variant": "unlimited-snake",
+      "n": 216,
+      "seeds": 24,
+      "uniqueOpenings": 216,
+      "winShare": [
+        0.3927469135802468,
+        0.31867283950617314,
+        0.28858024691358053
+      ],
+      "spread": 0.1041666666666663,
+      "scores": [
+        6.273148148148148,
+        5.87962962962963,
+        5.819444444444445
+      ],
+      "margin": 1.1157407407407407,
+      "capture": 0.9979423868312757,
+      "rounds": 9.00462962962963,
+      "passesPerGame": 0,
+      "repeatRate": 0.6473877000192789,
+      "midReversal": 0.023148148148148147,
+      "rescues": 0,
+      "cards": {
+        "walk": 4654,
+        "dash": 585,
+        "jump": 311,
+        "scan": 250,
+        "tractor": 35
+      }
+    },
+    {
+      "count": 3,
+      "size": 9,
+      "policy": "collect",
+      "variant": "finite-snake",
+      "n": 216,
+      "seeds": 24,
+      "uniqueOpenings": 216,
+      "winShare": [
+        0.3734567901234569,
+        0.31558641975308677,
+        0.310956790123457
+      ],
+      "spread": 0.06249999999999989,
+      "scores": [
+        6.1157407407407405,
+        5.949074074074074,
+        5.907407407407407
+      ],
+      "margin": 1.3564814814814814,
+      "capture": 0.9979423868312757,
+      "rounds": 8.88425925925926,
+      "passesPerGame": 0.10185185185185185,
+      "repeatRate": 0.25708661417322837,
+      "midReversal": 0.08333333333333333,
+      "rescues": 7,
+      "cards": {
+        "walk": 2246,
+        "dash": 1195,
+        "jump": 1215,
+        "scan": 626,
+        "tractor": 446
+      }
+    },
+    {
+      "count": 4,
+      "size": 7,
+      "policy": "collect",
+      "variant": "finite-cyclic",
+      "n": 384,
+      "seeds": 24,
+      "uniqueOpenings": 360,
+      "winShare": [
+        0.2599826388888889,
+        0.21614583333333334,
+        0.21223958333333334,
+        0.3116319444444444
+      ],
+      "spread": 0.09939236111111108,
+      "scores": [
+        5.9921875,
+        5.7890625,
+        5.838541666666667,
+        6.25
+      ],
+      "margin": 1.2942708333333333,
+      "capture": 0.9932725694444446,
+      "rounds": 9.127604166666666,
+      "passesPerGame": 0,
+      "repeatRate": 0.2179044560417503,
+      "midReversal": 0.14583333333333334,
+      "rescues": 29,
+      "cards": {
+        "walk": 5482,
+        "dash": 2136,
+        "jump": 2794,
+        "scan": 1899,
+        "tractor": 1680
+      }
+    },
+    {
+      "count": 4,
+      "size": 7,
+      "policy": "collect",
+      "variant": "unlimited-snake",
+      "n": 384,
+      "seeds": 24,
+      "uniqueOpenings": 360,
+      "winShare": [
+        0.25108506944444436,
+        0.26671006944444436,
+        0.224609375,
+        0.25759548611111105
+      ],
+      "spread": 0.042100694444444364,
+      "scores": [
+        5.893229166666667,
+        5.924479166666667,
+        5.893229166666667,
+        6.171875
+      ],
+      "margin": 1.4973958333333333,
+      "capture": 0.9937065972222224,
+      "rounds": 9.356770833333334,
+      "passesPerGame": 0,
+      "repeatRate": 0.617888082416296,
+      "midReversal": 0.0703125,
+      "rescues": 23,
+      "cards": {
+        "walk": 11012,
+        "dash": 945,
+        "jump": 996,
+        "scan": 1066,
+        "tractor": 330
+      }
+    },
+    {
+      "count": 4,
+      "size": 7,
+      "policy": "collect",
+      "variant": "finite-snake",
+      "n": 384,
+      "seeds": 24,
+      "uniqueOpenings": 360,
+      "winShare": [
+        0.1998697916666667,
+        0.22374131944444442,
+        0.25238715277777773,
+        0.32400173611111105
+      ],
+      "spread": 0.12413194444444434,
+      "scores": [
+        5.59375,
+        5.7265625,
+        6.151041666666667,
+        6.359375
+      ],
+      "margin": 1.5286458333333333,
+      "capture": 0.9908854166666673,
+      "rounds": 9.276041666666666,
+      "passesPerGame": 0,
+      "repeatRate": 0.22138910812943963,
+      "midReversal": 0.125,
+      "rescues": 42,
+      "cards": {
+        "walk": 5608,
+        "dash": 2195,
+        "jump": 2740,
+        "scan": 1921,
+        "tractor": 1742
+      }
+    },
+    {
+      "count": 4,
+      "size": 8,
+      "policy": "collect",
+      "variant": "finite-cyclic",
+      "n": 384,
+      "seeds": 24,
+      "uniqueOpenings": 376,
+      "winShare": [
+        0.21115451388888887,
+        0.2515190972222222,
+        0.2241753472222222,
+        0.3131510416666666
+      ],
+      "spread": 0.1019965277777777,
+      "scores": [
+        5.760416666666667,
+        5.940104166666667,
+        5.942708333333333,
+        6.283854166666667
+      ],
+      "margin": 1.2239583333333333,
+      "capture": 0.9952256944444448,
+      "rounds": 8.966145833333334,
+      "passesPerGame": 0,
+      "repeatRate": 0.2259568204121688,
+      "midReversal": 0.0703125,
+      "rescues": 8,
+      "cards": {
+        "walk": 5488,
+        "dash": 2452,
+        "jump": 2504,
+        "scan": 1794,
+        "tractor": 1526
+      }
+    },
+    {
+      "count": 4,
+      "size": 8,
+      "policy": "collect",
+      "variant": "unlimited-snake",
+      "n": 384,
+      "seeds": 24,
+      "uniqueOpenings": 376,
+      "winShare": [
+        0.19661458333333334,
+        0.24826388888888887,
+        0.28602430555555547,
+        0.26909722222222215
+      ],
+      "spread": 0.08940972222222213,
+      "scores": [
+        5.6484375,
+        5.828125,
+        6.135416666666667,
+        6.302083333333333
+      ],
+      "margin": 1.2578125,
+      "capture": 0.9956597222222223,
+      "rounds": 9.078125,
+      "passesPerGame": 0,
+      "repeatRate": 0.638922493749496,
+      "midReversal": 0.03125,
+      "rescues": 9,
+      "cards": {
+        "walk": 10874,
+        "dash": 1097,
+        "jump": 913,
+        "scan": 843,
+        "tractor": 208
+      }
+    },
+    {
+      "count": 4,
+      "size": 8,
+      "policy": "collect",
+      "variant": "finite-snake",
+      "n": 384,
+      "seeds": 24,
+      "uniqueOpenings": 376,
+      "winShare": [
+        0.18901909722222224,
+        0.208984375,
+        0.21940104166666666,
+        0.382595486111111
+      ],
+      "spread": 0.19357638888888876,
+      "scores": [
+        5.700520833333333,
+        5.841145833333333,
+        5.919270833333333,
+        6.463541666666667
+      ],
+      "margin": 1.2369791666666667,
+      "capture": 0.9960937500000001,
+      "rounds": 9.015625,
+      "passesPerGame": 0,
+      "repeatRate": 0.22868059507357125,
+      "midReversal": 0.0625,
+      "rescues": 11,
+      "cards": {
+        "walk": 5569,
+        "dash": 2471,
+        "jump": 2497,
+        "scan": 1765,
+        "tractor": 1535
+      }
+    },
+    {
+      "count": 4,
+      "size": 9,
+      "policy": "collect",
+      "variant": "finite-cyclic",
+      "n": 384,
+      "seeds": 24,
+      "uniqueOpenings": 384,
+      "winShare": [
+        0.283203125,
+        0.2510850694444444,
+        0.17643229166666666,
+        0.2892795138888889
+      ],
+      "spread": 0.11284722222222224,
+      "scores": [
+        6.151041666666667,
+        5.875,
+        5.786458333333333,
+        6.104166666666667
+      ],
+      "margin": 1.171875,
+      "capture": 0.9954427083333336,
+      "rounds": 9.010416666666666,
+      "passesPerGame": 0,
+      "repeatRate": 0.22221317482289715,
+      "midReversal": 0.08072916666666667,
+      "rescues": 23,
+      "cards": {
+        "walk": 5532,
+        "dash": 2589,
+        "jump": 2458,
+        "scan": 1799,
+        "tractor": 1439
+      }
+    },
+    {
+      "count": 4,
+      "size": 9,
+      "policy": "collect",
+      "variant": "unlimited-snake",
+      "n": 384,
+      "seeds": 24,
+      "uniqueOpenings": 384,
+      "winShare": [
+        0.23546006944444445,
+        0.21940104166666666,
+        0.2580295138888889,
+        0.287109375
+      ],
+      "spread": 0.06770833333333334,
+      "scores": [
+        6.033854166666667,
+        5.708333333333333,
+        6.059895833333333,
+        6.122395833333333
+      ],
+      "margin": 1.1822916666666667,
+      "capture": 0.9967447916666664,
+      "rounds": 9.020833333333334,
+      "passesPerGame": 0,
+      "repeatRate": 0.6192951112554815,
+      "midReversal": 0.03125,
+      "rescues": 6,
+      "cards": {
+        "walk": 10675,
+        "dash": 1300,
+        "jump": 862,
+        "scan": 851,
+        "tractor": 162
+      }
+    },
+    {
+      "count": 4,
+      "size": 9,
+      "policy": "collect",
+      "variant": "finite-snake",
+      "n": 384,
+      "seeds": 24,
+      "uniqueOpenings": 384,
+      "winShare": [
+        0.22178819444444445,
+        0.2348090277777778,
+        0.2560763888888889,
+        0.2873263888888889
+      ],
+      "spread": 0.06553819444444445,
+      "scores": [
+        5.932291666666667,
+        5.723958333333333,
+        6.036458333333333,
+        6.2265625
+      ],
+      "margin": 1.2682291666666667,
+      "capture": 0.9954427083333335,
+      "rounds": 8.9765625,
+      "passesPerGame": 0,
+      "repeatRate": 0.2312658331290349,
+      "midReversal": 0.059895833333333336,
+      "rescues": 15,
+      "cards": {
+        "walk": 5507,
+        "dash": 2624,
+        "jump": 2426,
+        "scan": 1777,
+        "tractor": 1439
+      }
+    }
+  ]
+}

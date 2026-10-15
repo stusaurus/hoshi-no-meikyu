@@ -26,6 +26,7 @@ jobs:
           node tests/navigation.cjs
           node tests/cpu-browser.cjs
           node tests/strategy-browser.cjs
+          STAR_MAZE_BALANCED=1 node tests/strategy-browser.cjs
           python3 scripts/package.py
           node tests/audit-browser.cjs
           node tests/audit-screens.cjs

@@ -20,6 +20,9 @@ jobs:
       - run: node tests/cpu.cjs
       - run: node tests/starter.cjs
       - run: node tests/strategy.cjs
+      - run: node tests/balanced.cjs
+      - run: node tests/strategy-balance-engine.cjs
+      - run: node tests/strategy-balance-data.cjs
       - run: node --check scripts/simulate.cjs
       - name: Lightweight CPU balance regression (90 matches)
         run: node scripts/simulate.cjs --games=10 --seed=20261014 --out=reports
