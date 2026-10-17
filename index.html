@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#0a1029" />
+<title>星の迷宮｜シンプル版・お試しゲーム</title>
+<style>
+:root{color-scheme:dark;--bg:#090f22;--navy:#131d39;--panel:#17213f;--line:#334164;--ink:#f0f4ff;--muted:#abb8d5;--bright:#8bedef;--gold:#ffd976;--red:#ff6877;--blue:#74a7ff;--tile:#1e2d4e;--tile2:#253658;--shadow:0 18px 60px #03071266}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;color:var(--ink);background:radial-gradient(circle at 22% 15%,#203d6b80 0,transparent 32%),radial-gradient(circle at 90% 75%,#29336155 0,transparent 39%),#090f22;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.25;background-image:radial-gradient(circle,#f3f7ff 1px,transparent 1.5px);background-size:57px 67px;background-position:10px 21px}
+.wrap{position:relative;max-width:1140px;margin:auto;padding:clamp(16px,3vw,32px)}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:22px}.eyebrow{font-size:11px;letter-spacing:.29em;font-weight:800;color:#8ce0e5}.top h1{font-size:clamp(24px,3.3vw,34px);letter-spacing:.12em;line-height:1.2;margin:5px 0 4px}.subtitle{font-size:12px;color:var(--muted)}.top-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+button{font:inherit;cursor:pointer;touch-action:manipulation}button:disabled{cursor:not-allowed;opacity:.42}button:focus-visible{outline:3px solid #a1eaf7;outline-offset:3px}.button{border:1px solid #526285;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:750;color:#edf4ff;background:#263353;transition:.16s}.button:not(:disabled):hover{background:#36476c}.button.ghost{background:#141d36}.button.primary{border-color:#a6eef0;background:#8bedef;color:#10233b;box-shadow:0 4px 18px #7fe6ed22}.button.primary:not(:disabled):hover{background:#b2f6f7}.button.small{padding:8px 12px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px;align-items:start}.gamepane,.sidepanel{background:#15203bdc;border:1px solid #3a4b7090;border-radius:20px;box-shadow:var(--shadow)}.gamepane{padding:clamp(12px,2.3vw,24px)}.scoreboard{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center}.player{border:1px solid #394a70;background:#111b32;padding:10px 12px;border-radius:14px;display:flex;align-items:center;gap:10px;min-height:70px}.player.active{border-color:#e5d29e;box-shadow:0 0 0 1px #e5d29e55,0 0 24px #f9d4770b}.player.blue{flex-direction:row-reverse;text-align:right}.orb{width:32px;height:32px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 5px #ffffff30,0 0 19px #ff68773f;background:var(--red)}.blue .orb{background:var(--blue);box-shadow:inset 0 0 0 5px #ffffff30,0 0 19px #74a7ff40}.pname{font-weight:800;font-size:13px}.points{display:flex;gap:4px;margin-top:5px}.blue .points{justify-content:flex-end}.point{font-size:21px;line-height:1;color:#50617a}.point.earned{color:var(--gold);filter:drop-shadow(0 0 6px #ffdb74a0)}.vs{font-size:12px;color:#8292b3;font-weight:900;letter-spacing:.1em}
+.turnhead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:19px 0 12px}.turntitle{font-size:16px;font-weight:850}.turnsub{font-size:12px;color:#b9c6e1;margin-top:3px;line-height:1.6}.turnnum{font-size:12px;font-weight:750;color:#9de6e9;white-space:nowrap}
+.boardwrap{position:relative;max-width:630px;margin:0 auto}.board{position:relative;width:100%;aspect-ratio:1;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:4px;padding:9px;border-radius:17px;background:#07102a;border:1px solid #46618b;box-shadow:inset 0 0 36px #0009,0 8px 35px #0005}.cell{position:relative;border:1px solid #374c6f;background:linear-gradient(145deg,#223353,#1b2946);border-radius:8px;min-width:0;min-height:0;padding:0;display:flex;align-items:center;justify-content:center;isolation:isolate;transition:background .14s,box-shadow .14s,border-color .14s}.cell:nth-child(even){background:linear-gradient(145deg,#243758,#1b2d4a)}.cell:before{content:"";position:absolute;top:10%;left:14%;width:2px;height:2px;border-radius:50%;background:#cdddfb66}.cell:hover:not(:disabled){border-color:#6e8ab5}.cell.wallcell{background:linear-gradient(145deg,#344761,#283a56);border-color:#536687}.cell.wallselected{border-color:#ffdc83;box-shadow:0 0 0 2px #ffdb76,inset 0 0 15px #ffdb7622}.wallblock{width:69%;height:68%;border-radius:7px;background:linear-gradient(135deg,#a5bbce 0%,#667d9d 55%,#3f5373 100%);box-shadow:inset -3px -4px 0 #354969,0 4px 4px #0005;display:flex;align-items:center;justify-content:center}.wallblock:after{content:"";width:40%;height:4px;background:#e0effba6;border-radius:5px;transform:rotate(-30deg)}
+.star{width:62%;height:62%;filter:drop-shadow(0 0 11px #f8c757a0);animation:twinkle 2.5s ease-in-out infinite alternate}.star path{fill:#fddd79;stroke:#fff5bf;stroke-width:1}.star.underrocket{opacity:.37}@keyframes twinkle{to{filter:drop-shadow(0 0 4px #f8c75760);transform:scale(.94)}}.rocket{position:absolute;width:68%;height:76%;z-index:3;filter:drop-shadow(0 5px 5px #050918b3)}.rocket svg{width:100%;height:100%;overflow:visible}.rocket.red{--accent:var(--red)}.rocket.blue{--accent:var(--blue)}.rocket .accent{fill:var(--accent)}.rocket .body{fill:#f4f7fc;stroke:#c9d7e8;stroke-width:2}.rocket .foot{fill:#9a6b4d;stroke:#624330;stroke-width:2}.rocket .window{fill:#18223c;stroke:#94b8d9;stroke-width:2}.rocket .shine{fill:#ffffff88}
+.cell.target{border-color:#90e8e9;box-shadow:inset 0 0 0 2px #79e4e56e,0 0 15px #83e8ef45;background:#286079}.cell.target:after{content:"";position:absolute;width:19%;height:19%;border-radius:50%;background:#9cfaffaa;box-shadow:0 0 10px #8aebf6;bottom:6%;right:7%}.cell.walltarget{border-color:#ffde80;box-shadow:inset 0 0 0 2px #ffde8077;background:#675b41}.cell.walltarget:after{content:"+";position:absolute;font-size:22px;color:#ffe6a8;font-weight:700}.cell.current{box-shadow:inset 0 0 0 2px #ffffff21}.cell.lasttarget{box-shadow:inset 0 0 0 2px #ffdb73ad}.cell:disabled{opacity:1;cursor:default}.rocket.flying{position:absolute;z-index:10;pointer-events:none;transition:transform .32s cubic-bezier(.2,.78,.25,1)}
+.controls{display:flex;align-items:center;gap:11px;margin-top:15px;flex-wrap:wrap}.phasecontrols{display:flex;gap:9px;align-items:center;flex:1;flex-wrap:wrap}.instructions{font-size:12px;color:#bac8df;line-height:1.6}.arrows{margin-left:auto;display:grid;grid-template-columns:repeat(3,36px);grid-template-rows:repeat(2,36px);gap:4px}.arr{border:1px solid #587094;border-radius:10px;color:white;background:#33496a;font-size:18px;font-weight:800;display:flex;align-items:center;justify-content:center}.arr:not(:disabled):hover{background:#567393}.arr.up{grid-column:2;grid-row:1}.arr.left{grid-column:1;grid-row:2}.arr.down{grid-column:2;grid-row:2}.arr.right{grid-column:3;grid-row:2}
+.sidepanel{padding:20px}.sidepanel h2{margin:0 0 12px;font-size:15px;letter-spacing:.035em}.how{counter-reset:steps;display:grid;gap:14px}.howrow{display:flex;align-items:flex-start;gap:11px;color:#d9e4f7;font-size:13px;line-height:1.7}.howrow .number{display:flex;align-items:center;justify-content:center;flex:none;width:26px;height:26px;border-radius:50%;background:#344a6c;border:1px solid #5b779a;color:#a9eef0;font-weight:900}.howrow strong{color:white}.aside-divider{height:1px;background:#3b4f72;margin:19px 0}.miniheading{font-weight:800;font-size:13px;margin-bottom:9px}.hint{font-size:12px;line-height:1.7;color:#b8d1e9;border-left:3px solid #81d8da;padding:7px 0 7px 11px;background:#7ccfe90b}.log{display:flex;flex-direction:column;gap:8px;max-height:224px;overflow:auto}.logitem{font-size:12px;color:#c3cee2;line-height:1.55;border-bottom:1px solid #384b6a6b;padding-bottom:6px}.logitem:first-child{color:#f8e1ab}.footer{font-size:11px;line-height:1.6;color:#90a4c0;text-align:center;padding:21px 6px 3px}.over{position:absolute;inset:8px;z-index:20;border-radius:10px;background:#070f24df;display:none;align-items:center;justify-content:center;text-align:center;padding:22px;backdrop-filter:blur(6px)}.over.show{display:flex}.overbox{max-width:350px}.finish-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:9px}.cell.lastcapture{border-color:#ffdf89;box-shadow:inset 0 0 0 2px #ffda68,0 0 20px #ffe88a88}.medal{font-size:55px;filter:drop-shadow(0 5px 15px #ffd77766)}.winheading{font-size:31px;font-weight:950;letter-spacing:.06em;margin:9px 0}.wintext{line-height:1.85;color:#c7d4ea;font-size:13px;margin:8px 0 19px}.chip{border:1px solid #546885;border-radius:999px;padding:5px 9px;font-size:11px;color:#afd2e8;white-space:nowrap}.statusline{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0 0;flex-wrap:wrap}.statecue{font-size:12px;color:#cbdaf0;line-height:1.5}select{color:#eef6ff;background:#203354;border:1px solid #627596;padding:10px 10px;border-radius:12px;font:inherit;font-size:12px;max-width:160px}.helpToggle{display:none}
+@media(max-width:830px){.layout{grid-template-columns:1fr}.sidepanel{display:grid;grid-template-columns:1fr 1fr;gap:14px}.sidepanel .aside-divider{display:none}.sidepanel section{min-width:0}.sidepanel .full{grid-column:1/-1}.boardwrap{max-width:580px}}
+@media(max-width:540px){.wrap{padding:13px 10px 24px}.top{align-items:start;margin-bottom:13px}.top h1{font-size:23px}.top-actions{gap:6px}.top-actions .button{padding:9px 10px}.gamepane{border-radius:15px;padding:10px}.scoreboard{gap:5px}.player{padding:7px;gap:6px;min-height:64px;border-radius:10px}.orb{width:21px;height:21px}.pname{font-size:11px}.point{font-size:17px}.vs{font-size:9px}.board{padding:5px;gap:3px;border-radius:11px}.cell{border-radius:5px}.wallblock{border-radius:4px}.turnhead{margin:13px 3px 9px}.turntitle{font-size:14px}.turnsub{font-size:11px}.controls{flex-wrap:nowrap;align-items:stretch;margin-top:10px;gap:6px}.phasecontrols{min-width:0;gap:6px;align-content:center}.phasecontrols .button{padding:8px 9px;font-size:11px}.instructions{font-size:11px}.arrows{grid-template-columns:repeat(3,32px);grid-template-rows:repeat(2,32px);margin-left:0;flex:none}.sidepanel{padding:15px;grid-template-columns:1fr}.sidepanel section{grid-column:1/-1}.sidepanel .aside-divider{display:block;margin:0}.footer{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div><div class="eyebrow">PLAYTEST · SIMPLE RULES</div><h1>星の迷宮 <span style="font-size:.46em;letter-spacing:.04em;color:#95dfe3;vertical-align:middle">シンプル版</span></h1><div class="subtitle">カードなし。たった２つの操作から駆け引きが生まれるか。</div></div><div class="top-actions"><select id="mode" aria-label="対戦モード"><option value="cpu">CPUと対戦</option><option value="local">2人で対戦</option></select><button class="button ghost small" id="reset">↻ はじめから</button></div></header>
+<div class="layout">
+<main class="gamepane">
+  <div class="scoreboard"><div class="player red active" id="redPlayer"><div class="orb"></div><div><div class="pname" id="redName">あなた · 赤</div><div class="points" id="redPoints"></div></div></div><div class="vs">VS</div><div class="player blue" id="bluePlayer"><div class="orb"></div><div><div class="pname" id="blueName">CPU · 青</div><div class="points" id="bluePoints"></div></div></div></div>
+  <div class="turnhead"><div><div class="turntitle" id="turnTitle">あなたの番</div><div class="turnsub" id="turnSub">壁を1マス動かすか、そのまま進みます。</div></div><div class="turnnum" id="turnCount">TURN 01</div></div>
+  <div class="boardwrap"><div class="board" id="board" role="group" aria-label="7×7の星の迷宮盤面"></div><div class="over" id="over"><div class="overbox"><div class="medal" id="medal">🏆</div><div class="winheading" id="winHeading">勝利！</div><div class="wintext" id="winText"></div><div class="finish-actions"><button class="button primary" id="again">もう一戦あそぶ →</button><button class="button ghost" id="review">盤面を見直す</button></div></div></div></div>
+  <div class="controls"><div class="phasecontrols"><button class="button primary" id="skip">壁を動かさず進む →</button><button class="button ghost" id="cancel" hidden>↶ 壁を戻す</button><div class="instructions" id="controlsHelp">壁をタップ → 隣のマスをタップ</div></div><div class="arrows" aria-label="ロケットの進行方向"><button class="arr up" data-dir="up" aria-label="上へ">↑</button><button class="arr left" data-dir="left" aria-label="左へ">←</button><button class="arr down" data-dir="down" aria-label="下へ">↓</button><button class="arr right" data-dir="right" aria-label="右へ">→</button></div></div>
+  <div class="statusline"><button class="button ghost small" id="undo">↩ 1手戻す</button><span class="statecue" id="statecue">星は止まったマスで取れる ★</span><span class="chip" id="remaining">残りの星 5個</span></div>
+</main>
+<aside class="sidepanel">
+<section><h2>あそび方 <span style="font-size:11px;color:#91c5d0;font-weight:500">約2分で覚える</span></h2><div class="how">
+<div class="howrow"><div class="number">1</div><div><strong>壁を1マス動かす</strong>（やらなくてもOK）。壁を選び、隣の光るマスへ動かす。</div></div>
+<div class="howrow"><div class="number">2</div><div><strong>ロケットを滑らせる。</strong> 壁・盤の端・相手ロケットの手前まで止まれない。</div></div>
+<div class="howrow"><div class="number">3</div><div><strong>星のマスで止まると獲得。</strong> 5個の星のうち、先に<strong>3個</strong>取った方の勝ち！</div></div>
+</div></section>
+<div class="aside-divider"></div>
+<section id="difficultyPanel"><label class="miniheading" for="difficulty" style="display:flex;align-items:center;justify-content:space-between;gap:8px">CPUの強さ <select id="difficulty"><option value="easy">やさしい</option><option value="normal">じっくり考える</option></select></label></section>
+<div class="aside-divider"></div>
+<section><h2>今回、試してほしいこと</h2><div class="hint">次に止まる位置から、さらにどこへ進めるか？<br>壁を動かすことで「自分の道」と「相手の道」がどう変わるか？<br><strong>勝ち負けに理由を感じられるか</strong>を重視してみてください。</div></section>
+<div class="aside-divider"></div>
+<section class="full"><h2>対戦の記録</h2><div class="log" id="log" aria-live="polite"></div></section>
+</aside></div>
+<div class="footer">これはゲーム性を試すための独立プロトタイプです。盤面・壁配置・CPU思考は調整段階です。<br>キーボードの矢印キーでも移動できます。</div>
+</div>
+<script>
+(() => {
+'use strict';
+const N=7;
+const START_WALLS=[[2,1],[4,5],[1,4],[5,2],[3,0],[3,6],[2,5],[4,1]];
+const START_STARS=[[1,1],[1,5],[3,3],[5,1],[5,5]];
+const DIRS=[[-1,0,'up','上'],[1,0,'down','下'],[0,-1,'left','左'],[0,1,'right','右']];
+const el=(id)=>document.getElementById(id);
+const key=(p)=>p[0]*N+p[1];
+const same=(a,b)=>a[0]===b[0]&&a[1]===b[1];
+const inside=(p)=>p[0]>=0&&p[0]<N&&p[1]>=0&&p[1]<N;
+const clone=(g)=>({pos:{red:[...g.pos.red],blue:[...g.pos.blue]},walls:g.walls.map(x=>[...x]),stars:g.stars.map(x=>[...x]),score:{...g.score},turn:g.turn,moves:g.moves,last:g.last?JSON.parse(JSON.stringify(g.last)):null,gameover:g.gameover});
+const enemy=p=>p==='red'?'blue':'red';
+const countNum = (arr,p)=>arr.some(x=>same(x,p));
+function slide(g, side, direction){
+  const orig=g.pos[side], rival=g.pos[enemy(side)], [dr,dc]=DIRS[direction];
+  let r=orig[0],c=orig[1];
+  while(inside([r+dr,c+dc])&&!countNum(g.walls,[r+dr,c+dc])&&!same([r+dr,c+dc],rival)){r+=dr;c+=dc;}
+  return [r,c];
+}
+function wallOpts(g, wallIndex){
+  const [r,c]=g.walls[wallIndex];
+  return DIRS.map(([dr,dc])=>[r+dr,c+dc]).filter(p=>inside(p)&&!countNum(g.walls,p)&&!countNum(g.stars,p)&&!same(p,g.pos.red)&&!same(p,g.pos.blue)).filter(p=>{
+    const temp=clone(g);temp.walls[wallIndex]=p;
+    return ['red','blue'].every(s=>DIRS.some((_,di)=>!same(slide(temp,s,di),temp.pos[s])));
+  });
+}
+function options(g, side){
+  const moves=[];
+  const shiftList=[null];
+  for(let wi=0;wi<g.walls.length;wi++)for(let to of wallOpts(g,wi))shiftList.push({wi,to});
+  for(const shift of shiftList){
+    const t=clone(g);
+    if(shift)t.walls[shift.wi]=shift.to;
+    for(let di=0;di<DIRS.length;di++){
+      const to=slide(t,side,di);
+      if(same(to,t.pos[side]))continue;
+      const captured=countNum(t.stars,to);
+      moves.push({shift,di,to,captured});
+    }
+  }
+  return moves;
+}
+function doMove(g, side, action){
+  const out=clone(g),from=[...out.pos[side]];
+  if(action.shift)out.walls[action.shift.wi]=[...action.shift.to];
+  out.pos[side]=[...action.to];
+  if(action.captured){out.stars=out.stars.filter(p=>!same(p,action.to));out.score[side]+=1;}
+  out.last={side,from,to:[...action.to],captured:action.captured,shift:action.shift?{wi:action.shift.wi,to:[...action.shift.to]}:null,dir:action.di};
+  out.turn=enemy(side);out.moves+=1;
+  if(out.score[side]===3||out.stars.length===0)out.gameover=side;
+  return out;
+}
+// Shortest path counting only rocket slides; moving walls still requires planning on later turns.
+function reach(g,side){
+  const other=g.pos[enemy(side)];
+  const ds=Array(49).fill(99),st=[g.pos[side]];ds[key(st[0])]=0;
+  for(let head=0;head<st.length;head++){
+    const p=st[head],len=ds[key(p)];
+    for(const [dr,dc] of DIRS){
+      let r=p[0],c=p[1];
+      while(inside([r+dr,c+dc])&&!countNum(g.walls,[r+dr,c+dc])&&!same([r+dr,c+dc],other)){r+=dr;c+=dc;}
+      const k=key([r,c]);if(ds[k]===99){ds[k]=len+1;st.push([r,c]);}
+    }
+  }
+  return ds;
+}
+function evaluate(g,side){
+  if(g.gameover)return g.gameover===side?20000:-20000;
+  const other=enemy(side);
+  let value=280*(g.score[side]-g.score[other]);
+  const ma=reach(g,side), mb=reach(g,other);
+  for(const star of g.stars){
+    const a=ma[key(star)],b=mb[key(star)];
+    const p=d=>d===99?0:(1/(d+.35));
+    value+=48*(p(a)-p(b));
+    const s= g.pos[side],o=g.pos[other];
+    const man=(v)=>Math.abs(star[0]-v[0])+Math.abs(star[1]-v[1]);
+    value+=1.7*(man(o)-man(s));
+  }
+  // Very small center control term to break ties. Prevent aimless wall manipulation.
+  const pos=g.pos[side];value+=2.5*(6-Math.abs(pos[0]-3)-Math.abs(pos[1]-3));
+  return value;
+}
+function chooseCPU(g){
+  const side='blue';
+  const list=options(g,side);
+  if(!list.length)return null;
+  const valued=list.map((m,i)=>({m,i,v:evaluate(doMove(g,side,m),side)}));
+  valued.sort((a,b)=>b.v-a.v);
+  if(valued[0].v>=20000)return valued[0].m;
+  // Casual setting: chase visible stars, but occasionally choose a near-best alternative.
+  if(el('difficulty').value==='easy'){
+    const best=valued[0].v;
+    const shortlist=valued.filter(x=>x.v>=best-10).slice(0,9);
+    const index=Math.min(shortlist.length-1,Math.floor(Math.random()*Math.min(4,shortlist.length)));
+    return shortlist[index].m;
+  }
+  // Candidate beam; respond to the opponent's strongest immediate threat.
+  const shortlist=[];const seen=new Set();
+  for(const x of valued){
+    const sig=`${x.m.to.join(',')}/${x.m.shift?x.m.shift.wi+':'+x.m.shift.to.join(','):'-'}`;
+    if(!seen.has(sig)){shortlist.push(x);seen.add(sig);}
+    if(shortlist.length===13)break;
+  }
+  let best=shortlist[0].m,top=-Infinity;
+  for(const x of shortlist){
+    const hypothetical=doMove(g,side,x.m);
+    const replies=options(hypothetical,'red');
+    let worst=x.v;
+    if(replies.length){
+      let threat=-Infinity;
+      for(const reply of replies){
+        const test=doMove(hypothetical,'red',reply);
+        const rv=evaluate(test,'red');
+        if(rv>threat)threat=rv;
+        if(threat>=20000)break;
+      }
+      worst=evaluate(hypothetical,side)*.25-threat*.75;
+    }
+    const randomness=(Math.sin((g.moves+1)*23+x.i*13.31)*.2);
+    const quality=worst+randomness;
+    if(quality>top){best=x.m;top=quality;}
+  }
+  return best;
+}
+const svgRocket=(s)=>`<div class="rocket ${s}" aria-label="${s==='red'?'赤':'青'}のロケット"><svg viewBox="0 0 70 94" role="img" aria-hidden="true"><path class="foot" d="M17 67 L17 89 Q17 93 23 90 L29 72 Z M41 72 L47 90 Q53 93 53 89 L53 67 Z"/><path class="accent" d="M20 47 L8 59 L12 76 L23 66 Z M50 47 L62 59 L58 76 L47 66 Z"/><path class="body" d="M35 6 C13 20 18 48 19 70 Q35 83 51 70 C52 48 57 20 35 6 Z"/><path class="accent" d="M35 6 Q22 15 21 28 L49 28 Q48 15 35 6 Z"/><circle class="window" cx="35" cy="43" r="13"/><ellipse class="shine" cx="30" cy="38" rx="4" ry="2.7" transform="rotate(-25 30 38)"/><path class="accent" d="M26 69 H44 V73 Q35 78 26 73 Z"/></svg></div>`;
+const svgStar=()=>`<svg class="star" viewBox="0 0 60 60" aria-label="星" role="img"><path d="M30 4 L37 22 L56 23 L41 36 L46 55 L30 44 L14 55 L19 36 L4 23 L23 22 Z"/></svg>`;
+let g,phase='wall',selected=null,wallOriginal=null,history=[],thinking=false,moveBusy=false,gameVersion=0,mode='cpu',message='',logs=[];
+function fresh(){
+ gameVersion++;g={pos:{red:[0,2],blue:[6,4]},walls:START_WALLS.map(x=>[...x]),stars:START_STARS.map(x=>[...x]),score:{red:0,blue:0},turn:'red',moves:0,last:null,gameover:null};
+ phase='wall';selected=null;wallOriginal=null;history=[];thinking=false;moveBusy=false;message='';logs=['ゲーム開始。先に星を3つ集めよう！'];el('over').classList.remove('show');render();
+}
+function currentHuman(){return !(mode==='cpu'&&g.turn==='blue')&&!thinking&&!moveBusy&&!g.gameover;}
+function slideMap(){return DIRS.map((_,i)=>slide(g,g.turn,i));}
+function render(){
+ const human=currentHuman(), opts=phase==='wall'&&Number.isInteger(selected)?wallOpts(g,selected):[];
+ const moves=slideMap();const dests=phase==='slide'?moves:[];
+ const board=el('board');board.innerHTML='';
+ const selectableWall = human&&phase==='wall';
+ for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+  const p=[r,c],wi=g.walls.findIndex(w=>same(w,p)),which=same(g.pos.red,p)?'red':same(g.pos.blue,p)?'blue':null,star=countNum(g.stars,p);
+  const wallTarget=selectableWall&&opts.some(o=>same(o,p));
+  const slideTarget=human&&phase==='slide'&&dests.some(t=>same(t,p)&&!same(t,g.pos[g.turn]));
+  const b=document.createElement('button');b.type='button';b.className='cell'+(wi>=0?' wallcell':'')+(star?' starcell':'')+(wi===selected?' wallselected':'')+(wallTarget?' walltarget':'')+(slideTarget?' target':'')+(which?' current':'')+(g.last&&same(g.last.to,p)?' lasttarget':'')+(g.last?.captured&&same(g.last.to,p)?' lastcapture':'');
+  b.setAttribute('aria-label',`${r+1}行${c+1}列${wi>=0?' 壁':''}${star?' 星':''}${which?' '+(which==='red'?'赤':'青')+'ロケット':''}${wallTarget?' 壁の移動先':''}${slideTarget?' ロケットの移動先':''}`);
+  b.dataset.r=r;b.dataset.c=c;
+  if(wi>=0)b.innerHTML='<div class="wallblock"></div>';
+  if(star)b.insertAdjacentHTML('beforeend',svgStar());
+  if(which)b.insertAdjacentHTML('beforeend',svgRocket(which));
+  b.disabled=!(human&&((selectableWall&&(wi>=0||wallTarget))||(phase==='slide'&&slideTarget)));
+  board.appendChild(b);
+ }
+ el('redPoints').innerHTML=Array.from({length:3},(_,i)=>`<span class="point ${i<g.score.red?'earned':''}">★</span>`).join('');
+ el('bluePoints').innerHTML=Array.from({length:3},(_,i)=>`<span class="point ${i<g.score.blue?'earned':''}">★</span>`).join('');
+ el('redPlayer').classList.toggle('active',g.turn==='red'&&!g.gameover);el('bluePlayer').classList.toggle('active',g.turn==='blue'&&!g.gameover);
+ el('redName').textContent=mode==='cpu'?'あなた · 赤':'プレイヤー1 · 赤';el('blueName').textContent=mode==='cpu'?'CPU · 青':'プレイヤー2 · 青';
+ el('turnCount').textContent='TURN '+String(g.moves+1).padStart(2,'0');
+ if(g.gameover){el('turnTitle').textContent='対戦終了';el('turnSub').textContent='星を3つ集めたプレイヤーの勝利！';}
+ else if(thinking||!human){el('turnTitle').textContent='CPUの番';el('turnSub').textContent='CPUが次の手を考えています…';}
+ else if(phase==='wall'){el('turnTitle').textContent=g.turn==='red'?(mode==='cpu'?'あなたの番':'赤の番'):'青の番';el('turnSub').textContent=selected===null?'壁を1マス動かす（省略OK）':'黄色に光るマスをタップして壁を移動';}
+ else{el('turnTitle').textContent='ロケットを動かそう';el('turnSub').textContent='光るマスをタップ、または矢印ボタンを押す';}
+ el('skip').hidden=!human||phase!=='wall';el('cancel').hidden=!human||phase!=='slide'||!wallOriginal;
+ el('controlsHelp').textContent=human?(phase==='wall'?(selected===null?'壁をタップ → 隣のマスをタップ':'動かす先を選ぼう'):'壁・盤の端・相手の手前で止まります'):(g.gameover?'対戦結果を確認':'CPUがプレイしています');
+ for(const button of document.querySelectorAll('[data-dir]')){
+  const di=DIRS.findIndex(d=>d[2]===button.dataset.dir);
+  button.disabled=!human||phase!=='slide'||same(moves[di],g.pos[g.turn]);
+ }
+ el('remaining').textContent='残りの星 '+g.stars.length+'個';
+ el('difficultyPanel').hidden=mode!=='cpu';el('undo').disabled=moveBusy||thinking||!history.length;
+ el('statecue').textContent=message||'星は止まったマスで取れる ★';
+ el('log').innerHTML=logs.slice(0,7).map(l=>`<div class="logitem">${escapeHtml(l)}</div>`).join('');
+}
+function escapeHtml(s){return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
+function wallTap(r,c){
+ const p=[r,c],wi=g.walls.findIndex(w=>same(w,p));
+ if(wi>=0){selected=(selected===wi?null:wi);message=selected===null?'':'壁の移動先を選んでください';render();return;}
+ if(selected!==null&&wallOpts(g,selected).some(x=>same(x,p))){
+  wallOriginal=clone(g);g.walls[selected]=p;selected=null;phase='slide';message='壁を動かした！ 次はロケット';render();
+ }
+}
+function boardClick(e){
+ const cell=e.target.closest('.cell');if(!cell||!currentHuman())return;
+ const r=+cell.dataset.r,c=+cell.dataset.c;
+ if(phase==='wall')wallTap(r,c);
+ else if(phase==='slide'){
+  const di=DIRS.findIndex((d,i)=>same(slide(g,g.turn,i),[r,c])&&!same(slide(g,g.turn,i),g.pos[g.turn]));
+  if(di>=0)takeSlide(di);
+ }
+}
+function saveHumanSnapshot(){history.push({g:clone(wallOriginal||g),logs:[...logs]});if(history.length>25)history.shift();}
+function takeSlide(di){
+ if(!currentHuman()||phase!=='slide')return;
+ const side=g.turn,old=clone(g),to=slide(g,side,di);
+ if(same(to,g.pos[side]))return;
+ saveHumanSnapshot();
+ const wasShifted=!!wallOriginal;
+ const action={di,to,captured:countNum(g.stars,to),shift:wasShifted?{wi:old.walls.findIndex((w,i)=>!same(w,wallOriginal.walls[i])),to:old.walls.find((w,i)=>!same(w,wallOriginal.walls[i]))}:null};
+ wallOriginal=null;
+ executeAnimated(side,action,true);
+}
+function animate(side,from,to,finish){
+ const board=el('board'),fromNode=board.children[key(from)],toNode=board.children[key(to)];
+ if(!fromNode||!toNode){finish();return;}
+ const rocket=fromNode.querySelector('.rocket');if(!rocket){finish();return;}
+ const br=board.getBoundingClientRect(),a=fromNode.getBoundingClientRect(),b=toNode.getBoundingClientRect();
+ const flyer=rocket.cloneNode(true);flyer.classList.add('flying');flyer.style.width=rocket.getBoundingClientRect().width+'px';flyer.style.height=rocket.getBoundingClientRect().height+'px';
+ flyer.style.left=(a.left-br.left+(a.width-rocket.getBoundingClientRect().width)/2)+'px';flyer.style.top=(a.top-br.top+(a.height-rocket.getBoundingClientRect().height)/2)+'px';
+ board.appendChild(flyer);rocket.style.opacity='0';
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{flyer.style.transform=`translate(${b.left-a.left}px,${b.top-a.top}px)`;}));
+ window.setTimeout(()=>{flyer.remove();finish();},matchMedia('(prefers-reduced-motion: reduce)').matches?10:340);
+}
+function executeAnimated(side,action,isHuman){
+ if(moveBusy)return;
+ moveBusy=true;phase='anim';selected=null;message='ロケット移動中…';render();
+ const version=gameVersion,from=[...g.pos[side]],to=[...action.to];
+ const complete=()=>animate(side,from,to,()=>{
+  if(version!==gameVersion)return;
+  g=doMove(g,side,action);moveBusy=false;
+  const person=side==='red'?'赤':'青',dir=DIRS[action.di][3];
+  const wallDetail=action.shift?'壁を動かし、':'';
+  let event=`${person}：${wallDetail}${dir}へ移動`;
+  if(action.captured)event+=' → ★ 星を獲得！';
+  logs.unshift(event);
+  message=action.captured?`${person}が星を獲得！ ${g.score[side]} / 3`:`${person}が${dir}へ進みました`;
+  phase='wall';wallOriginal=null;
+  if(g.gameover){render();endScreen();return;}
+  render();
+  if(mode==='cpu'&&g.turn==='blue')scheduleCPU();
+ });
+ if(!isHuman&&action.shift){
+  g.walls[action.shift.wi]=[...action.shift.to];
+  message='CPUが壁を1マスずらしました';render();
+  window.setTimeout(()=>{if(version===gameVersion)complete();},230);
+ }else complete();
+}
+function scheduleCPU(){
+ thinking=true;render();const version=gameVersion;
+ window.setTimeout(()=>{
+  if(version!==gameVersion||g.gameover)return;
+  const action=chooseCPU(g);thinking=false;
+  if(!action){g.turn='red';logs.unshift('CPUが動けなかったため、あなたの番になりました。');render();return;}
+  executeAnimated('blue',action,false);
+ },460);
+}
+function endScreen(){
+ const winner=g.gameover;const userWin=mode==='cpu'&&winner==='red';
+ const who=mode==='cpu'?(userWin?'あなたの勝ち！':'CPUの勝ち！'):(winner==='red'?'赤の勝ち！':'青の勝ち！');
+ el('medal').textContent=userWin||mode==='local'?'🏆':'🌠';el('winHeading').textContent=who;
+ const last=g.last;
+ const text=`${g.moves}手目、${winner==='red'?'赤':'青'}が3個目の星を獲得！<br><strong style="color:#ffe49c">決め手：${last.from[0]+1}行${last.from[1]+1}列から${DIRS[last.dir][3]}へ滑り、${last.to[0]+1}行${last.to[1]+1}列で止まった。</strong><br>最終結果は赤 ${g.score.red} ★ ／ 青 ${g.score.blue} ★。<br>一手前に止まり方を変えられたか、盤面で確かめよう。`;
+ el('winText').innerHTML=text;el('over').classList.add('show');
+}
+function undo(){
+ if(!history.length||moveBusy||thinking)return;
+ gameVersion++;
+ const save=history.pop();g=clone(save.g);logs=save.logs;phase='wall';selected=null;wallOriginal=null;thinking=false;message='手を戻しました。違う作戦を試そう';el('over').classList.remove('show');render();
+}
+el('board').addEventListener('click',boardClick);
+el('skip').addEventListener('click',()=>{if(currentHuman()&&phase==='wall'){selected=null;wallOriginal=null;phase='slide';message='矢印を選んでロケットを移動';render();}});
+el('cancel').addEventListener('click',()=>{if(currentHuman()&&wallOriginal){g=clone(wallOriginal);wallOriginal=null;phase='wall';selected=null;message='壁の移動を取り消しました';render();}});
+for(const button of document.querySelectorAll('[data-dir]'))button.addEventListener('click',()=>{const di=DIRS.findIndex(d=>d[2]===button.dataset.dir);takeSlide(di);});
+window.addEventListener('keydown',e=>{
+ if(!currentHuman())return;
+ const dirMap={ArrowUp:0,ArrowDown:1,ArrowLeft:2,ArrowRight:3};
+ if(Object.hasOwn(dirMap,e.key)&&phase==='slide'){e.preventDefault();takeSlide(dirMap[e.key]);}
+ if(e.key==='Escape'&&phase==='slide'&&wallOriginal)el('cancel').click();
+});
+el('undo').addEventListener('click',undo);
+el('reset').addEventListener('click',fresh);el('again').addEventListener('click',fresh);el('review').addEventListener('click',()=>{el('over').classList.remove('show');message='最後に獲得した星は光るマスです。↩1手戻すでやり直せます。';render();});
+el('mode').addEventListener('change',e=>{mode=e.target.value;fresh();});
+fresh();
+// Test hook: allows deterministic verification in a browser without changing gameplay.
+window.__mazeTest={get:()=>clone(g),opts:()=>options(g,g.turn),chooseCPU:()=>chooseCPU(g),move:(shift,di)=>{
+ if(shift){g.walls[shift.wi]=shift.to;wallOriginal=null;}
+ return doMove(g,g.turn,{shift:null,di,to:slide(g,g.turn,di),captured:countNum(g.stars,slide(g,g.turn,di))});
+ }};
+})();
+</script>
+</body></html>
