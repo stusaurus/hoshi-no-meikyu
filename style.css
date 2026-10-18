@@ -1,0 +1,216 @@
+
+:root{color-scheme:dark;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;background:#0b1427;color:#f0f6ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 15% 0%,#2b315d 0%,transparent 38%),radial-gradient(ellipse at 100% 60%,#152c50 0%,transparent 35%),#0a1325}
+button,select{font:inherit}button{cursor:pointer;color:inherit}button:disabled{opacity:.35;cursor:not-allowed}
+button:focus-visible,select:focus-visible{outline:3px solid #f4d784;outline-offset:2px}
+.top{max-width:1120px;margin:auto;padding:24px 16px 10px}.top h1{margin:0;font-size:clamp(1.55rem,4vw,2.4rem);letter-spacing:.08em}.eyebrow{font-size:.68rem;letter-spacing:.28em;color:#e7c67e;margin:0 0 5px}.lead{color:#b7c8e5;font-size:.87rem;margin:8px 0}
+.shell{max-width:1120px;margin:auto;padding:10px 16px 40px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(310px,.7fr);gap:16px}
+.panel{border:1px solid #54638b80;border-radius:19px;background:#101c35dc;padding:16px;box-shadow:0 8px 40px #04091a65}
+.panel h2{font-size:1.08rem;margin:2px 0 12px}.panel h3{font-size:.92rem;margin:12px 0 8px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}.muted{color:#adbeda}.small{font-size:.78rem}.tiny{font-size:.69rem}
+.btn{background:#24395b;border:1px solid #61749c;border-radius:10px;padding:10px 12px;transition:background .12s}.btn:hover:not(:disabled){background:#36547a}.btn.primary{background:#347cbd;border-color:#78baee;font-weight:700}.btn.active{border-color:#f0cf77;background:#5b4578}.btn.bad{background:#6c3644;border-color:#af717e}.btn.soft{background:#182946}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+select{background:#1c304f;border:1px solid #64779a;border-radius:10px;color:#fff;padding:10px;width:100%}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.formgrid label{display:grid;gap:5px;font-size:.82rem;color:#d1ddf3}
+.legend{display:flex;gap:10px;flex-wrap:wrap;padding:10px 0;color:#b9c8e2;font-size:.75rem}
+.board{width:min(100%,660px);margin:auto;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));aspect-ratio:1/1;gap:3px;background:#0c172c;padding:7px;border:1px solid #526787;border-radius:13px}
+.cell{min-width:0;position:relative;border:1px solid #466080;background:linear-gradient(145deg,#253a5d,#1b2c49);border-radius:5px;display:flex;align-items:center;justify-content:center;overflow:visible;padding:0}
+.cell:focus-visible{z-index:15}.cell:hover{background:#354d74}.cell.selectable{box-shadow:inset 0 0 0 2px #e8cf7d}
+.tiletext{font-size:clamp(.56rem,1.5vw,1.22rem);line-height:1;text-align:center;white-space:nowrap;pointer-events:none}
+.token{position:absolute;inset:10%;display:flex;align-items:center;justify-content:center;font-size:clamp(.7rem,2vw,1.6rem);pointer-events:none;text-shadow:0 2px 5px #071027}
+.token.dual{inset:0 0 16%}.token .playerdot{font-size:.7em;position:absolute;bottom:-6px;right:0}
+.star{color:#f7d381}.star.claimed{opacity:.75}.starlabel{position:absolute;top:0;left:2px;font-size:.62rem;color:#eac76c}
+.wall{position:absolute;z-index:4;border-radius:4px;border:1px solid #f9cc7e;background:#705db1;color:#fff;display:grid;place-items:center;font-size:.7rem;padding:0}
+.wall.e{right:-7px;top:26%;height:48%;width:13px}.wall.s{bottom:-7px;left:26%;width:48%;height:13px}
+.wall.open{background:#b27845;border-color:#f5c785}.wall.unknown{background:#7963bd}.wall:hover{filter:brightness(1.4)}
+.pill{background:#253b5e;border:1px solid #405c83;border-radius:50px;padding:5px 10px;font-size:.76rem}
+.hand{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px}
+.hand .btn{min-height:87px;font-size:.78rem;display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;padding:8px 4px}.cardicon{font-size:1.5rem}.hand .btn.move{border-color:#487da7}.hand .btn.effect{border-color:#8d6cb8}
+.log{max-height:190px;overflow:auto;background:#081428;border:1px solid #384869;padding:8px 12px;border-radius:10px}.log div{padding:5px 0;border-bottom:1px solid #30405a;font-size:.76rem}
+.note{border-left:3px solid #d4b16a;padding:10px;background:#443a2940;font-size:.79rem;color:#ecdcb8;margin:12px 0}
+.banner{padding:10px 13px;background:#263d63;border-radius:11px;margin-bottom:10px}
+.overlay{position:fixed;inset:0;background:#060d1bee;z-index:99;display:flex;align-items:center;justify-content:center;padding:16px}.overlay[hidden]{display:none}
+.modal{width:min(100%,430px);padding:28px 22px;border:1px solid #7085b3;border-radius:22px;background:linear-gradient(145deg,#1b3155,#101a30);box-shadow:0 24px 100px #000b}.modal h2{margin:0 0 8px}.modal .btn{margin-top:15px;width:100%}
+.results{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.result{border:1px solid #5f7498;border-radius:12px;padding:10px}
+.result strong{font-size:1.7rem}.slots{display:flex;gap:8px;margin:10px 0}.slot{border:1px solid #516b92;border-radius:9px;padding:10px;flex:1;background:#213554;text-align:center}
+footer{max-width:1120px;margin:auto;padding:0 16px 30px;color:#96a9c8;font-size:.73rem}
+@media(max-width:790px){.shell{grid-template-columns:1fr}.top{padding-top:17px}.panel{padding:12px}.board{width:min(100%,550px)}.tiletext{font-size:clamp(.5rem,2.6vw,1.1rem)}.token{font-size:clamp(.7rem,4vw,1.5rem)}.wall.e{width:10px;right:-6px}.wall.s{height:10px;bottom:-6px}}
+@media(max-width:370px){.hand{grid-template-columns:repeat(2,1fr)}.board{gap:2px;padding:4px}.wall.e{right:-5px}.wall.s{bottom:-5px}}
+
+/* Navigation and solo-first entry point */
+.header-actions{display:flex;justify-content:flex-start;align-items:center;min-height:0;margin-bottom:8px}
+.back-button{min-height:42px;min-width:130px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:.84rem}
+.start-main{display:block;width:100%;margin-top:16px;padding:14px 18px;font-size:1.04rem;letter-spacing:.02em}
+#startHeading{margin-bottom:6px}
+#startDescription{line-height:1.6}
+@media(max-width:790px){
+ .header-actions{margin-bottom:8px}
+ .back-button{min-height:44px}
+ .start-main{min-height:50px}
+}
+
+/* Explicitly honor native hidden state for the responsive navigation control. */
+.back-button[hidden],#backFromHandoff[hidden]{display:none!important}
+
+.formgrid label[hidden]{display:none!important}
+
+/* STARTER: clearly introduce what is in the simpler physical+web set. */
+.starter-selection{margin:12px 0 16px;padding:14px;border:1px solid #6886b1;border-radius:13px;background:linear-gradient(135deg,#213b5d,#172744)}
+.starter-selection>label{display:block;font-size:.88rem;margin-bottom:8px;color:#f5d88e}
+.starter-selection select{font-weight:700;background:#305781;border-color:#94b6db;min-height:48px}
+.starter-intro{margin-top:10px;font-size:.83rem;line-height:1.55;color:#e6f0ff}
+.starter-intro strong{color:#f3d68e}
+.starter-intro p{margin:8px 0;font-size:.8rem}
+.starter-intro small{color:#bdd1e9;line-height:1.5}
+@media(max-width:790px){.starter-selection{margin:10px 0 14px;padding:12px}}
+
+/* Starter: movement and effect cards are physically distinct decks and hand slots. */
+.separated-hands{display:grid;gap:10px;margin:10px 0}
+.hand-group{border:1px solid #6383ac;border-radius:12px;padding:10px 11px 12px;background:#142842}
+.hand-group h3{margin:0 0 10px;font-size:.94rem;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.hand-group .hand{margin:0}
+.move-group{border-color:#438dca;background:linear-gradient(145deg,#173554,#132940)}
+.move-group h3{color:#b8e4ff}
+.effect-group{border-color:#9b79c7;background:linear-gradient(145deg,#302748,#201e37)}
+.effect-group h3{color:#e1c8ff}
+.hand-group .tiny{font-size:.72rem;font-weight:400;color:#c7d4ee;white-space:nowrap}
+@media(max-width:400px){.hand-group{padding:9px 7px}.hand-group h3{font-size:.87rem}.hand-group .tiny{font-size:.68rem}}
+
+/* Visually approved tabletop art, packed in one lightweight transparent WEBP.
+   Geometry-based sprites ensure all states use the same unchanged source artwork. */
+.sprite{display:inline-block;flex:none;box-sizing:border-box;background-image:url("./assets/art.webp");background-repeat:no-repeat;pointer-events:none;user-select:none}
+.sprite-card_walk{background-size:875% 343.4066%;background-position:0% 0%;aspect-ratio:96/182}
+.sprite-card_dash{background-size:875% 343.4066%;background-position:13.3065% 0%;aspect-ratio:96/182}
+.sprite-card_jump{background-size:875% 343.4066%;background-position:26.6129% 0%;aspect-ratio:96/182}
+.sprite-card_scan{background-size:875% 343.4066%;background-position:39.9194% 0%;aspect-ratio:96/182}
+.sprite-card_tractor{background-size:875% 343.4066%;background-position:53.2258% 0%;aspect-ratio:96/182}
+.sprite-card_wallmove{background-size:875% 343.4066%;background-position:66.5323% 0%;aspect-ratio:96/182}
+.sprite-card_pull{background-size:875% 343.4066%;background-position:79.8387% 0%;aspect-ratio:96/182}
+.sprite-card_shield{background-size:875% 343.4066%;background-position:93.1452% 0%;aspect-ratio:96/182}
+.sprite-rocket_red{background-size:1105.2632% 606.7961%;background-position:0% 36.59%;aspect-ratio:76/103}
+.sprite-rocket_blue{background-size:1105.2632% 606.7961%;background-position:10.8639% 36.59%;aspect-ratio:76/103}
+.sprite-rocket_yellow{background-size:1105.2632% 606.7961%;background-position:21.7277% 36.59%;aspect-ratio:76/103}
+.sprite-rocket_green{background-size:1105.2632% 606.7961%;background-position:32.5916% 36.59%;aspect-ratio:76/103}
+.sprite-flag_red{background-size:1105.2632% 606.7961%;background-position:46.0733% 36.59%;aspect-ratio:76/103}
+.sprite-flag_blue{background-size:1105.2632% 606.7961%;background-position:56.9372% 36.59%;aspect-ratio:76/103}
+.sprite-flag_yellow{background-size:1105.2632% 606.7961%;background-position:67.801% 36.59%;aspect-ratio:76/103}
+.sprite-flag_green{background-size:1105.2632% 606.7961%;background-position:78.6649% 36.59%;aspect-ratio:76/103}
+.sprite-star_hidden{background-size:988.2353% 735.2941%;background-position:0% 56.2963%;aspect-ratio:85/85}
+.sprite-star_0{background-size:988.2353% 735.2941%;background-position:12.1854% 56.2963%;aspect-ratio:85/85}
+.sprite-star_1{background-size:988.2353% 735.2941%;background-position:24.2384% 56.2963%;aspect-ratio:85/85}
+.sprite-star_2{background-size:988.2353% 735.2941%;background-position:36.2914% 56.2963%;aspect-ratio:85/85}
+.sprite-star_3{background-size:988.2353% 735.2941%;background-position:48.3444% 56.2963%;aspect-ratio:85/85}
+.sprite-wall_solid{background-size:482.7586% 710.2273%;background-position:0% 74.8603%;aspect-ratio:174/88}
+.sprite-wall_bounce{background-size:482.7586% 710.2273%;background-position:26.7267% 74.8603%;aspect-ratio:174/88}
+.sprite-wall_phantom{background-size:482.7586% 710.2273%;background-position:53.4535% 74.8603%;aspect-ratio:174/88}
+.sprite-wall_oneway{background-size:482.7586% 710.2273%;background-position:80.1802% 74.8603%;aspect-ratio:174/88}
+.sprite-wall_hidden{background-size:482.7586% 694.4444%;background-position:0% 93.271%;aspect-ratio:174/90}
+.sprite-logo{background-size:245.614% 538.7931%;background-position:71.6867% 98.4283%;aspect-ratio:342/116}
+
+/* Quiet, low-cost, printed-board appearance: walls remain on edges, not on cells. */
+.board{gap:2px;padding:7px;border-color:#668eb5;background:
+ radial-gradient(circle at 20% 15%,#edf7ff8c 0 1px,transparent 2px) 0 0/43px 56px,
+ radial-gradient(circle at 80% 65%,#a9d4ff7d 0 1px,transparent 2px) 0 0/67px 59px,
+ radial-gradient(120% 80% at 15% 100%,#143564 0%,transparent 65%),#09172f}
+.cell{background:linear-gradient(145deg,#19335188,#11294374);border:1px solid #4a8fb7a3;border-radius:2px;isolation:isolate}
+.cell:hover{background:#224c7088}
+.cell.edge-right:before,.cell.edge-bottom:after{content:"";position:absolute;z-index:2;border:1px solid #7ac0e58a;border-radius:10px;background:#173753;pointer-events:none}
+.cell.edge-right:before{width:6px;height:36%;top:32%;right:-5px}
+.cell.edge-bottom:after{height:6px;width:36%;left:32%;bottom:-5px}
+.cell .star-card{position:absolute;z-index:1;width:64%;height:auto;aspect-ratio:1;top:50%;left:50%;transform:translate(-50%,-50%);filter:drop-shadow(0 1px 3px #000b)}
+.cell .star-owned{opacity:.9}
+.cell .rocket-on-cell{position:absolute;z-index:5;height:77%;width:auto;aspect-ratio:76/103;bottom:3%;left:50%;transform:translateX(-50%);filter:drop-shadow(0 2px 2px #0009)}
+.cell .rocket-on-flag{height:70%;left:38%}
+.cell .flag-on-star{position:absolute;z-index:3;height:64%;width:auto;aspect-ratio:76/103;top:2%;right:0;filter:drop-shadow(0 2px 3px #0009)}
+.cell .starlabel{z-index:7;top:1px;left:2px;font-size:clamp(.46rem,.95vw,.74rem);padding:1px 3px;background:#07182ed9;border:1px solid #fff4;border-radius:5px;color:#ffdd6b}
+.shield-badge{position:absolute;right:2px;bottom:0;z-index:8;font-size:.75rem;pointer-events:none}
+.wall{box-sizing:border-box;background:transparent!important;color:transparent!important;border:0!important;padding:0!important;box-shadow:none!important;z-index:8;overflow:visible}
+.wall.e{width:11px;height:50%;right:-7px;top:25%}
+.wall.s{height:11px;width:50%;left:25%;bottom:-7px}
+.wall .wall-visual{display:block;position:absolute;top:50%;left:50%;width:100%;height:100%;transform:translate(-50%,-50%);border-radius:3px;filter:drop-shadow(0 1px 1px #0008)}
+.wall.e .wall-visual{width:310%;height:38%;transform:translate(-50%,-50%) rotate(90deg)}
+.wall .wall-arrow{position:absolute;inset:0;z-index:3;display:grid;place-items:center;color:#fff;text-shadow:0 0 4px #07122d;font-size:.72rem}
+.wall.open{filter:drop-shadow(0 0 2px #bdeeff)}
+.wall:focus-visible{outline:2px solid #ffe17d;outline-offset:2px}
+.player-score{display:inline-flex;align-items:center;gap:4px}
+.inline-flag{width:15px;aspect-ratio:76/103;height:auto}
+.hand .card-choice{min-height:0;padding:5px 4px 7px;display:flex;justify-content:flex-start;align-items:center;gap:4px;border-radius:10px;overflow:hidden}
+.hand .card-choice .card-art{display:block;width:min(100%,115px);height:auto;aspect-ratio:96/182;border-radius:6px;box-shadow:0 2px 8px #0008}
+.hand .card-choice .card-name{line-height:1.2;font-weight:700;font-size:clamp(.63rem,1vw,.84rem);text-align:center}
+.hand .card-choice.move{background:#18496c;border:1px solid #59b5e7}
+.hand .card-choice.effect{background:#412553;border:1px solid #a16ed0}
+.hand .card-choice.active{box-shadow:0 0 0 3px #f5ce69}
+.hand-group .hand{grid-template-columns:repeat(3,minmax(0,1fr))}
+.home-rockets{display:flex;align-items:end;justify-content:center;gap:16px;padding:9px 6px;margin:8px 0;border:1px solid #5977a655;border-radius:12px;background:linear-gradient(180deg,#11294699,#14294466)}
+.home-rocket{width:13%;max-width:57px;height:auto;aspect-ratio:76/103;filter:drop-shadow(0 2px 3px #0008)}
+@media(max-width:790px){
+ .board{gap:2px;padding:5px}
+ .wall.e{width:9px;right:-6px}
+ .wall.s{height:9px;bottom:-6px}
+ .cell.edge-right:before{width:5px;right:-4px}
+ .cell.edge-bottom:after{height:5px;bottom:-4px}
+ .cell .rocket-on-cell{height:75%}
+ .cell .flag-on-star{height:60%}
+}
+@media(max-width:370px){
+ .hand-group .hand{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .hand-group .card-choice{padding:3px 2px 5px}
+ .hand-group .card-choice .card-name{font-size:.64rem}
+ .cell .starlabel{font-size:.46rem}
+}
+
+/* Audit improvements: preserve original art ratios and expose readable text. */
+.play-nav[hidden],#panHint[hidden]{display:none}
+.play-nav{max-width:1120px;margin:auto;padding:6px 16px;display:flex;gap:8px;align-items:center;background:#0b1427;z-index:30}
+.play-nav a,.play-nav button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 10px;border:1px solid #6683ad;border-radius:9px;color:#ecf4ff;background:#1c304f;text-decoration:none;font-size:.8rem}
+.board-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-color:#7191be #102440;padding:8px 2px}
+#boardPanel,#handPanel{scroll-margin-top:72px;min-width:0}
+.btn,select{min-height:44px}
+.cell .rocket-on-cell{height:85%}
+.cell .rocket-on-flag{height:78%;left:32%}
+.cell .flag-on-star{height:76%;right:-1px}
+.cell .star-card{width:76%}
+.cell .starlabel{font-size:10px}
+/* Hit region stays centered on the edge. Art maintains its natural ratio. */
+.wall.e{width:24px;height:78%;top:11%;right:-14px}
+.wall.s{height:24px;width:78%;left:11%;bottom:-14px}
+.wall .wall-visual{height:auto;width:100%;aspect-ratio:174/90;transform:translate(-50%,-50%)}
+.wall.e .wall-visual{width:auto;height:100%;aspect-ratio:90/174;transform:translate(-50%,-50%);background-image:none}
+/* A horizontal sprite with an invariant ratio, rotated into the vertical edge. */
+.wall.e .wall-visual{width:calc(var(--wall-length, 34px));height:auto;aspect-ratio:174/90;background-image:url('./assets/art.webp');transform:translate(-50%,-50%) rotate(90deg)}
+.wall.s .wall-visual{width:100%;height:auto;aspect-ratio:174/90}
+.wall .wall-visual{outline:1px dashed #d4deee;outline-offset:1px}
+.wall.open .wall-visual{outline:2px solid #79d5ff;outline-offset:1px}
+.hand .card-choice .card-name{font-size:.83rem}
+.card-effect{font-size:.72rem;line-height:1.5;text-align:center;color:#edf5ff;white-space:normal}
+.hand .card-choice{min-width:0;min-height:44px}
+.hand .card-choice[aria-pressed=true]{border:2px solid #ffe17d}
+.private-notes,.wall-picker{padding:10px;border:1px solid #788aad;border-radius:10px;margin:10px 0;font-size:.8rem}
+summary{cursor:pointer;min-height:32px}
+body:not(.playing) #boardPanel{display:none}
+body:not(.playing) .shell{display:block;max-width:640px}
+#side{line-height:1.5}
+@media(max-width:790px){
+ .top{padding:12px 12px 4px}.shell{padding:8px 10px 24px;gap:10px}.panel{padding:10px}
+ .play-nav{position:sticky;top:0;padding:6px 10px;gap:6px}.play-nav a,.play-nav button{flex:1;padding:6px 4px;font-size:.73rem}
+ .board{width:calc(var(--n)*46px + 14px);min-width:calc(var(--n)*46px + 14px);max-width:none;--wall-length:34px}
+ .compact-board .board{width:100%;min-width:0}.compact-board .wall.e .wall-visual{width:22px}
+ .hand .card-choice .card-art{width:64px;max-width:100%}
+ .hand-group .hand{gap:6px}.hand-group{padding:8px}
+ .hand-group h3{font-size:.85rem}.card-effect{font-size:.68rem}
+ .legend{font-size:.7rem;gap:6px}.formgrid{grid-template-columns:1fr}
+}
+@media(min-width:791px){.board{--wall-length:40px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+/* Use each approved wall sprite's own aspect ratio (88px face / 90px back). */
+.wall .wall-visual,.wall.s .wall-visual,.wall.e .wall-visual{aspect-ratio:174/88}
+.wall .sprite-wall_hidden{aspect-ratio:174/90}
+/* Identical horizontal/vertical tile geometry; rotate the edge hit region itself. */
+.wall.e{width:78%;height:24px;top:calc(50% - 12px);right:calc(-39% - 2px);transform:rotate(90deg)}
+.wall.e .wall-visual{width:100%;height:auto;transform:translate(-50%,-50%)}
+.wall.e .wall-arrow{transform:rotate(-90deg)}
+@media(min-width:791px){#boardZoom,#panHint{display:none}}
+
+/* Fixed-action scan targets walls only; cover the old printed star-or-wall
+   caption without modifying the approved illustration atlas. */
+.fixed-card .sprite-card_scan{position:relative}
+.fixed-card .sprite-card_scan::after{content:"秘密の壁を確認";position:absolute;left:5%;right:5%;bottom:3%;height:25%;display:flex;align-items:center;justify-content:center;padding:2px;box-sizing:border-box;background:#f3f0db;color:#18344f;font-size:clamp(8px,1vw,12px);font-weight:800;line-height:1.2;border-radius:2px;text-align:center}
